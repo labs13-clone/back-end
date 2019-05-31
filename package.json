@@ -11,7 +11,8 @@
     "db_stop_dev": "docker container stop postgres_dev",
     "db_stop_test": "docker container stop postgres_test",
     "dev": "npx knex migrate:latest && npx knex seed:run && npx cross-env NODE_ENV=development nodemon index.js",
-    "test": "npx knex migrate:latest --env testing && npx knex seed:run --env testing && npx cross-env NODE_ENV=testing jest --watch --verbose"
+    "test": "npx knex migrate:latest --env testing && npx knex seed:run --env testing && npx cross-env NODE_ENV=testing jest --watch --verbose",
+    "heroku-postbuild": "npx knex migrate:rollback --env production && npx knex migrate:latest --env production && npx knex seed:run --env production"
   },
   "repository": {
     "type": "git",
