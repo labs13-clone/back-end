@@ -1,0 +1,45 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "db_start_dev": "docker run --rm --name postgres_dev -d -p 6000:5432 postgres",
+    "db_start_test": "docker run --rm --name postgres_test -d -p 7000:5432 postgres",
+    "db_reset_dev": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
+    "db_stop_dev": "docker container stop postgres_dev",
+    "db_stop_test": "docker container stop postgres_test",
+    "dev": "npx knex migrate:latest && npx knex seed:run && npx cross-env NODE_ENV=development nodemon index.js",
+    "test": "npx knex migrate:latest --env testing && npx knex seed:run --env testing && npx cross-env NODE_ENV=testing jest --watch --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/labs13-clone/back-end.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/labs13-clone/back-end/issues"
+  },
+  "homepage": "https://github.com/labs13-clone/back-end#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^3.18.0",
+    "jest": "^24.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.17.0",
+    "pg": "^7.11.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "dotenv": "^8.0.0",
+    "nodemon": "^1.19.1",
+    "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": "10.x"
+  }
+}
