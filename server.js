@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require('./config/usersRoute');
+const router = require('./config/authRoute');
 const cors = require('cors');
 const helmet = require('helmet');
 

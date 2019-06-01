@@ -9,12 +9,13 @@ describe('Users Model', () => {
     describe('add()', () => {
         it('should insert user', async () => {
             const userId = await dbApi.add({
-                sub: 'auth0sub'
+                sub_id: 'auth0sub',
+                role: 'user'
             });
             const user = await db('users').where({
                 id: userId[0]
             }).first();
-            expect(user.sub).toBe('auth0sub');
+            expect(user.sub_id).toBe('auth0sub');
         });
     });
 });
