@@ -2,8 +2,8 @@ const db = require('../data/dbConfig');
 
 module.exports = {
     insert,
-    getAll,
-    getBySubId
+    getMany,
+    getOne
 }
 
 //Add a user to the database
@@ -16,12 +16,15 @@ function insert(user) {
     });
 }
 
-function getAll() {
-    return db('users');
+//Get multiple users in the database
+//Filterable by sending in an object literal that matches the user schema
+function getMany(filter = {}) {
+    return db('users').where(filter);
 }
 
-function getBySubId(sub_id) {
-    return db('users').where({
-        sub_id
-    }).first();
+//Get a single user object from their Auth0 sub id
+//Filterable by sending in an object literal that matches the user schema
+function getOne(filter = null) {
+    if (!filter) return new Error('No filter provided for the query');
+    return db('users').where(filter).first();
 }

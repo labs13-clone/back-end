@@ -31,7 +31,7 @@ module.exports = function (req, res, next) {
             req.headers.user = decoded;
 
             //Query the database by sub id to see if any users have the same sub id
-            usersDbApi.getBySubId(decoded.sub)
+            usersDbApi.getOne({sub_id: decoded.sub})
                 .then(user => {
 
                     //If no user is found

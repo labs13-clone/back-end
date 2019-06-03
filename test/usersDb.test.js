@@ -18,18 +18,18 @@ describe('Users Model', () => {
         });
     });
 
-    describe('getBySubId()', () => {
+    describe('getOne()', () => {
         it('should get a user by their sub_id', async () => {
             const userId = await dbApi.insert({
                 sub_id: 'auth0sub'
             });
-            const user = await dbApi.getBySubId(userId.sub_id);
+            const user = await dbApi.getOne({sub_id: userId.sub_id});
 
             expect(user.sub_id).toBe('auth0sub');
         });
     });
 
-    describe('getAll()', () => {
+    describe('getMany()', () => {
         it('should get all users', async () => {
             await dbApi.insert([{
                 sub_id: 'auth0sub1'
@@ -38,7 +38,7 @@ describe('Users Model', () => {
             }, {
                 sub_id: 'auth0sub3'
             }]);
-            const users = await dbApi.getAll()
+            const users = await dbApi.getMany()
             expect(users).toHaveLength(3);
         });
     });
