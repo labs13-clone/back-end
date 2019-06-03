@@ -5,9 +5,6 @@ exports.up = function (knex, Promise) {
             tbl.string('created_at')
                 .defaultTo(knex.fn.now());
 
-            tbl.string('role')
-                .notNullable();
-
             tbl.string('sub_id')
                 .unique()
                 .notNullable();

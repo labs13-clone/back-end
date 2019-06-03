@@ -1,13 +1,20 @@
 const db = require('../data/dbConfig');
 
 module.exports = {
-    add,
+    insert,
     getAll,
     getBySubId
 }
 
-function add(user) {
-    return db('users').insert(user).returning('id');
+//Add a user to the database
+function insert(user) {
+    return db('users').insert(user).returning('id').then(idArr => {
+        const id = idArr[0];
+        console.log(id)
+        return db('users').where({
+            id
+        }).first();
+    });
 }
 
 function getAll() {
@@ -15,6 +22,7 @@ function getAll() {
 }
 
 function getBySubId(sub_id) {
+    console.log(sub_id)
     return db('users').where({
         sub_id
     }).first();

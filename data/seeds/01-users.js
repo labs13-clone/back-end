@@ -5,9 +5,9 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('users').insert([
-        {sub_id: 'auth0sub1', role: 'admin'},
-        {sub_id: 'auth0sub2', role: 'user'},
-        {sub_id: 'auth0sub3', role: 'user'}
+        {sub_id: 'auth0sub1'},
+        {sub_id: 'auth0sub2'},
+        {sub_id: 'auth0sub3'}
       ]);
     });
 };

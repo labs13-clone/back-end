@@ -6,14 +6,13 @@ describe('Users Model', () => {
         await db('users').del();
     });
 
-    describe('add()', () => {
+    describe('insert()', () => {
         it('should insert user', async () => {
-            const userId = await dbApi.add({
-                sub_id: 'auth0sub',
-                role: 'user'
+            const userId = await dbApi.insert({
+                sub_id: 'auth0sub'
             });
             const user = await db('users').where({
-                id: userId[0]
+                id: userId.id
             }).first();
             expect(user.sub_id).toBe('auth0sub');
         });
