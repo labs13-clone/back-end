@@ -55,7 +55,7 @@ To get the server running locally:
 
 🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ USERS
+#### 2️⃣ users
 
 ---
 
@@ -63,11 +63,11 @@ To get the server running locally:
 {
   id: UUID
   created_at: DATE - Optional - Defaults to current time
-  sub_id: STRING - Required - Auth0 sub id
+  sub_id: STRING - Required - Unique - Auth0 sub id
 }
 ```
 
-#### CATEGORIES
+#### categories
 
 ---
 
@@ -75,11 +75,57 @@ To get the server running locally:
 {
   id: UUID
   created_at: DATE - Optional - Defaults to current time
-  name: STRING 
+  name: STRING - Required - Unique
 }
 ```
 
-created_at: UUID foreign key in ORGANIZATIONS table
+#### challenges
+
+---
+
+```
+{
+  id: UUID
+  created_at: DATE - Optional - Defaults to current time
+  created_by: UUID - Required - Foreign key in USERS table
+  title: STRING - Required - Unique
+  description: STRING - Required
+  tests: JSON - Required
+  skeleton_function: JSON - Required
+  solution: JSON - Required
+  difficulty: STRING - Required
+  approved: BOOLEAN - Optional - Defaults to false
+}
+```
+
+#### challenges_categories
+
+---
+
+```
+{
+  id: UUID
+  challenges_id: UUID - Required - Foreign key in CHALLENGES table
+  categories_id: UUID - Required - Foreign key in CATEGORIES table
+}
+```
+
+#### user_submissions
+
+---
+
+```
+{
+  id: UUID
+  created_at: DATE - Optional - Defaults to current time
+  created_by: UUID - Required - Foreign key in USERS table
+  challenge_id: UUID - Required - Foreign key in CHALLENGES table
+  attempts: INTEGER - Required - Defaults to 1
+  completed: BOOLEAN - Optional - Defaults to false
+  started: BOOLEAN - Optional - Defaults to true
+  solution: JSON - Optional
+}
+```
 
 ## 2️⃣ Actions
 

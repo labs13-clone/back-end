@@ -92,16 +92,16 @@ exports.up = function (knex, Promise) {
                 .onUpdate('CASCADE');
 
             tbl.integer('attempts')
-                .notNullable();
+                .notNullable()
+                .defaultTo(1);
 
             tbl.boolean('completed')
                 .defaultTo(0);
 
             tbl.boolean('started')
-                .defaultTo(0);
+                .defaultTo(1);
 
-            tbl.json('solution')
-                .notNullable();
+            tbl.json('solution');
         })
 };
 
