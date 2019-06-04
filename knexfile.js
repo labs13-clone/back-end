@@ -1,9 +1,15 @@
-// Update with your config settings.
+if (process.env.DATABASE_URL === undefined) require('dotenv').config();
 
 module.exports = {
   development: {
     client: 'postgresql',
-    connection: 'postgres://postgres:password@localhost:6000/postgres',
+    connection: {
+      host : process.env.DB_IP,
+      port: '6000',
+      user : 'postgres',
+      password : 'password',
+      database : 'postgres'
+    },
     pool: {
       min: 2,
       max: 10
@@ -17,7 +23,7 @@ module.exports = {
   },
   testing: {
     client: 'postgresql',
-    connection: 'postgres://postgres:password@localhost:7000/postgres',
+    connection: `postgres://postgres:password@192.168.99.100:7000/postgres`,
     pool: {
       min: 2,
       max: 10
@@ -44,3 +50,4 @@ module.exports = {
     }
   }
 };
+

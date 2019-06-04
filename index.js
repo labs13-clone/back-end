@@ -1,5 +1,5 @@
 if (process.env.DATABASE_URL === undefined) require('dotenv').config();
-const server = require('./server');
+const server = require('./config/server');
 
 const port = process.env.PORT || 5000;
 
