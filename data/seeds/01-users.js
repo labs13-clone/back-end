@@ -1,13 +1,13 @@
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  return knex('users').truncate()
+  return knex('users').del()
     .then(function () {
       // Inserts seed entries
       return knex('users').insert([
-        {name: 'max'},
-        {name: 'sam'},
-        {name: 'rob'}
+        {sub_id: 'auth0sub1'},
+        {sub_id: 'auth0sub2'},
+        {sub_id: 'auth0sub3'}
       ]);
     });
 };

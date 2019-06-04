@@ -55,38 +55,75 @@ To get the server running locally:
 
 🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ ORGANIZATIONS
+#### 2️⃣ users
 
 ---
 
 ```
 {
   id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  created_at: DATE - Optional - Defaults to current time
+  sub_id: STRING - Required - Unique - Auth0 sub id
 }
 ```
 
-#### USERS
+#### categories
 
 ---
 
 ```
 {
   id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  created_at: DATE - Optional - Defaults to current time
+  name: STRING - Required - Unique
+}
+```
+
+#### challenges
+
+---
+
+```
+{
+  id: UUID
+  created_at: DATE - Optional - Defaults to current time
+  created_by: UUID - Required - Foreign key in USERS table
+  title: STRING - Required - Unique
+  description: STRING - Required
+  tests: JSON - Required
+  skeleton_function: JSON - Required
+  solution: JSON - Required
+  difficulty: STRING - Required
+  approved: BOOLEAN - Optional - Defaults to false
+}
+```
+
+#### challenges_categories
+
+---
+
+```
+{
+  id: UUID
+  challenges_id: UUID - Required - Foreign key in CHALLENGES table
+  categories_id: UUID - Required - Foreign key in CATEGORIES table
+}
+```
+
+#### user_submissions
+
+---
+
+```
+{
+  id: UUID
+  created_at: DATE - Optional - Defaults to current time
+  created_by: UUID - Required - Foreign key in USERS table
+  challenge_id: UUID - Required - Foreign key in CHALLENGES table
+  attempts: INTEGER - Required - Defaults to 1
+  completed: BOOLEAN - Optional - Defaults to false
+  started: BOOLEAN - Optional - Defaults to true
+  solution: JSON - Optional
 }
 ```
 

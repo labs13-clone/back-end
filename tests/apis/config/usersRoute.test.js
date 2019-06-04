@@ -1,5 +1,5 @@
 const request = require('supertest');
-const server = require('../server');
+const server = require('../../../config/server');
 
 describe('users', () => {
     it('Set environment to testing', () => {

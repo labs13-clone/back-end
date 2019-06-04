@@ -8,10 +8,11 @@
     "db_start_dev": "docker run --rm --name postgres_dev -d -p 6000:5432 postgres",
     "db_start_test": "docker run --rm --name postgres_test -d -p 7000:5432 postgres",
     "db_reset_dev": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
+    "db_reset_test": "npx knex migrate:rollback --env testing && npx knex migrate:latest --env testing && npx knex seed:run --env testing",
     "db_stop_dev": "docker container stop postgres_dev",
     "db_stop_test": "docker container stop postgres_test",
-    "dev": "npx knex migrate:latest && npx knex seed:run && npx cross-env NODE_ENV=development nodemon index.js",
-    "test": "npx knex migrate:latest --env testing && npx knex seed:run --env testing && npx cross-env NODE_ENV=testing jest --watch --verbose",
+    "dev": "npx cross-env NODE_ENV=development nodemon index.js",
+    "test": "npx cross-env NODE_ENV=testing jest --watch --verbose",
     "heroku-postbuild": "npx knex migrate:rollback --env production && npx knex migrate:latest --env production && npx knex seed:run --env production"
   },
   "repository": {
