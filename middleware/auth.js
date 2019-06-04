@@ -1,14 +1,6 @@
-const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const usersDbApi = require('../api/usersDb');
-let kid;
-
-//Get the kid from the Auth0 api to confirm the validity of the token
-//The kid should match the kid in the header of the token
-axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
-    .then(res => {
-        kid = res.data.keys[0].kid;
-    });
+const auth0Api = require('../apis/external/auth0');
+const usersDbApi = require('../apis/db/users');
 
 module.exports = function (req, res, next) {
 
@@ -20,7 +12,7 @@ module.exports = function (req, res, next) {
     } else {
 
         //Verify whatever is in the authorization header
-        jwt.verify(req.headers.authorization, kid, function (err, decoded) {
+        jwt.verify(req.headers.authorization, auth0Api.getKid(), function (err, decoded) {
 
             //If the signature on the token is invalid throw an error
             if (err) res.status(400).send({

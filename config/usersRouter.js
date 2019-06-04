@@ -1,6 +1,6 @@
 const express = require('express');
-const userApi = require('../api/usersDb');
-const auth = require('./authMiddleware');
+const userApi = require('../apis/db/users');
+const auth = require('../middleware/auth');
 
 const router = express.Router();
 
