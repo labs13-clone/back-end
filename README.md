@@ -55,40 +55,31 @@ To get the server running locally:
 
 🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ ORGANIZATIONS
+#### 2️⃣ USERS
 
 ---
 
 ```
 {
   id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  created_at: DATE - Optional - Defaults to current time
+  sub_id: STRING - Required - Auth0 sub id
 }
 ```
 
-#### USERS
+#### CATEGORIES
 
 ---
 
 ```
 {
   id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  created_at: DATE - Optional - Defaults to current time
+  name: STRING 
 }
 ```
+
+created_at: UUID foreign key in ORGANIZATIONS table
 
 ## 2️⃣ Actions
 
