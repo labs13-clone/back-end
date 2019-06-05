@@ -19,7 +19,7 @@ router.post('/:id', (req, res) => {
 // Solution should be the only column users are allowed to updated
 // Users should only be able to update their own submissions
 // Check to make sure the submission exists- If not throw an error
-router.put('/:id', (req, res) => {
+router.put('/:id', auth, (req, res) => {
     
 });
 
@@ -28,12 +28,12 @@ router.put('/:id', (req, res) => {
 // Get user ID out of the req.headers.users which is populated in the auth middleware
 // Any registered user can access this endpoint
 // Returns an array of submissions
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
 
     //Users can only retrieve submissions they have created
     req.params.created_by = req.headers.user.id;
 
-    
+
     userSubmissionsApi.getMany(req.params)
         .then(dbRes => {
             res.status(200).send(dbRes);

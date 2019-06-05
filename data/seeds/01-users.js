@@ -7,7 +7,10 @@ exports.seed = function(knex, Promise) {
       return knex('users').insert([
         {sub_id: 'auth0sub1'},
         {sub_id: 'auth0sub2'},
-        {sub_id: 'auth0sub3'}
+        {sub_id: 'auth0sub3'},
+        {sub_id: 'auth0sub4'},
+        {sub_id: 'auth0sub5'},
+        {sub_id: 'auth0sub6'}
       ]);
     });
 };
