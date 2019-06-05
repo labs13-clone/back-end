@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-router.get('/', auth, (req, res) => {
+router.get('/', (req, res) => {
     userApi.getMany()
         .then(dbRes => {
             res.status(200).send(dbRes);

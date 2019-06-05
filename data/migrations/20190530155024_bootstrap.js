@@ -39,13 +39,13 @@ exports.up = function (knex, Promise) {
             tbl.string('description')
                 .notNullable();
 
-            tbl.json('tests')
+            tbl.string('tests')
                 .notNullable();
 
-            tbl.json('skeleton_function')
+            tbl.string('skeleton_function')
                 .notNullable();
 
-            tbl.json('solution')
+            tbl.string('solution')
                 .notNullable();
 
             tbl.string('difficulty')
@@ -101,7 +101,7 @@ exports.up = function (knex, Promise) {
             tbl.boolean('started')
                 .defaultTo(1);
 
-            tbl.json('solution');
+            tbl.string('solution');
         })
 };
 
