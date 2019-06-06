@@ -13,7 +13,7 @@ const router = express.Router();
 router.post('/:id', (req, res) => {
 
     //Todo: Add validation once payload format is decided upon
-    //Check that the submission ID exists and is an approved challenge
+    //Check that the challenge ID exists and is an approved challenge
 
     //Insert the new challenge into the database
     userSubmissionsApi.insert({
