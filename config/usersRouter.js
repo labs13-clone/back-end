@@ -9,6 +9,8 @@ const router = express.Router();
 //So all that needs to be returned is the req.headers.user object
 router.get('/', auth, (req, res) => {
 
+    //TODO: Figure out exactly what data needs to be returned
+
     //Return user information
     res.status(200).send(req.headers.user);
 });
