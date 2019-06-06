@@ -7,11 +7,7 @@ const userSubmissionsApi = require('../apis/db/userSubmissions');
 
 const router = express.Router();
 
-// Replace with Challenge Routes
 
-// Allow any registered user to create a challenge
-// Double check the approved column is false
-// Validate format of payload
 router.post('/', auth, (req, res) => {
     const challenge = {
         ...req.body,
@@ -31,12 +27,7 @@ router.post('/', auth, (req, res) => {
         })
 });
 
-// Query parameters can be used to filter results
-// By default it returns all approved challenges
-// Any registered user can access this endpoint
-// Regular users should only be able to access approved challenges no matter if they created them or not, and unapproved challenges that they created
-// Only admins can access all challenges
-// Returns an array of challenges
+
 router.get('/', auth, (req, res) => {
     const filter = req.query
     if(req.headers.role === "user") {
@@ -59,5 +50,28 @@ router.get('/', auth, (req, res) => {
         });
     });
 });
+
+
+// TODO do validation for the payload
+router.put('/', auth, (req, res) => {
+    const selector = {
+        id: req.body.id, 
+        approved: false
+    }
+
+    if(req.headers.user.role === 'user') {
+        selector.created_by = req.headers.user.id;
+    }
+
+    challengesApi.update(selector, req.body)
+        .then(dbRes => {
+            res.status(200).send(dbRes);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: err.message
+            })
+        })
+})
 
 module.exports = router;
