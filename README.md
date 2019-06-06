@@ -1,91 +1,289 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
+## Backend delpoyed at [Heroku](https://clone-coding-server.herokuapp.com/) <br>
 
-## 1️⃣ Getting started
-
-To get the server running locally:
-
-🚫 adjust these scripts to match your project
-
+##  Getting started
 - Clone this repo
 - **yarn install** to install all required dependencies
-- **yarn server** to start the local server
+- **yarn dev** to start the local server
 - **yarn test** to start server using testing environment
 
-### Backend framework goes here
+  
+- **yarn db_start_dev** to start docker development postgres database
+- **yarn db_start_test** to start docker testing database
+- **yarn db_reset_dev** to migrate and rollback seeds in developer database
+- **yarn db_reset_test** to migrate and rollback seeds in developer tests
+- **yarn db_stop_dev** burns down development database
+- **yarn db_stop_test** burn down tests database
+  
+## Made using Express backend framework
 
-🚫 Why did you choose this framework?
+### We used this framework for these reasons
 
--    Point One
--    Point Two
--    Point Three
--    Point Four
+-  Minimal and flexible.
+-  Highly customizable.
+-  Written in javascript, allowing us to write in same language for front and backend.
+- Compatable with AuthO libraries.
 
-## 2️⃣ Endpoints
+# Route List
+## Get user ID out of the req.headers.users which is populated in the auth middleware
+* /api/user
+* /api/challenges
+* /api/challenges/:id
+* /api/challenges
+* /api/submissions
+* /api/validation/:id
 
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
+# Getting user profile information
 
-#### Organization Routes
+## GET /api/user
 
-| Method | Endpoint                | Access Control | Description                                  |
-| ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+- Xp level / Experience
+--- Sent 
 
-#### User Routes
+```
+{
+ access token in header
+}
+```
 
-| Method | Endpoint                | Access Control      | Description                                        |
-| ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |
+--- Received 201
 
-#Temporary Route List
+```
+{
+  xp : Number
+}
+```
 
-Getting user profile information
-GET /api/user
+---
 
---------------
+# Creating a new code challenge
 
-Creating a new code challenge
-POST /api/challenges
+## POST /api/challenges
 
-Editing an existing code challenge
-PUT /api/challenges/:id
+- Allow any registered user to create a challenge
+- Double check the approved column is false
+- Validate format of payload
 
-Getting Available Challenges
-GET /api/challenges
+--- Sent body payload
 
---------------
+```
+{
+  title: STRING - Required - Unique
+  description: STRING - Required
+  tests: STRING - Required
+  skeleton_function: STRING - Required
+  solution: STRING - Required
+  difficulty: STRING - Required
+}
+```
 
-Updating a Challenge Submission's Answer
-PUT /api/submissions/:id
+--- Received 201
 
-Creating a Challenge Submission
-POST /api/submissions/:id
+```
+{
+  id:NUMBER
+  title: STRING - Required - Unique
+  description: STRING - Required
+  tests: STRING - Required
+  skeleton_function: STRING - Required
+  solution: STRING - Required
+  difficulty: STRING - Required
+}
+```
 
-Getting Challenge Submissions
-GET /api/submissions
+# Editing an existing code challenge
 
-Validating a Challenge Submission (to validate they have the correct answer)
-GET /api/validation/:id
+## PUT /api/challenges/:id
+
+- Only owner of challenge can edit
+- For users to edit unapproved challenges they created
+- For admins to edit any unapproved challenges
+- Expects a payload of challenge data
+- Validate payload data
+
+--- Sent, id is route parameter
+
+```
+{
+  title: STRING - Required - Unique
+  description: STRING - Required
+  tests: STRING - Required
+  skeleton_function: STRING - Required
+  solution: STRING - Required
+  difficulty: STRING - Required
+}
+```
+
+--- Received 201
+
+```
+{
+  id:NUMBER
+}
+```
+
+# Getting Available Challenges
+
+## GET /api/challenges
+
+- Query parameters can be used to filter results
+- By default it returns all approved challenges
+- Any registered user can access this endpoint
+- Regular users should only be able to access approved challenges no matter if they created them or not, and unapproved challenges that they created
+- Only admins can access all challenges
+- Returns an array of challenges
+
+--- Sent query parameter for difficulty, created_by, approved, id
+
+```
+{
+
+}
+```
+
+--- Received 200
+
+```
+[
+  {
+    id number 
+    title: STRING - Required - Unique
+    description: STRING - Required
+    tests: STRING - Required
+    skeleton_function: STRING - Required
+    solution: STRING - Required
+    difficulty: STRING - Required
+  }
+]
+```
+---
+
+# Updating a Submission
+
+## PUT /api/submissions
+* Save a user's submission answer and completed state from true to false
+* Takes the ID of the submission
+* Solution should be the only column users are allowed to updated
+* Users should only be able to update their own submissions
+* Check to make sure the submission exists- If not throw an error
+
+--- Sent
+
+```
+{
+  id: number - Required
+  completed: boolean - optional
+  solution: STRING - optional
+}
+```
+
+--- Received 200
+
+```
+{
+   id
+  challenge_id
+  attempts
+  completed
+  solution
+}
+```
+
+# Creating a Challenge Submission
+
+## POST /api/submissions
+- Populate skeleton function 
+- Takes the ID of the challenge
+- Check to make sure the challenge exists- If not throw an error
+- check to make sure submission does not exist for user- if one exists throw error
+
+--- Sent
+
+```
+{
+  challenge_id - required
+}
+```
+
+--- Received, 201
+
+```
+{
+  id
+  challenge_id
+  attempts
+  completed
+  solution
+}
+```
+
+# Getting Challenge Submissions
+
+## GET /api/submissions
+
+- Object-literal query parameters located in req.query can be used to filter query results
+- Users should only be able to access their own submissions
+- Any registered user can access this endpoint
+- Returns an array of submissions
+
+--- Sent challenge_id, completed
+
+```
+{
+ 
+}
+```
+
+--- Received, array of challenge submissions
+
+```
+[
+  {
+   id
+   challenge_id
+   attempts
+   completed
+   solution
+  }
+]
+```
+
+# Validating a Challenge Submission (to validate they have the correct answer)
+
+## PUT /api/validation/:id
+* Validate a user has the correct answer and update the database entry accordingly
+* similar too /api/submissions PUT tests code
+* Uses the ID of the applicable user_submission entry 
+* Users should only be able to request validation on submissions they created
+* Users should only be able to request validation of solutions which have not already been verified as correct
+
+--- Sent submission id as route parameter
+
+```
+{
+
+}
+```
+
+--- Received
+
+```
+  {
+    id
+   challenge_id
+   attempts
+   completed
+   solution
+  }
+
+```
 
 # Data Model
+## The following represesents the tables in the database.
 
-🚫This is just an example. Replace this with your data model
 
-#### 2️⃣ users
+#  users
 
 ---
 
@@ -97,7 +295,7 @@ GET /api/validation/:id
 }
 ```
 
-#### categories
+# categories
 
 ---
 
@@ -109,10 +307,8 @@ GET /api/validation/:id
 }
 ```
 
-#### challenges
-
+# challenges
 ---
-
 ```
 {
   id: UUID
@@ -120,15 +316,15 @@ GET /api/validation/:id
   created_by: UUID - Required - Foreign key in USERS table
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: JSON - Required
-  skeleton_function: JSON - Required
-  solution: JSON - Required
+  tests: STRING - Required
+  skeleton_function: STRING - Required
+  solution: STRING - Required
   difficulty: STRING - Required
   approved: BOOLEAN - Optional - Defaults to false
 }
 ```
 
-#### challenges_categories
+## challenges_categories
 
 ---
 
@@ -140,7 +336,7 @@ GET /api/validation/:id
 }
 ```
 
-#### user_submissions
+## user_submissions
 
 ---
 
@@ -152,88 +348,16 @@ GET /api/validation/:id
   challenge_id: UUID - Required - Foreign key in CHALLENGES table
   attempts: INTEGER - Required - Defaults to 1
   completed: BOOLEAN - Optional - Defaults to false
-  started: BOOLEAN - Optional - Defaults to true
-  solution: JSON - Optional
+  solution: STRING - Optional - Defaults to skeleton code
 }
 ```
 
-## 2️⃣ Actions
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+#  Environment Variables
+## Production enviroment variables
+* DATABASE_URL
+* NODE_ENV
+---
+## Local Variable
+* DB_IP
 
-`getOrgs()` -> Returns all organizations
-
-`getOrg(orgId)` -> Returns a single organization by ID
-
-`addOrg(org)` -> Returns the created org
-
-`updateOrg(orgId)` -> Update an organization by ID
-
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
-
-`getUser(userId)` -> Returns a single user by user ID
-
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
-
-`updateUser(userId, changes object)` -> Updates a single user by ID.
-
-`deleteUser(userId)` -> deletes everything dependent on the user
-
-## 3️⃣ Environment Variables
-
-In order for the app to function correctly, the user must set up their own environment variables.
-
-create a .env file that includes the following:
-
-🚫 These are just examples, replace them with the specifics for your app
-    
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
-    
-## Contributing
-
-When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
-
-Please note we have a [code of conduct](./code_of_conduct.md). Please follow it in all your interactions with the project.
-
-### Issue/Bug Request
-
- **If you are having an issue with the existing project code, please submit a bug report under the following guidelines:**
- - Check first to see if your issue has already been reported.
- - Check to see if the issue has recently been fixed by attempting to reproduce the issue using the latest master branch in the repository.
- - Create a live example of the problem.
- - Submit a detailed bug report including your environment & browser, steps to reproduce the issue, actual and expected outcomes,  where you believe the issue is originating from, and any potential solutions you have considered.
-
-### Feature Requests
-
-We would love to hear from you about new features which would improve this app and further the aims of our project. Please provide as much detail and information as possible to show us why you think your new feature should be implemented.
-
-### Pull Requests
-
-If you have developed a patch, bug fix, or new feature that would improve this app, please submit a pull request. It is best to communicate your ideas with the developers first before investing a great deal of time into a pull request to ensure that it will mesh smoothly with the project.
-
-Remember that this project is licensed under the MIT license, and by submitting a pull request, you agree that your work will be, too.
-
-#### Pull Request Guidelines
-
-- Ensure any install or build dependencies are removed before the end of the layer when doing a build.
-- Update the README.md with details of changes to the interface, including new plist variables, exposed ports, useful file locations and container parameters.
-- Ensure that your code conforms to our existing code conventions and test coverage.
-- Include the relevant issue number, if applicable.
-- You may merge the Pull Request in once you have the sign-off of two other developers, or if you do not have permission to do that, you may request the second reviewer to merge it for you.
-
-### Attribution
-
-These contribution guidelines have been adapted from [this good-Contributing.md-template](https://gist.github.com/PurpleBooth/b24679402957c63ec426).
-
-## Documentation
-
-See [Frontend Documentation](🚫link to your frontend readme here) for details on the fronend of our project.
-🚫 Add DS iOS and/or Andriod links here if applicable.
