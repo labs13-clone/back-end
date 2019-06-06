@@ -47,10 +47,10 @@ router.put('/:id', auth, (req, res) => {
 
         //If there's a property other than solutions then toggle valid to false and send back an error
         //Users should only be able to edit their solutions
-        if (property !== 'solutions') {
+        if (property !== 'solutions' || property !== 'completed') {
             valid = false;
             req.status(422).send({
-                message: 'Only solutions can be edited'
+                message: 'Only solutions and completed can be edited'
             });
         }
     })

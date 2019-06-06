@@ -16,6 +16,7 @@ router.get('/:id', auth, (req, res) => {
 
     //Todo: Validate their solution passes all tests for the code challenge
     //For now we assume they pass all tests
+    //Validation happens on frontend
 
     //Update the user_submissions
     userSubmissionsApi.update(req.params.id, {
