@@ -98,9 +98,6 @@ exports.up = function (knex, Promise) {
             tbl.boolean('completed')
                 .defaultTo(0);
 
-            tbl.boolean('started')
-                .defaultTo(1);
-
             tbl.string('solution');
         })
 };
