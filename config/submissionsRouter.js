@@ -12,6 +12,24 @@ const router = express.Router();
 // Accessible by any registered user
 router.post('/:id', (req, res) => {
 
+    //Todo: Add validation once payload format is decided upon
+    //Check that the submission ID exists and is an approved challenge
+
+    //Insert the new challenge into the database
+    userSubmissionsApi.insert({
+        ...req.body,
+        challenge_id: req.params.id,
+        created_by: req.headers.user.id
+    })
+    .then(dbRes => {
+        //Returns the new submission object
+        res.status(200).send(dbRes);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: err.message
+        });
+    });
 });
 
 // Save a user's submission answer
