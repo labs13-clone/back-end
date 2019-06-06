@@ -94,7 +94,7 @@
 
 # Editing an existing code challenge
 
-## PUT /api/challenges/:id
+## PUT /api/challenges/
 
 - Only owner of challenge can edit
 - For users to edit unapproved challenges they created
@@ -102,10 +102,11 @@
 - Expects a payload of challenge data
 - Validate payload data
 
---- Sent, id is route parameter
+--- Sent
 
 ```
 {
+  id: INTEGER - Required
   title: STRING - Required - Unique
   description: STRING - Required
   tests: STRING - Required
