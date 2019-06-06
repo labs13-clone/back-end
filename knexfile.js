@@ -23,7 +23,13 @@ module.exports = {
   },
   testing: {
     client: 'postgresql',
-    connection: `postgres://postgres:password@192.168.99.100:7000/postgres`,
+    connection: {
+      host : process.env.DB_IP,
+      port: '7000',
+      user : 'postgres',
+      password : 'password',
+      database : 'postgres'
+    },
     pool: {
       min: 2,
       max: 10
