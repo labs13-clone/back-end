@@ -49,7 +49,37 @@ To get the server running locally:
 | GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
 | POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
 | PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
+| DELETE | `/users/:userId`        | owners, supervisors |
+
+#Temporary Route List
+
+Getting user profile information
+GET /api/user
+
+--------------
+
+Creating a new code challenge
+POST /api/challenges
+
+Editing an existing code challenge
+PUT /api/challenges/:id
+
+Getting Available Challenges
+GET /api/challenges
+
+--------------
+
+Updating a Challenge Submission's Answer
+PUT /api/submissions/:id
+
+Creating a Challenge Submission
+POST /api/submissions/:id
+
+Getting Challenge Submissions
+GET /api/submissions
+
+Validating a Challenge Submission (to validate they have the correct answer)
+GET /api/validation/:id
 
 # Data Model
 
