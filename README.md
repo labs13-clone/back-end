@@ -350,6 +350,8 @@
 
 ## The following represents each table in the database:
 
+![](images/database_model.png)
+
 ##  users
 
 ---
