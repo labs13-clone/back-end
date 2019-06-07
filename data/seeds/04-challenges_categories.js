@@ -7,6 +7,14 @@ exports.seed = function(knex, Promise) {
         {
           challenge_id:1,
           categories_id:1
+        },
+        {
+          challenge_id:2,
+          categories_id:1
+        },
+        {
+          challenge_id:3,
+          categories_id:6
         }
       ]);
     });
