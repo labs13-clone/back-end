@@ -9,8 +9,9 @@
 //     default: Boolean || String || Number,
 //     dataType: Boolean || String || Number | UUID,
 //     table: String,
-//     unique: Boolean
+//     unique: Boolean,
 // }
+
 
 //Curry the Validation Schema to the actual custom middleware function
 const validateUserInput = (validationSchema) => {

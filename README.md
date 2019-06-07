@@ -1,57 +1,93 @@
 # API Documentation
 
-## Backend delpoyed at [Heroku](https://clone-coding-server.herokuapp.com/) <br>
+## Backend Deployed On Heroku [https://clone-coding-server.herokuapp.com/](https://clone-coding-server.herokuapp.com/) <br>
 
-##  Getting started
-- Clone this repo
+##  Getting Started
+
+### Scripts
+
 - **yarn install** to install all required dependencies
 - **yarn dev** to start the local server
-- **yarn test** to start server using testing environment
-
-  
-- **yarn db_start_dev** to start docker development postgres database
+- **yarn test** to start server using testing environment  
+- **yarn db_start_dev** to start docker development Postgres database
 - **yarn db_start_test** to start docker testing database
 - **yarn db_reset_dev** to migrate and rollback seeds in developer database
 - **yarn db_reset_test** to migrate and rollback seeds in developer tests
 - **yarn db_stop_dev** burns down development database
-- **yarn db_stop_test** burn down tests database
+- **yarn db_stop_test** burn down testing database
   
-## Made using Express backend framework
+## Using Express Backend Framework
 
 ### We used this framework for these reasons
 
--  Minimal and flexible.
--  Highly customizable.
--  Written in javascript, allowing us to write in same language for front and backend.
-- Compatable with AuthO libraries.
+- Minimal and flexible
+- Highly customizable
+- Written in Javascript, allowing us to write in same language for frontend and backend
+- Compatible with AuthO libraries
 
 # Route List
 ## Get user ID out of the req.headers.users which is populated in the auth middleware
-* /api/user
-* /api/challenges
-* /api/challenges/:id
-* /api/challenges
-* /api/submissions
-* /api/validation/:id
+- **GET /api/users**
+  - Get logged in user profile information
+    - Can be used to see if the user is logged in
+    - Can be used to get the role of the user
+- **POST /api/challenges**
+  - Create a new code challenge
+- **PUT /api/challenges**
+  - Edit a code challenge
+    - Users can edit unapproved challenges they created
+    - Admins can edit any unapproved challenges
+    - Admins can approve a challenge
+- **GET /api/challenges**
+  - Get code challenge(s)
+    - Users can get unapproved challenges they created
+    - Admins can get any unapproved challenges
+    - Users and Admins can get any approved challenges
+    - Users and Admins can filter challenges by difficulty
+- **POST /api/submissions**
+  - Create a new submission
+    - User is starting a code challenge
+- **PUT /api/submissions**
+  - Edit a submission
+    - Users can only edit submissions they created
+    - Users can update their answer
+    - Users can retake a challenge they already completed
+- **GET /api/submissions**
+  - Get submission(s)
+    - Users can get submissions they created
+    - Users can get all submissions they have completed
+    - Users can get all submissions they started on
+    - Users can get a submission for a specific challenge
+- **PUT /api/validation**
+  - Validate a submission's answer
+    - Users can optionally update their answer when validating
 
 # Getting user profile information
 
-## GET /api/user
+## GET /api/users
 
-- Xp level / Experience
---- Sent 
+- Get user profile information
+- User ID is acquired using the access token in the Authorization header
+- Will return an error if token is invalid
+- Can be used to confirm user is logged in
 
+### --- Sent 
+
+#### Request Body:
 ```
 {
- access token in header
+
 }
 ```
 
---- Received 201
+### --- Received 201
 
+#### Returns user information:
 ```
 {
-  xp : Number
+  id: INTEGER
+  xp: INTEGER
+  role: STRING
 }
 ```
 
@@ -65,8 +101,9 @@
 - Double check the approved column is false
 - Validate format of payload
 
---- Sent body payload
+### --- Sent
 
+#### Request Body:
 ```
 {
   title: STRING - Required - Unique
@@ -78,17 +115,18 @@
 }
 ```
 
---- Received 201
+### --- Received 201
 
+#### Returns the new challenge:
 ```
 {
-  id:NUMBER
-  title: STRING - Required - Unique
-  description: STRING - Required
-  tests: STRING - Required
-  skeleton_function: STRING - Required
-  solution: STRING - Required
-  difficulty: STRING - Required
+  id: INTEGER
+  title: STRING
+  description: STRING
+  tests: STRING
+  skeleton_function: STRING
+  solution: STRING
+  difficulty: STRING
 }
 ```
 
@@ -102,8 +140,9 @@
 - Expects a payload of challenge data
 - Validate payload data
 
---- Sent
+### --- Sent
 
+#### Request Body:
 ```
 {
   id: INTEGER - Required
@@ -116,11 +155,18 @@
 }
 ```
 
---- Received 201
+### --- Received 201
 
+#### Returns the updated challenge:
 ```
 {
-  id:NUMBER
+  id: INTEGER
+  title: STRING
+  description: STRING
+  tests: STRING
+  skeleton_function: STRING
+  solution: STRING
+  difficulty: STRING
 }
 ```
 
@@ -135,16 +181,24 @@
 - Only admins can access all challenges
 - Returns an array of challenges
 
---- Sent query parameter for difficulty, created_by, approved, id
+### --- Sent
 
+#### Optional Query Parameters:
+ - difficulty
+ - created_by
+ - approved
+ - id
+
+#### Request Body:
 ```
 {
 
 }
 ```
 
---- Received 200
+### --- Received 200
 
+#### Returns an array of challenges:
 ```
 [
   {
@@ -160,7 +214,7 @@
 ```
 ---
 
-# Updating a Submission
+# Updating A Submission
 
 ## PUT /api/submissions
 * Save a user's submission answer and completed state from true to false
@@ -169,21 +223,23 @@
 * Users should only be able to update their own submissions
 * Check to make sure the submission exists- If not throw an error
 
---- Sent
+### --- Sent
 
+#### Request Body:
 ```
 {
-  id: number - Required
-  completed: boolean - optional
-  solution: STRING - optional
+  id: NUMBER - Required
+  completed: BOOLEAN - Optional
+  solution: STRING - Optional
 }
 ```
 
---- Received 200
+### --- Received 200
 
+#### Returns the updated submission:
 ```
 {
-   id
+  id
   challenge_id
   attempts
   completed
@@ -191,24 +247,26 @@
 }
 ```
 
-# Creating a Challenge Submission
+# Creating A Submission
 
 ## POST /api/submissions
 - Populate skeleton function 
 - Takes the ID of the challenge
 - Check to make sure the challenge exists- If not throw an error
-- check to make sure submission does not exist for user- if one exists throw error
+- Check to make sure submission does not exist for user- if one exists throw error
 
---- Sent
+### --- Sent
 
+#### Request Body:
 ```
 {
-  challenge_id - required
+  challenge_id - INTEGER - Required
 }
 ```
 
---- Received, 201
+### --- Received, 201
 
+#### Returns the new challenge submission:
 ```
 {
   id
@@ -228,16 +286,22 @@
 - Any registered user can access this endpoint
 - Returns an array of submissions
 
---- Sent challenge_id, completed
+### --- Sent
 
+#### Optional Query Parameters:
+ - challenge_id
+ - completed
+
+#### Request Body:
 ```
 {
  
 }
 ```
 
---- Received, array of challenge submissions
+### --- Received
 
+#### Array of challenge submissions:
 ```
 [
   {
@@ -250,70 +314,72 @@
 ]
 ```
 
-# Validating a Challenge Submission (to validate they have the correct answer)
+# Validating a Challenge Submission Has A Correct Answer
 
-## PUT /api/validation/:id
+## PUT /api/validation
 * Validate a user has the correct answer and update the database entry accordingly
-* similar too /api/submissions PUT tests code
+* Similar to /api/submissions PUT tests code
 * Uses the ID of the applicable user_submission entry 
 * Users should only be able to request validation on submissions they created
 * Users should only be able to request validation of solutions which have not already been verified as correct
 
---- Sent submission id as route parameter
+### --- Sent
 
+#### Request Body:
 ```
 {
-
+  id: STRING - Required - ID of the applicable user_submission
+  solution: STRING - Required
 }
 ```
 
---- Received
+### --- Received, 201
 
+#### Returns an updated submission:
 ```
-  {
-    id
-   challenge_id
-   attempts
-   completed
-   solution
-  }
-
+{
+  id
+  challenge_id
+  attempts
+  completed
+  solution
+}
 ```
 
 # Data Model
-## The following represesents the tables in the database.
 
+## The following represents each table in the database:
 
-#  users
+##  users
 
 ---
 
 ```
 {
   id: UUID
-  created_at: DATE - Optional - Defaults to current time
+  created_at: DATETIME - Optional - Defaults to current time
   sub_id: STRING - Required - Unique - Auth0 sub id
 }
 ```
 
-# categories
+## categories
 
 ---
 
 ```
 {
   id: UUID
-  created_at: DATE - Optional - Defaults to current time
+  created_at: DATETIME - Optional - Defaults to current time
   name: STRING - Required - Unique
 }
 ```
 
-# challenges
+## challenges
 ---
 ```
 {
   id: UUID
-  created_at: DATE - Optional - Defaults to current time
+  created_at: DATETIME - Optional - Defaults to current time
   created_by: UUID - Required - Foreign key in USERS table
   title: STRING - Required - Unique
   description: STRING - Required
@@ -344,7 +410,7 @@
 ```
 {
   id: UUID
-  created_at: DATE - Optional - Defaults to current time
+  created_at: DATETIME - Optional - Defaults to current time
   created_by: UUID - Required - Foreign key in USERS table
   challenge_id: UUID - Required - Foreign key in CHALLENGES table
   attempts: INTEGER - Required - Defaults to 1
@@ -352,13 +418,10 @@
   solution: STRING - Optional - Defaults to skeleton code
 }
 ```
-
-
 #  Environment Variables
-## Production enviroment variables
+## Production Environment Variables
 * DATABASE_URL
 * NODE_ENV
 ---
-## Local Variable
+## Development Environment Variables
 * DB_IP
-

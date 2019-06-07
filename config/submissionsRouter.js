@@ -7,64 +7,47 @@ const userSubmissionsApi = require('../apis/db/userSubmissions');
 
 const router = express.Router();
 
-router.post('/:id', (req, res) => {
+router.post('/', (req, res) => {
 
     //Todo: Add validation once payload format is decided upon
     //Check that the challenge ID exists and is an approved challenge
+    //Check to make sure submission does not exist for user
 
     //Insert the new challenge into the database
     userSubmissionsApi.insert({
-        ...req.body,
-        challenge_id: req.params.id,
-        created_by: req.headers.user.id
-    })
-    .then(dbRes => {
-        //Returns the new submission object
-        res.status(200).send(dbRes);
-    })
-    .catch(err => {
-        res.status(500).send({
-            message: err.message
+            ...req.body,
+            challenge_id: req.body.challenge_id,
+            created_by: req.headers.user.id
+        })
+        .then(dbRes => {
+            //Returns the new submission object
+            res.status(200).send(dbRes);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: 'Internal Server Error'
+            });
         });
-    });
 });
 
-router.put('/:id', auth, (req, res) => {
+router.put('/', auth, (req, res) => {
 
-    //Used as a toggle invalid submission state to skip update
-    let valid = true;
+    //Todo: Validation of request body
 
-    //For each property in the body of the request
-    Object.keys(req.body).forEach(property => {
-
-        //If there's a property other than solutions then toggle valid to false and send back an error
-        //Users should only be able to edit their solutions
-        if (property !== 'solutions' || property !== 'completed') {
-            valid = false;
-            req.status(422).send({
-                message: 'Only solutions and completed can be edited'
+    //Update the user's challenge_submission entry for the challenge specified in the id param
+    userSubmissionsApi.update({
+            id: req.body.id,
+            created_by: req.headers.user.id
+        }, req.body)
+        .then(dbRes => {
+            //Returns an updated submission object
+            res.status(200).send(dbRes);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: 'Internal Server Error'
             });
-        }
-    })
-
-    //Ensure the payload was valid
-    if (valid) {
-
-        //Update the user's challenge_submission entry for the challenge specified in the id param
-        userSubmissionsApi.update({
-                challenge_id: req.params.id,
-                created_by: req.params.id
-            }, req.body)
-            .then(dbRes => {
-                //Returns an updated submission object
-                res.status(200).send(dbRes);
-            })
-            .catch(err => {
-                res.status(500).send({
-                    message: err.message
-                });
-            });
-    }
+        });
 });
 
 router.get('/', auth, (req, res) => {
@@ -80,7 +63,7 @@ router.get('/', auth, (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message
+                message: 'Internal Server Error'
             });
         });
 });

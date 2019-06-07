@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/', auth, (req, res) => {
 
-    //TODO: Figure out exactly what data needs to be returned
+    //TODO: Calculate XP earned from submissions that are completed and return it
 
     //Return user information
     res.status(200).send(req.headers.user);
