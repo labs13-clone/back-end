@@ -1,0 +1,363 @@
+{
+	"info": {
+		"_postman_id": "8e3f3038-d659-4ce5-bfd7-b90b506b1eec",
+		"name": "Coding Clone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Local Dev",
+			"item": [
+				{
+					"name": "Submissions",
+					"item": [
+						{
+							"name": "POST - Submissions",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"challenge_id\":1,\n\t\"solution\":\"test\"\n}"
+								},
+								"url": {
+									"raw": "{{local_url}}/api/submissions",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"submissions"
+									]
+								},
+								"description": "A user can submit a submission to a coding challenge"
+							},
+							"response": []
+						},
+						{
+							"name": "GET - Submissions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local_url}}/api/submissions",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"submissions"
+									]
+								},
+								"description": "Get a user's submissions. A user would receive their submissions to challanges that were completed or not. "
+							},
+							"response": []
+						},
+						{
+							"name": "PUT - Updating a Submission",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": 1,\n  \"solution\": \"blow me\"\n}"
+								},
+								"url": {
+									"raw": "{{local_url}}/api/submissions",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"submissions"
+									]
+								},
+								"description": "A user can update their submission's solution. "
+							},
+							"response": []
+						}
+					],
+					"description": "A folder to store all of the requests related to submissions routes",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Challenges",
+					"item": [
+						{
+							"name": "GET - Challenges",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local_url}}/api/challenges",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"challenges"
+									]
+								},
+								"description": "Receive challenges"
+							},
+							"response": []
+						},
+						{
+							"name": "GET - Challenges by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local_url}}/api/challenges?id=1&difficulty=EASY&approved=1&created_by=3",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"challenges"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1"
+										},
+										{
+											"key": "difficulty",
+											"value": "EASY"
+										},
+										{
+											"key": "approved",
+											"value": "1"
+										},
+										{
+											"key": "created_by",
+											"value": "3"
+										}
+									]
+								},
+								"description": "Get a challenge by a specific ID. "
+							},
+							"response": []
+						},
+						{
+							"name": "POST - Challenges",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Test\",\n  \"description\": \"Test\",\n  \"tests\": \"Test\",\n  \"skeleton_function\": \"\\n function(){\\n  console.log('test')\\n}\\n\",\n  \"solution\": \"Test\",\n  \"difficulty\": \"EASY\"\n}"
+								},
+								"url": {
+									"raw": "{{local_url}}/api/challenges",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"challenges"
+									]
+								},
+								"description": "A user can post a challenge"
+							},
+							"response": []
+						}
+					],
+					"description": "A collection of requests related to challenges route",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "GET - User",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{local_url}}/api/users",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								},
+								"description": "Get's information about the user which is specific to the access token. The user should receive details about their XP. "
+							},
+							"response": []
+						}
+					],
+					"description": "A collection of requests related to the user route",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Validation",
+					"item": [
+						{
+							"name": "PUT - Validation",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"id\": 1,\n\t\"solution\": \"Test\"\n}"
+								},
+								"url": {
+									"raw": "{{local_url}}/api/validation",
+									"host": [
+										"{{local_url}}"
+									],
+									"path": [
+										"api",
+										"validation"
+									]
+								},
+								"description": "Validate a user has the correct answer and update the database entry accordingly"
+							},
+							"response": []
+						}
+					],
+					"description": "A collection of requests related to the validation route",
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "GET- Root Path",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{local_url}}",
+							"host": [
+								"{{local_url}}"
+							]
+						},
+						"description": "Test if API is up"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "f0888186-176a-4d84-a4d5-ddcb87b82e26",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "4f03049d-2271-43aa-923e-2174638563d4",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "3ec8284e-2759-4817-8510-23f870184d1f",
+			"key": "auth0_domain_url",
+			"value": "https://clone-coding-server.herokuapp.com/",
+			"type": "string"
+		},
+		{
+			"id": "4a9802c9-cd68-45c7-bc31-c029899d5d98",
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VUkVRa05GT0RneE5EUTRRVVJHT1VJeU56RTJNekUzTkRNM04wRkRNRVZFTnpVNU9ESXdRUSJ9.eyJpc3MiOiJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1Y2Y4Mzc1OTJhYTI0MzBiZjdiY2Q1NmQiLCJhdWQiOlsiaHR0cDovL2xhYnMxM2NvZGluZ2Nsb25lLmNvbS9hcGkiLCJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1NTk3NzU0MDQsImV4cCI6MTU1OTc4MjYwNCwiYXpwIjoiY1NzTnR5YkdSQWVaRVN1WlZKWGRhWWlsZDZPbk1ETFciLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIiwicGVybWlzc2lvbnMiOlsidXNlcjp1c2VyIl19.Cwxe7b_2__UXXoT7bEJFF33A9l06xeNGaj3yvK6mLeJSjqF2qUMDneHa-wgmT-a9TCtr2c3hVzM2s8XUEv8zoypaXFEeU3LTyLN8ue40DDMZ7qYFWCSKkZx3k4ZEoHFUMvHfSvnC0UpfdggEMU2sk1G6zc6LAYR1wKPqSp36SUT1n9mfW4xXepgxP8b05IN3xWkBHbDQl5_r8y2UO7wwpeVP1fqwFzEObX-B2lKfaIlpjRd7Cvn23kVrz2I-FboS6Y9cpFOU2RkCO9vir6htQyJw4bsWsxSMO-sdofBTQ-6hk6ujPfcqABTQNy7mFmR7rfIrQYzV4QbhveZD416dcQ",
+			"type": "string"
+		},
+		{
+			"id": "35fea6c0-2e12-4c7a-b88b-45abcd25e566",
+			"key": "local_url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		}
+	]
+}

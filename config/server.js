@@ -13,10 +13,11 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
-server.use('/api/users', usersRouter);
-server.use('/api/challenges', challengesRouter);
-server.use('/api/submissions', submissionsRouter);
-server.use('/api/validation', validationRouter);
+
+server.use('/api/users', auth, usersRouter);
+server.use('/api/challenges', auth, challengesRouter);
+server.use('/api/submissions', auth, submissionsRouter);
+server.use('/api/validation', auth, validationRouter);
 
 server.get('/', auth, (req, res) =>
     res.status(200).send({
