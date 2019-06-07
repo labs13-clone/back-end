@@ -14,7 +14,6 @@ router.post('/', (req, res) => {
     //Check to make sure submission does not exist for user
 
     //Insert the new challenge into the database
-    console.log(req.headers.user)
     userSubmissionsApi.insert({
             ...req.body,
             challenge_id: req.body.challenge_id,
