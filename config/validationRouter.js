@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
-router.put('/:id', auth, (req, res) => {
+router.put('/', auth, (req, res) => {
 
     //Todo: Validate the ID provided exists and was created_by the user
     //Use the retrieved DB entry to get the current attempt # and increase the # by one when updating
@@ -14,12 +14,12 @@ router.put('/:id', auth, (req, res) => {
     //Validation happens on frontend
 
     //Update the user_submissions
-    userSubmissionsApi.update(req.params.id, {
+    userSubmissionsApi.update(req.body.id, {
             completed: 1,
-            solution: releaseEvents.body.solution
+            solution: req.body.solution
         })
         .then(dbRes => {
-            //Returns an array of all submissions matching the filter
+            //Returns the updated submission object
             res.status(200).send(dbRes);
         })
         .catch(err => {

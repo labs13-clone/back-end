@@ -15,30 +15,35 @@ router.post('/', auth, (req, res) => {
         approved: false
     }
 
-    //todo: validation of format of payload
+    //Todo: Validation of format of payload
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
+
     challengesApi.insert(challenge)
         .then(dbRes => {
             res.status(201).send(dbRes);
         })
         .catch(err => {
-            res.status(400).send({
-                message: err.message
-            },console.log(err))
-        })
+            res.status(500).send({
+                message: 'Internal Server Error'
+            });
+        });
 });
 
 
 router.get('/', auth, (req, res) => {
-    const filter = req.query
+    const filter = req.query;
     if(req.headers.role === "user") {
         if(filter.approved === undefined) {
             filter.approved = true;
         } else if (filter.approved === false) {
-            filter.created_by = req.headers.user.id    
+            filter.created_by = req.headers.user.id;  
         }
     } else if (filter.approved === undefined) {
         filter.approved = true;
     }
+
+    //Todo: Validate query parameters
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
 
     challengesApi.getMany(filter)
     .then(dbRes => {
@@ -46,19 +51,25 @@ router.get('/', auth, (req, res) => {
     })
     .catch(err => {
         res.status(500).send({
-            message: err.message
+            message: 'Internal Server Error'
         });
     });
 });
 
 
-// TODO do validation for the payload
 router.put('/', auth, (req, res) => {
+
     const selector = {
-        id: req.body.id, 
-        approved: false
+        id: req.body.id
     }
 
+    if(req.headers.user.role !== 'admin') {
+        selector.approved = false;
+    }
+    
+    //TODO: Validation the request body
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
+    
     if(req.headers.user.role === 'user') {
         selector.created_by = req.headers.user.id;
     }
@@ -69,9 +80,9 @@ router.put('/', auth, (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
-                message: err.message
-            })
-        })
+                message: 'Internal Server Error'
+            });
+        });
 })
 
 module.exports = router;
