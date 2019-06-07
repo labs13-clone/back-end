@@ -342,33 +342,33 @@
 	],
 	"variable": [
 		{
-			"id": "96836c4b-83d7-4ec8-aca2-b06939a1af39",
+			"id": "95462781-6666-4eab-8e91-422697319039",
 			"key": "auth0_domain_url",
 			"value": "https://clone-coding-server.herokuapp.com/",
 			"type": "string"
 		},
 		{
-			"id": "e4badc38-99e9-4788-a82c-fa71acf1ab56",
+			"id": "575c3ff2-b735-4826-91dd-ab2597957965",
 			"key": "token",
-			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VUkVRa05GT0RneE5EUTRRVVJHT1VJeU56RTJNekUzTkRNM04wRkRNRVZFTnpVNU9ESXdRUSJ9.eyJpc3MiOiJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1Y2Y4Mzc1OTJhYTI0MzBiZjdiY2Q1NmQiLCJhdWQiOlsiaHR0cDovL2xhYnMxM2NvZGluZ2Nsb25lLmNvbS9hcGkiLCJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1NTk3NzU0MDQsImV4cCI6MTU1OTc4MjYwNCwiYXpwIjoiY1NzTnR5YkdSQWVaRVN1WlZKWGRhWWlsZDZPbk1ETFciLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIiwicGVybWlzc2lvbnMiOlsidXNlcjp1c2VyIl19.Cwxe7b_2__UXXoT7bEJFF33A9l06xeNGaj3yvK6mLeJSjqF2qUMDneHa-wgmT-a9TCtr2c3hVzM2s8XUEv8zoypaXFEeU3LTyLN8ue40DDMZ7qYFWCSKkZx3k4ZEoHFUMvHfSvnC0UpfdggEMU2sk1G6zc6LAYR1wKPqSp36SUT1n9mfW4xXepgxP8b05IN3xWkBHbDQl5_r8y2UO7wwpeVP1fqwFzEObX-B2lKfaIlpjRd7Cvn23kVrz2I-FboS6Y9cpFOU2RkCO9vir6htQyJw4bsWsxSMO-sdofBTQ-6hk6ujPfcqABTQNy7mFmR7rfIrQYzV4QbhveZD416dcQ",
+			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VUkVRa05GT0RneE5EUTRRVVJHT1VJeU56RTJNekUzTkRNM04wRkRNRVZFTnpVNU9ESXdRUSJ9.eyJpc3MiOiJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1Y2Y4Mzc1OTJhYTI0MzBiZjdiY2Q1NmQiLCJhdWQiOlsiaHR0cDovL2xhYnMxM2NvZGluZ2Nsb25lLmNvbS9hcGkiLCJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1NTk3NzU0MDQsImV4cCI6MTU1OTc4MjYwNCwiYXpwIjoiY1NzTnR5YkdSQWVaRVN1WlZKWGRhWWlsZDZPbk1ETFciLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIiwicGVybWlzc2lvbnMiOlsidXNlcjp1c2VyIl19.Cwxe7b_2__UXXoT7bEJFF33A9l06xeNGaj3yvK6mLeJSjqF2qUMDneHa-wgmT-a9TCtr2c3hVzM2s8XUEv8zoypaXFEeU3LTyLN8ue40DDMZ7qYFWCSKkZx3k4ZEoHFUMvHfSvnC0UpfdggEMU2sk1G6zc6LAYR1wKPqSp36SUT1n9mfW4xXepgxP8b05IN3xWkBHbDQl5_r8y2UO7wwpeVP1fqwFzEObX-B2lKfaIlpjRd7Cvn23kVrz2I-FboS6Y9cpFOU2RkCO9vir6htQyJw4bsWsxSMO-sdofBTQ-6hk6ujPfcqABTQNy7mFmR7rfIrQYzV4QbhveZD416dcQ",
 			"type": "string"
 		},
 		{
-			"id": "7009a6e9-2bc0-4939-afba-67481d656529",
+			"id": "b54ed2c9-f320-4e90-b9e2-c75cc48b09ec",
 			"key": "local_url",
 			"value": "http://localhost:5000",
 			"type": "string"
 		},
 		{
-			"id": "b7e5b0cc-4070-47fd-a20d-ce16695b3987",
+			"id": "3190fb32-829b-4ae5-84bf-1a3d953a58cb",
 			"key": "remote_url",
-			"value": "https://clone-coding-server.herokuapp.com/",
+			"value": "https://clone-coding-server.herokuapp.com",
 			"type": "string"
 		},
 		{
-			"id": "eee3249f-7077-4b36-8273-97318ed7ca2b",
+			"id": "b754fc7d-ac52-4dad-8bd1-2ceb23d6d5d5",
 			"key": "url",
-			"value": "https://clone-coding-server.herokuapp.com/",
+			"value": "https://clone-coding-server.herokuapp.com",
 			"type": "string"
 		}
 	]
