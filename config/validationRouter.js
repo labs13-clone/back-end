@@ -14,7 +14,7 @@ router.put('/', auth, (req, res) => {
     //Validation happens on frontend
 
     //Update the user_submissions
-    userSubmissionsApi.update(req.body.id, {
+    userSubmissionsApi.update({id:req.body.id}, {
             completed: 1,
             solution: req.body.solution
         })
