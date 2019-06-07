@@ -15,8 +15,8 @@ router.post('/', auth, (req, res) => {
         approved: false
     }
 
-    //Todo: validation of format of payload
-    //Todo: Figure out how to use bridge table for matching categories to challenges
+    //Todo: Validation of format of payload
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
 
     challengesApi.insert(challenge)
         .then(dbRes => {
@@ -43,7 +43,7 @@ router.get('/', auth, (req, res) => {
     }
 
     //Todo: Validate query parameters
-    //Todo: Figure out how to use bridge table for matching categories to challenges
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
 
     challengesApi.getMany(filter)
     .then(dbRes => {
@@ -68,6 +68,7 @@ router.put('/', auth, (req, res) => {
     }
     
     //TODO: Validation the request body
+    //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
     
     if(req.headers.user.role === 'user') {
         selector.created_by = req.headers.user.id;
