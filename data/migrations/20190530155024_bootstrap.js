@@ -2,7 +2,7 @@ exports.up = function (knex, Promise) {
     return knex.schema.createTable('users', tbl => {
             tbl.increments();
 
-            tbl.string('created_at')
+            tbl.datetime('created_at')
                 .defaultTo(knex.fn.now());
 
             tbl.string('sub_id')
@@ -12,7 +12,7 @@ exports.up = function (knex, Promise) {
         .createTable('categories', tbl => {
             tbl.increments();
 
-            tbl.string('created_at')
+            tbl.datetime('created_at')
                 .defaultTo(knex.fn.now());
 
             tbl.string('name')
@@ -22,7 +22,7 @@ exports.up = function (knex, Promise) {
         .createTable('challenges', tbl => {
             tbl.increments();
 
-            tbl.string('created_at')
+            tbl.datetime('created_at')
                 .defaultTo(knex.fn.now());
 
             tbl.integer('created_by')
@@ -32,20 +32,20 @@ exports.up = function (knex, Promise) {
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
 
-            tbl.string('title')
+            tbl.string('title',100)
                 .unique()
                 .notNullable();
 
-            tbl.string('description')
+            tbl.string('description',5000)
                 .notNullable();
 
-            tbl.string('tests')
+            tbl.string('tests',5000)
                 .notNullable();
 
-            tbl.string('skeleton_function')
+            tbl.string('skeleton_function',5000)
                 .notNullable();
 
-            tbl.string('solution')
+            tbl.string('solution',5000)
                 .notNullable();
 
             tbl.string('difficulty')
@@ -60,7 +60,7 @@ exports.up = function (knex, Promise) {
             tbl.integer('challenge_id')
                 .notNullable()
                 .references('id')
-                .inTable('users')
+                .inTable('challenges')
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
 
@@ -74,7 +74,7 @@ exports.up = function (knex, Promise) {
         .createTable('user_submissions', tbl => {
             tbl.increments();
 
-            tbl.string('created_at')
+            tbl.datetime('created_at')
                 .defaultTo(knex.fn.now());
 
             tbl.integer('created_by')
