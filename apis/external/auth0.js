@@ -4,17 +4,6 @@ module.exports = {
     getPubKey
 }
 
-let pubKey;
-
-//Get the public key from the Auth0 api to confirm the validity of the token
-axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
-    .then(res => {
-        pubKey = getSigningKey(res.data.keys);
-    })
-    .catch(err => {
-        console.log('Error retrieving JKWS from Auth0', err);
-    });
-
 //auth0 documentation states sometimes there can be multiple keys returned by the JKWS key set API
 //Write function to validate the correct one is used
 //Reference: https://auth0.com/blog/navigating-rs256-and-jwks/#Finding-the-exact-signing-key
@@ -50,7 +39,15 @@ function getSigningKey(keys) {
 //Return the public key
 //Only function exported from this module
 function getPubKey() {
-    return pubKey;
+
+    //Get the public key from the Auth0 api to confirm the validity of the token
+    return axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
+        .then(res => {
+            return getSigningKey(res.data.keys);
+        })
+        .catch(err => {
+            console.log('Error retrieving JKWS from Auth0', err);
+        });
 }
 
 //Convert the certificate to the proper format

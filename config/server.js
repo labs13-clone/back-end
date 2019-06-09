@@ -19,9 +19,10 @@ server.use('/api/challenges', auth, challengesRouter);
 server.use('/api/submissions', auth, submissionsRouter);
 server.use('/api/validation', auth, validationRouter);
 
-server.get('/', auth, (req, res) =>
+server.get('/', (req, res) => {
     res.status(200).send({
         message: "API is alive"
-    }));
+    });
+});
 
 module.exports = server;
