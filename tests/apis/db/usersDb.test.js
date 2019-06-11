@@ -18,6 +18,22 @@ describe('Users Model', () => {
         });
     });
 
+    describe('insert()', () => {
+        it('should throw an error when the sub id is already taken', async () => {
+            await usersApi.insert({
+                sub_id: 'auth0sub'
+            });
+
+            try{
+                await usersApi.insert({
+                    sub_id: 'auth0sub'
+                });
+            } catch(err) {
+                expect(err).not.toBe(undefined);
+            }
+        });
+    });
+
     describe('getOne()', () => {
         it('should get a user by their sub_id', async () => {
             const userId = await usersApi.insert({
