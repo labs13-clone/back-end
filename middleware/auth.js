@@ -43,6 +43,8 @@ module.exports = function (req, res, next) {
 
                     //Set the users role according to the permissions property
                     if (decoded.permissions.includes('admin:admin')) {
+
+                        //var used to declare role so the variable is accessible outside this if/else statement
                         var role = 'admin';
                     } else {
                         var role = 'user';

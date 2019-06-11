@@ -3,8 +3,13 @@ const express = require('express');
 const db = require('../../data/dbConfig');
 const validateUserInput = require('../../middleware/validateUserInput');
 const auth = require('../../middleware/auth');
+const auth0Api = require('../../apis/external/auth0');
 
 describe('userValidation Middleware Tests - Query Params', () => {
+
+    beforeAll(() => {
+        return auth0Api.getPubKey();
+    });
 
     beforeEach(async () => {
         await db('user_submissions').del();
@@ -270,6 +275,11 @@ describe('userValidation Middleware Tests - Query Params', () => {
 });
 
 describe('userValidation Middleware Tests - Body', () => {
+
+    beforeAll(() => {
+        return auth0Api.getPubKey();
+    });
+    
     it('Required Body Property Included In The Request- Returns 200', done => {
 
         const testApp = express();

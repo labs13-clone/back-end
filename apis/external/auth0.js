@@ -15,9 +15,11 @@ function pubKey() {
 //Get the public key from the Auth0 api to confirm the validity of the token
 function getPubKey() {
 
-    axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
+    return axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
         .then(res => {
             publicKey = getSigningKey(res.data.keys);
+
+            return null;
         })
         .catch(err => {
             console.log('Error retrieving JKWS from Auth0', err);

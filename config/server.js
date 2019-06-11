@@ -11,6 +11,7 @@ const auth0Api = require('../apis/external/auth0');
 
 //Get the JKWS key set used in the auth middleware
 auth0Api.getPubKey();
+
 const server = express();
 
 server.use(helmet());

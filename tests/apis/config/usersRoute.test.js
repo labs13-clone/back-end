@@ -1,7 +1,17 @@
 const request = require('supertest');
 const server = require('../../../config/server');
+const db = require('../../../data/dbConfig');
+const auth0Api = require('../../../apis/external/auth0');
 
 describe('users', () => {
+    beforeAll(() => {
+        return auth0Api.getPubKey();
+    });
+
+    beforeEach(async () => {
+        await db('users').del();
+    });
+
     it('Set environment to testing', () => {
         expect(process.env.NODE_ENV).toBe('testing');
     });
