@@ -1,9 +1,18 @@
 const request = require('supertest');
 const express = require('express');
+const db = require('../../data/dbConfig');
 const validateUserInput = require('../../middleware/validateUserInput');
 const auth = require('../../middleware/auth');
 
 describe('userValidation Middleware Tests - Query Params', () => {
+
+    beforeEach(async () => {
+        await db('user_submissions').del();
+        await db('challenges_categories').del();
+        await db('categories').del();
+        await db('challenges').del();
+        await db('users').del();
+    });
 
     it('Required Query Param Included With Requests- Returns 200', done => {
 
@@ -108,6 +117,150 @@ describe('userValidation Middleware Tests - Query Params', () => {
                 id: 'test'
             })
             .set('authorization', process.env.TEST_TOKEN)
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Optional Query Param Included With The Request Should Be Unique And Is NOT Unique- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'sub_id',
+            required: false,
+            type: 'query',
+            dataType: 'string',
+            unique: true,
+            dbTable: 'users'
+        }]), (req, res) => {
+            console.log('too late')
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        db('users').insert({
+                sub_id: 'test'
+            })
+
+            .then(_ => {
+                request(testApp)
+                    .post('/')
+                    .query({
+                        sub_id: 'test'
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(422)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
+            });
+    });
+
+    it('Required Query Param Included With The Request Should Be Unique And Is NOT Unique- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'sub_id',
+            required: true,
+            type: 'query',
+            dataType: 'string',
+            unique: true,
+            dbTable: 'users'
+        }]), (req, res) => {
+            console.log('too late')
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        db('users').insert({
+                sub_id: 'test'
+            })
+
+            .then(_ => {
+                request(testApp)
+                    .post('/')
+                    .query({
+                        sub_id: 'test'
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(422)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
+            });
+    });
+
+    it('Required Query Param Included With The Request Should Be Unique And IS Unique- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'sub_id',
+            required: true,
+            type: 'query',
+            dataType: 'string',
+            unique: true,
+            dbTable: 'users'
+        }]), (req, res) => {
+
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .query({
+                sub_id: 'test'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Optional Query Param Included With The Request Should Be Unique And IS Unique- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'sub_id',
+            required: false,
+            type: 'query',
+            dataType: 'string',
+            unique: true,
+            dbTable: 'users'
+        }]), (req, res) => {
+
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .query({
+                sub_id: 'test'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
             .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
@@ -408,7 +561,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({id: 1})
+            .send({
+                id: 1
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(200)
@@ -453,8 +608,10 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({id: 1,
-            boolean: false})
+            .send({
+                id: 1,
+                boolean: false
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(200)
@@ -528,7 +685,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({string: 1})
+            .send({
+                string: 1
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
@@ -557,7 +716,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({string: false})
+            .send({
+                string: false
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
@@ -586,7 +747,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({boolean: 1})
+            .send({
+                boolean: 1
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
@@ -615,7 +778,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({boolean: 'string'})
+            .send({
+                boolean: 'string'
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
@@ -644,7 +809,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({number: 'string'})
+            .send({
+                number: 'string'
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
@@ -673,7 +840,9 @@ describe('userValidation Middleware Tests - Body', () => {
 
         request(testApp)
             .post('/')
-            .send({number: false})
+            .send({
+                number: false
+            })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)

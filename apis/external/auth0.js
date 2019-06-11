@@ -1,7 +1,27 @@
 const axios = require('axios');
 
 module.exports = {
+    pubKey,
     getPubKey
+}
+
+let publicKey;
+
+//Return the public key
+function pubKey() {
+    return publicKey;
+}
+
+//Get the public key from the Auth0 api to confirm the validity of the token
+function getPubKey() {
+
+    axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
+        .then(res => {
+            publicKey = getSigningKey(res.data.keys);
+        })
+        .catch(err => {
+            console.log('Error retrieving JKWS from Auth0', err);
+        });
 }
 
 //auth0 documentation states sometimes there can be multiple keys returned by the JKWS key set API
@@ -36,19 +56,6 @@ function getSigningKey(keys) {
     return signingKeys[0].publicKey;
 }
 
-//Return the public key
-//Only function exported from this module
-function getPubKey() {
-
-    //Get the public key from the Auth0 api to confirm the validity of the token
-    return axios.get('https://labs13codingclone.auth0.com/.well-known/jwks.json')
-        .then(res => {
-            return getSigningKey(res.data.keys);
-        })
-        .catch(err => {
-            console.log('Error retrieving JKWS from Auth0', err);
-        });
-}
 
 //Convert the certificate to the proper format
 //Certificate must be in this specific format or else jwt won't be able to parse it
