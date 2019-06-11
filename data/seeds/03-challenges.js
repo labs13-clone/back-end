@@ -34,18 +34,18 @@ function longestString(arr) {
 }
               `,
               solution:`
-              function longestString(arr) {
-                let result = '';
-                for(let i = 0; i < arr.length;  i++){
-                  let currentItem = arr[i];
-                  if(currentItem.length > result){
-                    result = arr[i];
-                  }
-                }
-                return result;
-              }
+function longestString(arr) {
+let result = '';
+for(let i = 0; i < arr.length;  i++){
+    let currentItem = arr[i];
+    if(currentItem.length > result){
+    result = arr[i];
+    }
+}
+return result;
+}
               `,
-              difficulty:"EASY",
+              difficulty:10,
               approved:1
             },
             {
@@ -92,9 +92,9 @@ function reverseString(str) {
         reversed += str[i - 1];
     }
     return reversed;
-    }
+}
                 `,
-                difficulty:"EASY",
+                difficulty:10,
                 approved:1
               },
               {
@@ -142,9 +142,9 @@ function reverseNumber (num) {
     }
     let result = Number(reversed);
     return result;
-    }                  
+}                  
                 `,
-                difficulty:"EASY",
+                difficulty:10,
                 approved:1
               }
         ]);

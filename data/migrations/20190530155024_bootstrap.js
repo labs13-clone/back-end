@@ -48,8 +48,10 @@ exports.up = function (knex, Promise) {
             tbl.string('solution',5000)
                 .notNullable();
 
-            tbl.string('difficulty')
-                .notNullable();
+            tbl.integer('difficulty')
+                .unsigned()
+                .notNullable()
+                .defaultTo(1);
 
             tbl.boolean('approved')
                 .defaultTo(0);
