@@ -10,11 +10,7 @@ module.exports = {
 //Add a challenge to the database
 //Returns the updated challenge object
 function insert(challenge) {
-<<<<<<< Updated upstream
-    challenge.tests = JSON.stringify(challenge.tests)
-=======
     challenge.tests = JSON.stringify(challenge.tests);
->>>>>>> Stashed changes
     return db('challenges')
         .insert(challenge)
         .returning('id')
@@ -30,11 +26,7 @@ function insert(challenge) {
 //Update a challenge
 //Returns the updated challenge object
 function update(selector = null, payload) {
-<<<<<<< Updated upstream
-    if(payload.tests !== undefined) payload.tests = JSON.stringify(payload.tests)
-=======
     if(payload.tests !== undefined) payload.tests = JSON.stringify(payload.tests);
->>>>>>> Stashed changes
     if (!selector) return new Error('No selector provided for the update');
     return db('challenges')
         .where(selector)
