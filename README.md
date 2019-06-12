@@ -145,7 +145,7 @@
   tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
-  difficulty: STRING - Required
+  difficulty: INTEGER - Required
 }
 ```
 
@@ -160,7 +160,7 @@
   tests: JSON
   skeleton_function: STRING
   solution: STRING
-  difficulty: STRING
+  difficulty: INTEGER
 }
 ```
 
@@ -185,7 +185,7 @@
   tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
-  difficulty: STRING - Required
+  difficulty: INTEGER - Required
 }
 ```
 
@@ -200,7 +200,7 @@
   tests: JSON
   skeleton_function: STRING
   solution: STRING
-  difficulty: STRING
+  difficulty: INTEGER
 }
 ```
 
@@ -242,7 +242,7 @@
     tests: JSON - Required
     skeleton_function: STRING - Required
     solution: STRING - Required
-    difficulty: STRING - Required
+    difficulty: INTEGER - Required
   }
 ]
 ```

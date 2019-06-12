@@ -10,6 +10,7 @@ module.exports = {
 //Add a challenge to the database
 //Returns the updated challenge object
 function insert(challenge) {
+    challenge.tests = JSON.stringify(challenge.tests)
     return db('challenges')
         .insert(challenge)
         .returning('id')
@@ -25,6 +26,7 @@ function insert(challenge) {
 //Update a challenge
 //Returns the updated challenge object
 function update(selector = null, payload) {
+    if(payload.tests !== undefined) payload.tests = JSON.stringify(payload.tests)
     if (!selector) return new Error('No selector provided for the update');
     return db('challenges')
         .where(selector)

@@ -200,7 +200,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"title\": \"Send a string 'test' to the console\",\n  \"description\": \"Write a function that sends a string 'test' to the console\",\n  \"tests\": \"test\",\n  \"skeleton_function\": \"\\n function(){\\n  console.log('test')\\n}\\n\",\n  \"solution\": \"test\",\n  \"difficulty\": \"EASY\"\n}"
+									"raw": "{\n  \"title\": \"Testing1\",\n  \"description\": \"Write a function that sends a string 'test' to the console\",\n  \"tests\": [\n  \t\t\t{\n            \"descriptor\":\"Returns an array of common elements for numbers\",\n            \"argumentsToPass\":[[1, 2, 3, 4, 5], [4, 5, 6, 7]],\n            \"expectedResult\":[4, 5]\n            }\n           ],\n  \"skeleton_function\": \"\\n function(){\\n  console.log('test')\\n}\\n\",\n  \"solution\": \"test\",\n  \"difficulty\": 10\n}"
 								},
 								"url": {
 									"raw": "{{url}}/api/challenges",
@@ -213,6 +213,41 @@
 									]
 								},
 								"description": "A user can post a challenge"
+							},
+							"response": []
+						},
+						{
+							"name": "PUT - Challenges",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"id\": 7,\n  \"title\": \"Testing1\",\n  \"description\": \"Write a function that sends a string 'test' to the console\",\n  \"tests\": [\n  \t\t\t{\n            \"descriptor\":\"Returns an array of common elements for numbers\",\n            \"argumentsToPass\":[[1, 2, 3, 4, 5], [4, 5, 6, 7]],\n            \"expectedResult\":[4, 5]\n            }\n           ],\n  \"skeleton_function\": \"\\n function(){\\n  console.log('test')\\n}\\n\",\n  \"solution\": \"test\",\n  \"difficulty\": 20\n}"
+								},
+								"url": {
+									"raw": "{{url}}/api/challenges",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"api",
+										"challenges"
+									]
+								},
+								"description": "Edit Challenges"
 							},
 							"response": []
 						}
@@ -342,33 +377,33 @@
 	],
 	"variable": [
 		{
-			"id": "95462781-6666-4eab-8e91-422697319039",
+			"id": "7a56fb80-8c06-4838-ae9a-02c44b098bee",
 			"key": "auth0_domain_url",
 			"value": "https://clone-coding-server.herokuapp.com/",
 			"type": "string"
 		},
 		{
-			"id": "575c3ff2-b735-4826-91dd-ab2597957965",
+			"id": "809affc5-f8cd-4901-83a9-ad0f1489ac45",
 			"key": "token",
 			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VUkVRa05GT0RneE5EUTRRVVJHT1VJeU56RTJNekUzTkRNM04wRkRNRVZFTnpVNU9ESXdRUSJ9.eyJpc3MiOiJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1Y2Y4Mzc1OTJhYTI0MzBiZjdiY2Q1NmQiLCJhdWQiOlsiaHR0cDovL2xhYnMxM2NvZGluZ2Nsb25lLmNvbS9hcGkiLCJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1NTk3NzU0MDQsImV4cCI6MTU1OTc4MjYwNCwiYXpwIjoiY1NzTnR5YkdSQWVaRVN1WlZKWGRhWWlsZDZPbk1ETFciLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIiwicGVybWlzc2lvbnMiOlsidXNlcjp1c2VyIl19.Cwxe7b_2__UXXoT7bEJFF33A9l06xeNGaj3yvK6mLeJSjqF2qUMDneHa-wgmT-a9TCtr2c3hVzM2s8XUEv8zoypaXFEeU3LTyLN8ue40DDMZ7qYFWCSKkZx3k4ZEoHFUMvHfSvnC0UpfdggEMU2sk1G6zc6LAYR1wKPqSp36SUT1n9mfW4xXepgxP8b05IN3xWkBHbDQl5_r8y2UO7wwpeVP1fqwFzEObX-B2lKfaIlpjRd7Cvn23kVrz2I-FboS6Y9cpFOU2RkCO9vir6htQyJw4bsWsxSMO-sdofBTQ-6hk6ujPfcqABTQNy7mFmR7rfIrQYzV4QbhveZD416dcQ",
 			"type": "string"
 		},
 		{
-			"id": "b54ed2c9-f320-4e90-b9e2-c75cc48b09ec",
+			"id": "fd0de526-e52b-45c4-a598-d7d139cd678f",
 			"key": "local_url",
 			"value": "http://localhost:5000",
 			"type": "string"
 		},
 		{
-			"id": "3190fb32-829b-4ae5-84bf-1a3d953a58cb",
+			"id": "38c6629b-c076-4cb7-88cf-5e9d51cd313f",
 			"key": "remote_url",
 			"value": "https://clone-coding-server.herokuapp.com",
 			"type": "string"
 		},
 		{
-			"id": "b754fc7d-ac52-4dad-8bd1-2ceb23d6d5d5",
+			"id": "21a6a898-5eac-4929-846e-0e8a61ab7511",
 			"key": "url",
-			"value": "https://clone-coding-server.herokuapp.com",
+			"value": "http://localhost:5000",
 			"type": "string"
 		}
 	]
