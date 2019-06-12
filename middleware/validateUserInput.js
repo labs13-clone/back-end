@@ -13,7 +13,7 @@ const users = require('../apis/db/users');
 //     required: Boolean
 //     type: String ('query' || 'body' || 'params')
 //     default: Boolean || String || Number
-//     dataType: String ('boolean' || 'string' || 'number' || 'id')
+//     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range')
 //     dbTable: String ('users' || 'categories' || 'challenges' || 'user_submissions' || 'challenges_categories')
 //     protected: Boolean
 //     unique: Boolean
@@ -23,7 +23,6 @@ const users = require('../apis/db/users');
 //Curry the Validation Schema to the actual custom middleware function
 module.exports = function validateUserInput(validationSchema) {
 
-
     //Returns Express middleware
     return (req, res, next) => {
 
@@ -32,21 +31,17 @@ module.exports = function validateUserInput(validationSchema) {
         //Then an error will be thrown after an error response is sent.
         Promise.resolve()
 
-            .then(_ => {
+            .then(async _ => {
 
                 //If the proper validationSchema type was not submitted to the middleware
                 if (!validationSchema instanceof Array) {
 
                     //Then the validationSchema is misconfigured
                     //Return an internal server error
-                    res.status(500).send({
-                        message: 'Internal Server Error'
-                    });
-
-                    return Promise.reject();
+                    return {
+                        errorType: 'default'
+                    };
                 }
-            })
-            .then(_ => {
 
                 //For each schema entry
                 for (let i = 0; i < validationSchema.length; i++) {
@@ -59,7 +54,10 @@ module.exports = function validateUserInput(validationSchema) {
                     //And it does not have a default value
                     if (req[validationObject.type][validationObject.name] === undefined && validationObject.required && validationObject.default === undefined) {
 
-                        return Promise.reject({errorType: 'required', schemaName: validationObject.name});
+                        return {
+                            errorType: 'required',
+                            errorName: validationObject.name
+                        };
                     }
 
                     //If the property does not exist on the query/body/params
@@ -74,59 +72,50 @@ module.exports = function validateUserInput(validationSchema) {
                             const applicableDbApi = dbTableSwitch(validationObject.dbTable);
 
                             //Fetch it from the proper table
-                            applicableDbApi.getOne({
-                                    id: validationObject.default
-                                })
-                                .then(item => {
+                            const item = await applicableDbApi.getOne({
+                                id: validationObject.default
+                            });
 
-                                    //If it doesn't exist...
+                            //If it doesn't exist...
+                            if (item === undefined) {
 
-                                    if (item === undefined) {
+                                //Defaults should never not exist in the database
+                                //If it occurs then the validationSchema is incorrect
+                                //Log the error to the console and return internal server error
+                                console.log(`The default validationObject specified as ${validationObject.name} in ${validationObject.dbTable} does not exist in the database`);
+                                return {
+                                    errorType: 'default'
+                                };
+                            }
 
-                                        //Defaults should never not exist in the database
-                                        //If it occurs then the validationSchema is incorrect
-                                        //Log the error to the console and return internal server error
-                                        console.log(`The default validationObject specified as ${validationObject.name} in ${validationObject.dbTable} does not exist in the database`);
-                                        res.status(500).send({
-                                            message: `Internal Server Error`
-                                        });
+                            //Else If it does exist:
+                            //Make sure it is they own the resource
+                            //If it is a protected resource and the user is not an admin
+                            else if (validationObject.protected && req.headers.user.role !== 'admin') {
 
-                                        return Promise.reject();
+                                //If it's on the user table
+                                if (validationObject.dbTable) {
+
+                                    //Then make sure their user id matches the id sent by the request
+                                    if (req.headers.user.id !== item.id) {
+                                        return {
+                                            errorType: 'protected'
+                                        };
                                     }
+                                }
 
-                                    //Else If it does exist:
-                                    //Make sure it is they own the resource
-                                    //If it is a protected resource and the user is not an admin
-                                    else if (validationObject.protected && req.headers.user.role !== 'admin') {
+                                //Else their id should be in created_by
+                                //Make sure they own the document
+                                else {
 
-                                        //If it's on the user table
-                                        if (validationObject.dbTable) {
-
-                                            //Then make sure their user id matches the id sent by the request
-                                            if (req.headers.user.id !== item.id) {
-                                                res.status(403).send({
-                                                    message: `Not Authorized`
-                                                });
-
-                                                return Promise.reject();
-                                            }
-                                        }
-
-                                        //Else their id should be in created_by
-                                        //Make sure they own the document
-                                        else {
-
-                                            //Make sure their user id matches the created_by column
-                                            if (req.headers.user.id !== item.created_by) {
-                                                res.status(403).send({
-                                                    message: `Not Authorized`
-                                                });
-
-                                                return Promise.reject();
-                                            }
-                                        }
+                                    //Make sure their user id matches the created_by column
+                                    if (req.headers.user.id !== item.created_by) {
+                                        return {
+                                            errorType: 'protected'
+                                        };
                                     }
-                                });
+                                }
+                            }
                         }
 
                         //Else, the default is already in the proper format so it can be assigned
@@ -145,13 +134,18 @@ module.exports = function validateUserInput(validationSchema) {
                     else if (req[validationObject.type][validationObject.name] !== undefined) {
 
                         //Check it's the proper data type
-                        if ((typeof req[validationObject.type][validationObject.name] !== validationObject.dataType && validationObject.dataType !== 'id') ||
-                            (typeof req[validationObject.type][validationObject.name] !== 'number' && validationObject.dataType === 'id')) {
-                            res.status(422).send({
-                                message: `${validationObject.name} must be a ${validationObject.dataType}`
-                            });
+                        if ((typeof req[validationObject.type][validationObject.name] !== validationObject.dataType && validationObject.dataType !== 'id' && validationObject.dataType !== 'range') ||
+                            (typeof req[validationObject.type][validationObject.name] !== 'number' && validationObject.dataType === 'id') ||
+                            (typeof req[validationObject.type][validationObject.name] !== 'string' && validationObject.dataType === 'range') ||
+                            (validationObject.dataType === 'range' && req[validationObject.type][validationObject.name].split('-').reduce((prev, curr) => {
+                                return isNaN(Number(curr)) ? true : prev;
+                            }, false))) {
 
-                            return Promise.reject();
+                            return {
+                                errorType: 'data-type',
+                                errorName: validationObject.name,
+                                errorDataType: validationObject.dataType
+                            };
                         }
 
                         //If it is an id
@@ -162,69 +156,85 @@ module.exports = function validateUserInput(validationSchema) {
                             const applicableDbApi = dbTableSwitch(validationObject.dbTable);
 
                             //Fetch it from the proper table
-                            applicableDbApi.getOne({
-                                    id: req[validationObject.type].id
-                                })
-                                .then(item => {
+                            const item = await applicableDbApi.getOne({
+                                id: req[validationObject.type].id
+                            });
 
-                                    //If it doesn't exist...
-                                    if (item === undefined) {
+                            //If it doesn't exist...
+                            if (item === undefined) {
 
-                                        //Then throw an error
-                                        res.status(422).send({
-                                            message: `${validationObject.name} in ${validationObject.dbTable} does not exist in the database`
-                                        });
+                                //Then throw an error
+                                return {
+                                    errorType: 'invalid-id',
+                                    errorName: validationObject.name,
+                                    errorDbTable: validationObject.dbTable
+                                };
+                            }
 
-                                        return Promise.reject();
+                            //Else If it does exist:
+                            //Make sure it is they own the resource
+                            //If it is a protected resource and not an admin
+                            else if (validationObject.protected && req.headers.user.role !== 'admin') {
+
+                                //If it's on the user table
+                                if (validationObject.dbTable === 'users') {
+
+                                    //Then make sure their user id matches the id sent by the request
+                                    if (req.headers.user.id !== item.id) {
+
+                                        //If not then throw an error
+                                        return {
+                                            errorType: 'protected'
+                                        };
                                     }
+                                }
 
-                                    //Else If it does exist:
-                                    //Make sure it is they own the resource
-                                    //If it is a protected resource and not an admin
-                                    else if (validationObject.protected && req.headers.user.role !== 'admin') {
+                                //Else their id should be in created_by
+                                //Make sure they own the document
+                                else {
 
-                                        //If it's on the user table
-                                        if (validationObject.dbTable === 'users') {
+                                    //Make sure their user id matches the created_by column
+                                    if (req.headers.user.id !== item.created_by) {
 
-                                            //Then make sure their user id matches the id sent by the request
-                                            if (req.headers.user.id !== item.id) {
-
-                                                //Throw an error
-                                                res.status(403).send({
-                                                    message: `Not Authorized`
-                                                });
-
-                                                return Promise.reject();
-                                            }
-                                        }
-
-                                        //Else their id should be in created_by
-                                        //Make sure they own the document
-                                        else {
-
-                                            //Make sure their user id matches the created_by column
-                                            if (req.headers.user.id !== item.created_by) {
-                                                res.status(403).send({
-                                                    message: `Not Authorized`
-                                                });
-
-                                                return Promise.reject();
-                                            }
-                                        }
+                                        //If not then throw an error
+                                        return {
+                                            errorType: 'protected'
+                                        };
                                     }
-                                });
+                                }
+                            }
+                        }
 
+                        //If the dataType is a range
+                        //And the range limit is specified
+                        else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
+
+                            //Convert range values from string form to an array of numbers
+                            const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+
+                            //If the array contains a number below the minimum
+                            //If the array contains a number above the maximum
+                            if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
+                                rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'out-of-range',
+                                    errorRange: req[validationObject.type][validationObject.name],
+                                    errorLimit: JSON.stringify(validationObject.range)
+                                };
+                            }
                         }
 
                         //If it's a protected resource and the user is not an admin
                         //Then force the query/param/body property to the default
-                        else if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
+                        if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
                             req[validationObject.type][validationObject.name] = validationObject.default;
                         }
 
                         //If it's a unique property
                         //Then make sure it doesn't already exist
-                        else if (validationObject.unique !== undefined && validationObject.unique) {
+                        if (validationObject.unique !== undefined && validationObject.unique) {
 
                             //Get the applicable database API
                             const applicableDbApi = dbTableSwitch(validationObject.dbTable);
@@ -233,36 +243,23 @@ module.exports = function validateUserInput(validationSchema) {
                             filter[validationObject.name] = req[validationObject.type][validationObject.name];
 
                             //Fetch it from the proper table
-                            applicableDbApi.getOne(filter)
-                                .then(item => {
+                            const item = await applicableDbApi.getOne(filter);
 
-                                    // console.log('unique', filter, item)
+                            //If it already exists...
+                            if (item !== undefined) {
 
-                                    //If it already exists...
-                                    if (item !== undefined) {
-
-                                        console.log('Found in DB')
-
-                                        //Then throw an error because it's supposed to be unique
-                                        res.status(422).send({
-                                            message: `${validationObject.name} in ${validationObject.dbTable} is not unique`
-                                        });
-
-                                        return Promise.reject();
-
-                                    }
-                                    
-                                    // else {
-                                    //     console.log('Not Found in DB')
-                                    // }
-                                });
+                                //If not then throw an error
+                                //Then throw an error because it's supposed to be unique
+                                return {
+                                    errorType: 'unique',
+                                    errorName: validationObject.name,
+                                    errorDbTable: validationObject.dbTable
+                                };
+                            }
                         }
                     }
 
                 }
-            })
-
-            .then(_ => {
 
                 //After it is confirmed that the validationSchema is valid
                 //Make sure no extra user inputs are passed that can cause unexpected bugs and vulnerabilities
@@ -291,12 +288,14 @@ module.exports = function validateUserInput(validationSchema) {
                                 //If it doesn't exist then throw an error..
                                 if (!foundKey) {
 
-                                    //Including invalid properties on a request object could cause unintended consequences
-                                    res.status(422).send({
-                                        message: `Including ${key} in the ${type} invalidates your request`
-                                    });
+                                    //Including invalid properties (properties not included in the validation schema)
+                                    //On a request object could cause unintended consequences
+                                    return {
+                                        errorType: 'invalid-param',
+                                        errorKey: key,
+                                        errorParamType: type
+                                    };
 
-                                    return Promise.reject();
                                 }
 
                                 //Else if they sent a duplicate key then throw an error
@@ -311,11 +310,11 @@ module.exports = function validateUserInput(validationSchema) {
                                     //If found then throw an error
                                     if (duplicateKey) {
 
-                                        res.status(422).send({
-                                            message: `Including two ${key}s invalidates your request`
-                                        });
-
-                                        return Promise.reject();
+                                        return {
+                                            errorType: 'duplicate-param',
+                                            errorKey: key,
+                                            errorParamType: type
+                                        };
                                     }
                                 }
                             });
@@ -324,22 +323,63 @@ module.exports = function validateUserInput(validationSchema) {
 
                 });
             })
-            .catch(err => {
-                
+            .then(err => {
+
                 //An error response was already sent to the client
                 //So we don't need to do anything here
                 //You could add some logging if you want.
-                if(err !== undefined) {
-                    
-                    switch(err.errorType) {
+                if (err !== undefined) {
+
+                    switch (err.errorType) {
                         case 'required':
                             res.status(422).send({
-                                message: `${err.schemaName} is required`
+                                message: `${err.errorName} is required`
+                            });
+                            break;
+                        case 'protected':
+                            res.status(403).send({
+                                message: `Not Authorized`
+                            });
+                            break;
+                        case 'data-type':
+                            res.status(422).send({
+                                message: `${err.errorName} must be a ${err.dataType}`
+                            });
+                            break;
+                        case 'invalid-id':
+                            res.status(422).send({
+                                message: `${err.errorName} in ${err.errorDbTable} does not exist in the database`
+                            });
+                            break;
+                        case 'unique':
+                            res.status(422).send({
+                                message: `${err.errorName} in ${err.errorDbTable} is not unique`
+                            });
+                            break;
+                        case 'invalid-param':
+                            res.status(422).send({
+                                message: `Including ${err.errorKey} in the ${err.errorParamType} invalidates your request`
+                            });
+                            break;
+                        case 'duplicate-param':
+                            res.status(422).send({
+                                message: `Including two ${err.errorKey} ${err.errorParamType} invalidates your request`
+                            });
+                            break;
+                        case 'out-of-range':
+                            res.status(422).send({
+                                message: `Range ${err.errorRange} is outside of range limit ${err.errorLimit}`
+                            });
+                            break;
+                        default:
+                            res.status(500).send({
+                                message: 'Internal Server Error'
                             });
                             break;
                     }
+
                 } else {
-                    
+
                     //If we get to this point in the Promise chain and there are no errors
                     //Then the request has been determined to be valid, so we call next()
                     next();

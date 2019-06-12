@@ -8,10 +8,6 @@ describe('users', () => {
         return auth0Api.getPubKey();
     });
 
-    beforeEach(async () => {
-        await db('users').del();
-    });
-
     it('Set environment to testing', () => {
         expect(process.env.NODE_ENV).toBe('testing');
     });
