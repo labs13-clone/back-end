@@ -142,10 +142,10 @@
 {
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
-  difficulty: STRING - Required
+  difficulty: INTEGER - Required
 }
 ```
 
@@ -157,10 +157,10 @@
   id: INTEGER
   title: STRING
   description: STRING
-  tests: STRING
+  tests: JSON
   skeleton_function: STRING
   solution: STRING
-  difficulty: STRING
+  difficulty: INTEGER
 }
 ```
 
@@ -182,10 +182,10 @@
   id: INTEGER - Required
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
-  difficulty: STRING - Required
+  difficulty: INTEGER - Required
 }
 ```
 
@@ -197,10 +197,10 @@
   id: INTEGER
   title: STRING
   description: STRING
-  tests: STRING
+  tests: JSON
   skeleton_function: STRING
   solution: STRING
-  difficulty: STRING
+  difficulty: INTEGER
 }
 ```
 
@@ -239,10 +239,10 @@
     id number 
     title: STRING - Required - Unique
     description: STRING - Required
-    tests: STRING - Required
+    tests: JSON - Required
     skeleton_function: STRING - Required
     solution: STRING - Required
-    difficulty: STRING - Required
+    difficulty: INTEGER - Required
   }
 ]
 ```
@@ -419,7 +419,7 @@
   created_by: UUID - Required - Foreign key in USERS table
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
   difficulty: STRING - Required

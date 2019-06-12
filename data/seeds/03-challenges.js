@@ -21,13 +21,14 @@ For example:
 const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
 console.log(longestString(strings2)); // <--- 'first long string!'
 `,
-              tests:`
-describe("UnitTests", function() {
-    it("longest_string_at_the_end_of_the_array", function() {
-        expect(longestString(['a', 'bc', 'defg', 'hi', 'abcdefgh'])).toBe('abcdefgh');
-        });
-});
-              `,
+              tests:JSON.stringify([
+                {
+                descriptor:"longest_string_at_the_end_of_the_array",
+                argumentsToPass:[['a', 'bc', 'defg', 'hi', 'abcdefgh']],
+                expectedResult:'abcdefgh'
+                },
+            ])
+              ,
               skeleton_function:`
 function longestString(arr) {
 
@@ -64,21 +65,19 @@ Output Example:
 'fdsa'
 '!skcor SC'
   `,
-                tests:`
-describe("UnitTests", function() {
-    it("returns_a_reversed_version_of_the_string_argument", function() {
-        // Failure message: 
-        // Try console.log()'ing your function. If you use "Bob" as an argument, does your function return "boB'?
-        expect(reverseString('abc')).toBe('cba');
-        expect(reverseString('Hello world')).toBe('dlrow olleH');
-});
-    it("returns_a_string", function() {
-        // Failure message: 
-        // Are you returning something besides a string?
-        expect(typeof reverseString('abc')).toBe('string');
-    });
-});
-                `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"Returns a reversed version of the string argument",
+                    argumentsToPass:['abc'],
+                    expectedResult:'cba'
+                    },
+                    {
+                    descriptor:"Returns a reversed version of the string argument",
+                    argumentsToPass:['Hello world'],
+                    expectedResult:'dlrow olleH'
+                    }
+                ])
+                ,
                 skeleton_function:`
 function reverseString(str) {
 
@@ -111,22 +110,24 @@ Output Example:
 54321
 555
   `,
-                tests:`
-describe("UnitTests", function() {
-    it("should_return_a_reversed_number", function() {
-        // Failure message: 
-        // Your function should return a reversed version of the original number
-        expect(reverseNumber(12345)).toBe(54321);
-        expect(reverseNumber(555)).toBe(555);
-        expect(reverseNumber(987)).toBe(789);
-        });
-    it("should_return_a_number", function() {
-        // Failure message: 
-        // Your function should return a number
-        expect(typeof reverseNumber(15)).toBe('number');
-    });
-});
-                `,
+
+                tests:JSON.stringify([
+                    {
+                    descriptor:"Returns a reversed version of the original number",
+                    argumentsToPass:[12345],
+                    expectedResult:54321
+                    },
+                    {
+                    descriptor:"Returns a reversed version of the original number",
+                    argumentsToPass:[555],
+                    expectedResult:555
+                    },
+                    {
+                    descriptor:"Returns a reversed version of the original number",
+                    argumentsToPass:[987],
+                    expectedResult:789
+                    }
+                ]),
                 skeleton_function:`
 function reverseNumber(num) {
 
@@ -146,8 +147,103 @@ function reverseNumber (num) {
                 `,
                 difficulty:10,
                 approved:1
+              },
+              {
+                created_by: 1,
+                title: "Reverse Case",
+                  description:`
+Write a function that takes in a string, reverses the 'casing' of that string, and returns the "reversed-casing" string.
+
+const string = 'HELLO world!';
+console.log(reverseCase(string)); // <--- hello WORLD!
+            `,
+            
+                tests:JSON.stringify([
+                    {
+                    descriptor:"Handles non alphabet character",
+                    argumentsToPass:["HELLO world!"],
+                    expectedResult:"hello WORLD!"
+                    },
+                    {
+                    descriptor:"Reverse the string case",
+                    argumentsToPass:["HELLO world"],
+                    expectedResult:"hello WORLD"
+                    },
+                    {
+                    descriptor:"Reverse the string case",
+                    argumentsToPass:["ONE more TEST"],
+                    expectedResult:"one MORE test"
+                    }
+                ]),
+                skeleton_function:`
+function reverseCase(str) {
+
+}
+                `,
+                solution:`
+function reverseCase(str) {
+    return str
+    .split('')
+    .map(function(char) {               //then                //else
+        return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
+    })
+    .join('');
+}          
+                `,
+                difficulty:15,
+                approved:1
+              },
+              {
+                created_by: 1,
+                title: "Common Elements",
+                  description:`
+Write a function called commonElements that has parameters for two arrays.
+Return an array of all items that are present in both arrays.
+Do not modify the arrays that are passed in.
+
+Input Example:  
+
+[1, 2, 3, 4] [3, 4, 5, 6]
+['a', 'b', 'c'] ['x', 'y', 'z', 'a']
+[1, 2, 3] [4, 5, 6]
+
+Output Example:  
+
+[3, 4]
+['a']
+[]
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"Returns an array of common elements for numbers",
+                    argumentsToPass:[[1, 2, 3, 4, 5], [4, 5, 6, 7]],
+                    expectedResult:[4, 5]
+                    },
+                    {
+                    descriptor:"Returns an array of common elements for strings",
+                    argumentsToPass:[['a', 'b', 'c'], ['x', 'y', 'z', 'a']],
+                    expectedResult:["a"]
+                    },
+                ]),
+                skeleton_function:`
+function commonElements(arr1, arr2) {
+
+}
+                `,
+                solution:`
+function commonElements(arr1, arr2) {
+    return arr1.filter((item, index) => {
+        if (arr1.indexOf(item) === index){
+        return arr2.includes(item);
+        }
+    });
+}          
+                `,
+                difficulty:40,
+                approved:1
               }
         ]);
       });
   };
-  
+
+
