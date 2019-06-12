@@ -17,6 +17,7 @@ const users = require('../apis/db/users');
 //     dbTable: String ('users' || 'categories' || 'challenges' || 'user_submissions' || 'challenges_categories')
 //     protected: Boolean
 //     unique: Boolean
+//     range: [min, max]
 // }
 
 //Curry the Validation Schema to the actual custom middleware function
@@ -42,7 +43,7 @@ module.exports = function validateUserInput(validationSchema) {
                         message: 'Internal Server Error'
                     });
 
-                    throw new Error();
+                    return Promise.reject();
                 }
             })
             .then(_ => {
@@ -57,11 +58,8 @@ module.exports = function validateUserInput(validationSchema) {
                     //If the property required but undefined
                     //And it does not have a default value
                     if (req[validationObject.type][validationObject.name] === undefined && validationObject.required && validationObject.default === undefined) {
-                        res.status(422).send({
-                            message: `${validationObject.name} is required`
-                        });
 
-                        throw new Error();
+                        return Promise.reject({errorType: 'required', schemaName: validationObject.name});
                     }
 
                     //If the property does not exist on the query/body/params
@@ -93,7 +91,7 @@ module.exports = function validateUserInput(validationSchema) {
                                             message: `Internal Server Error`
                                         });
 
-                                        throw new Error();
+                                        return Promise.reject();
                                     }
 
                                     //Else If it does exist:
@@ -110,7 +108,7 @@ module.exports = function validateUserInput(validationSchema) {
                                                     message: `Not Authorized`
                                                 });
 
-                                                throw new Error();
+                                                return Promise.reject();
                                             }
                                         }
 
@@ -124,7 +122,7 @@ module.exports = function validateUserInput(validationSchema) {
                                                     message: `Not Authorized`
                                                 });
 
-                                                throw new Error();
+                                                return Promise.reject();
                                             }
                                         }
                                     }
@@ -153,7 +151,7 @@ module.exports = function validateUserInput(validationSchema) {
                                 message: `${validationObject.name} must be a ${validationObject.dataType}`
                             });
 
-                            throw new Error();
+                            return Promise.reject();
                         }
 
                         //If it is an id
@@ -177,7 +175,7 @@ module.exports = function validateUserInput(validationSchema) {
                                             message: `${validationObject.name} in ${validationObject.dbTable} does not exist in the database`
                                         });
 
-                                        throw new Error();
+                                        return Promise.reject();
                                     }
 
                                     //Else If it does exist:
@@ -196,7 +194,7 @@ module.exports = function validateUserInput(validationSchema) {
                                                     message: `Not Authorized`
                                                 });
 
-                                                throw new Error();
+                                                return Promise.reject();
                                             }
                                         }
 
@@ -210,7 +208,7 @@ module.exports = function validateUserInput(validationSchema) {
                                                     message: `Not Authorized`
                                                 });
 
-                                                throw new Error();
+                                                return Promise.reject();
                                             }
                                         }
                                     }
@@ -250,7 +248,7 @@ module.exports = function validateUserInput(validationSchema) {
                                             message: `${validationObject.name} in ${validationObject.dbTable} is not unique`
                                         });
 
-                                        throw new Error();
+                                        return Promise.reject();
 
                                     }
                                     
@@ -298,7 +296,7 @@ module.exports = function validateUserInput(validationSchema) {
                                         message: `Including ${key} in the ${type} invalidates your request`
                                     });
 
-                                    throw new Error();
+                                    return Promise.reject();
                                 }
 
                                 //Else if they sent a duplicate key then throw an error
@@ -317,7 +315,7 @@ module.exports = function validateUserInput(validationSchema) {
                                             message: `Including two ${key}s invalidates your request`
                                         });
 
-                                        throw new Error();
+                                        return Promise.reject();
                                     }
                                 }
                             });
@@ -326,16 +324,27 @@ module.exports = function validateUserInput(validationSchema) {
 
                 });
             })
-            .then(_ => {
-
-                //If we get to this point in the Promise then chain
-                //Then the request is valid, so we call next()
-                next();
-            })
             .catch(err => {
+                
                 //An error response was already sent to the client
                 //So we don't need to do anything here
                 //You could add some logging if you want.
+                if(err !== undefined) {
+                    
+                    switch(err.errorType) {
+                        case 'required':
+                            res.status(422).send({
+                                message: `${err.schemaName} is required`
+                            });
+                            break;
+                    }
+                } else {
+                    
+                    //If we get to this point in the Promise chain and there are no errors
+                    //Then the request has been determined to be valid, so we call next()
+                    next();
+                }
+
             });
     };
 }
