@@ -31,6 +31,10 @@
   - Get logged in user profile information
     - Can be used to see if the user is logged in
     - Can be used to get the role of the user
+- **GET /api/categories**
+  - Get an array of categories for:
+    - Create Challenge Form
+    - Search Challenges Category Filter
 - **POST /api/challenges**
   - Create a new code challenge
 - **PUT /api/challenges**
@@ -89,6 +93,36 @@
   xp: INTEGER
   role: STRING
 }
+```
+
+---
+
+# Getting category information
+
+## GET /api/categories
+
+- Get an array of category information 
+
+### --- Sent 
+
+#### Request Body:
+```
+{
+
+}
+```
+
+### --- Received 201
+
+#### Returns an array of category information:
+```
+[
+  {
+    id: INTEGER
+    name: STRING
+    created_at: DATE
+  }
+]
 ```
 
 ---
