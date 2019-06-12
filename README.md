@@ -108,7 +108,7 @@
 {
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
   difficulty: STRING - Required
@@ -123,7 +123,7 @@
   id: INTEGER
   title: STRING
   description: STRING
-  tests: STRING
+  tests: JSON
   skeleton_function: STRING
   solution: STRING
   difficulty: STRING
@@ -148,7 +148,7 @@
   id: INTEGER - Required
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
   difficulty: STRING - Required
@@ -163,7 +163,7 @@
   id: INTEGER
   title: STRING
   description: STRING
-  tests: STRING
+  tests: JSON
   skeleton_function: STRING
   solution: STRING
   difficulty: STRING
@@ -205,7 +205,7 @@
     id number 
     title: STRING - Required - Unique
     description: STRING - Required
-    tests: STRING - Required
+    tests: JSON - Required
     skeleton_function: STRING - Required
     solution: STRING - Required
     difficulty: STRING - Required
@@ -385,7 +385,7 @@
   created_by: UUID - Required - Foreign key in USERS table
   title: STRING - Required - Unique
   description: STRING - Required
-  tests: STRING - Required
+  tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
   difficulty: STRING - Required
