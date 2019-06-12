@@ -39,7 +39,7 @@ exports.up = function (knex, Promise) {
             tbl.string('description',5000)
                 .notNullable();
 
-            tbl.string('tests',5000)
+            tbl.json('tests')
                 .notNullable();
 
             tbl.string('skeleton_function',5000)
