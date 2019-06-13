@@ -238,7 +238,7 @@
 ```
 [
   {
-    id number
+    id: NUMBER
     approved: BOOLEAN
     title: STRING
     description: STRING
@@ -248,12 +248,12 @@
     difficulty: INTEGER
     challenges: [
       {
-        id: 1
-        name: 'Strings'
+        id: NUMBER
+        name: STRING
       },
       {
-        id: 2
-        name: 'Numbers'
+        id: NUMBER
+        name: STRING
       },
       ...
     ]
