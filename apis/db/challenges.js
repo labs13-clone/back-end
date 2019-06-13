@@ -61,14 +61,16 @@ function getMany(filter = {}) {
 
             return db('challenges')
                 .where(filter)
-                .whereBetween('difficulty', difficulty);
+                .whereBetween('difficulty', difficulty)
+                .join('challenges_categories as categories', 'challenges.id', 'categories.challenge_id');
         }
 
         //Else there's no difficulty
         //So we don't need to alter the query or filter
         else {
             return db('challenges')
-                .where(filter);
+                .where(filter)
+                .join('challenges_categories as categories', 'challenges.id', 'categories.challenge_id');
         }
 
 }

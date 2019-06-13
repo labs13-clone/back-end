@@ -776,10 +776,15 @@ describe('userValidation Middleware Tests - Body', () => {
             dataType: 'boolean'
         }, {
             name: 'id',
-            required: true,
+            required: false,
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'json',
+            required: true,
+            type: 'body',
+            dataType: 'json'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
@@ -860,7 +865,38 @@ describe('userValidation Middleware Tests - Body', () => {
             });
     });
 
-    it('Body Property Supposed To Be A Boolean But Sent A Number- Returns 422', done => {
+    it('Body Property Supposed To Be A Boolean But Sent A Non-Boolean Number- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 94
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In Number Format (1)- Returns 200', done => {
 
         const testApp = express();
         testApp.use(express.json())
@@ -884,14 +920,45 @@ describe('userValidation Middleware Tests - Body', () => {
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
-            .expect(422)
+            .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
                 done();
             });
     });
 
-    it('Body Property Supposed To Be A Boolean But Sent A String- Returns 422', done => {
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In Number Format (0)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 0
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Non-Boolean String- Returns 422', done => {
 
         const testApp = express();
         testApp.use(express.json())
@@ -916,6 +983,130 @@ describe('userValidation Middleware Tests - Body', () => {
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (true - lowercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'true'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (false - lowercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'false'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (true - uppercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'TRUE'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (false - uppercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'FALSE'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
                 done();

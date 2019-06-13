@@ -13,7 +13,7 @@ const users = require('../apis/db/users');
 //     required: Boolean
 //     type: String ('query' || 'body' || 'params')
 //     default: Boolean || String || Number
-//     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range')
+//     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range' || 'json')
 //     dbTable: String ('users' || 'categories' || 'challenges' || 'user_submissions' || 'challenges_categories')
 //     protected: Boolean
 //     unique: Boolean
@@ -129,28 +129,28 @@ module.exports = function validateUserInput(validationSchema) {
                     //2. The property does not exist, is not required, and does not have a default
                     //  2a. So we don't need to do anything...
 
-                    //If the property exists on the query/body
+                    //If a property exists exists on the query/body
+                    //With the same name as the validationSchema Object
                     //Then validate its value
                     else if (req[validationObject.type][validationObject.name] !== undefined) {
 
-                        //Check it's the proper data type
-                        if ((typeof req[validationObject.type][validationObject.name] !== validationObject.dataType && validationObject.dataType !== 'id' && validationObject.dataType !== 'range') ||
-                            (typeof req[validationObject.type][validationObject.name] !== 'number' && validationObject.dataType === 'id') ||
-                            (typeof req[validationObject.type][validationObject.name] !== 'string' && validationObject.dataType === 'range') ||
-                            (validationObject.dataType === 'range' && req[validationObject.type][validationObject.name].split('-').reduce((prev, curr) => {
-                                return isNaN(Number(curr)) ? true : prev;
-                            }, false))) {
-
-                            return {
-                                errorType: 'data-type',
-                                errorName: validationObject.name,
-                                errorDataType: validationObject.dataType
-                            };
-                        }
-
-                        //If it is an id
+                        //If the dataType is id
                         //If dataType is an ID of a database table entry
                         if (validationObject.dataType === 'id') {
+
+                            //If it is an ID
+                            //Not a number
+                            //And not able to be converted into a number
+                            if (typeof req[validationObject.type][validationObject.name] !== 'number' && !isNan(Number(req[validationObject.type][validationObject.name]))) {
+
+                                //Then throw an error because it is of an invalid data type
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+                            }
+
 
                             //Get the applicable database API
                             const applicableDbApi = dbTableSwitch(validationObject.dbTable);
@@ -207,23 +207,216 @@ module.exports = function validateUserInput(validationSchema) {
 
                         //If the dataType is a range
                         //And the range limit is specified
-                        else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
+                        else if (validationObject.dataType === 'range') {
 
-                            //Convert range values from string form to an array of numbers
-                            const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+                            //If it's a number or boolean
+                            if (typeof req[validationObject.type][validationObject.name] === 'number' ||
+                                typeof req[validationObject.type][validationObject.name] === 'boolean') {
 
-                            //If the array contains a number below the minimum
-                            //If the array contains a number above the maximum
-                            if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
-                                rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+                                //Then throw an error because it is of an invalid data type
+                                //Ranges can only be expressed in string or array formay
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+                            }
+
+                            //Else If the range is not a string or an array, or an array with two values
+                            else if ((typeof req[validationObject.type][validationObject.name] !== 'string' &&
+                                    req[validationObject.type][validationObject.name].length === undefined) &&
+                                (req[validationObject.type][validationObject.name].length !== undefined &&
+                                    req[validationObject.type][validationObject.name].length !== 2)) {
+
+                                //Then throw an error because it is of an invalid data type
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+
+                            }
+
+
+                            //Else if it's a string
+                            //AND the string can not be split into two numbers delimited by a dash
+                            else if (typeof req[validationObject.type][validationObject.name] === 'string' &&
+                                req[validationObject.type][validationObject.name].split('-').reduce((prev, curr) => {
+                                    return isNaN(Number(curr)) ? true : prev;
+                                }, false)) {
+
+                                //Then throw an error because it is of an invalid data type
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+
+                            }
+
+                            //If a range limit is set in the schema
+                            if (validationObject.range !== undefined) {
+
+                                //Convert range values from string form to an array of numbers
+                                const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+
+                                //If the array contains a number below the minimum
+                                //If the array contains a number above the maximum
+                                if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
+                                    rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'out-of-range',
+                                        errorRange: req[validationObject.type][validationObject.name],
+                                        errorLimit: JSON.stringify(validationObject.range)
+                                    };
+                                }
+                            }
+                        }
+
+                        //If it's supposed to be of a number dataType
+                        //And the typeof does not equal number
+                        else if (validationObject.dataType === 'number') {
+
+                            //If it's not a number via typeof then subject it to more tests
+                            if (typeof req[validationObject.type][validationObject.name] !== 'number') {
+
+                                //If it's a boolean then it's not a number
+                                //This test is needed in addition to isNaN(Number(value))
+                                //Due to type coercion Number(boolean) convers to 1 || 0
+                                if(typeof req[validationObject.type][validationObject.name] === 'boolean') {
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'data-type',
+                                        errorName: validationObject.name,
+                                        errorDataType: validationObject.dataType
+                                    };                        
+                                }
+                                
+                                //If the value can not be converted into a number via type conversion
+                                else if (isNaN(Number(req[validationObject.type][validationObject.name]))) {
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'data-type',
+                                        errorName: validationObject.name,
+                                        errorDataType: validationObject.dataType
+                                    };
+                                }
+
+                                //Otherwise, it's supposed to be an number
+                                //And can be converted into an number
+                                //So convert it into a number
+                                else {
+                                    req[validationObject.type][validationObject.name] = Number(req[validationObject.type][validationObject.name]);
+                                }
+                            }
+                        }
+                        
+                        else if (validationObject.dataType === 'boolean') {
+
+                            //If the typeof is not a boolean, string, or number then it's not of a proper boolean value
+                            if (typeof req[validationObject.type][validationObject.name] !== 'boolean' &&
+                                typeof req[validationObject.type][validationObject.name] !== 'string' &&
+                                typeof req[validationObject.type][validationObject.name] !== 'number') {
 
                                 //Then throw an error
                                 return {
-                                    errorType: 'out-of-range',
-                                    errorRange: req[validationObject.type][validationObject.name],
-                                    errorLimit: JSON.stringify(validationObject.range)
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
                                 };
                             }
+
+                            //Else if it's not a boolean but actually a string
+                            else if(typeof req[validationObject.type][validationObject.name] === 'string'){
+
+                                //Check if it is a boolean in string format
+                                if(req[validationObject.type][validationObject.name].toLowerCase() == 'true' ||
+                                    req[validationObject.type][validationObject.name].toLowerCase() == 'false') {
+
+                                        //Ensure boolean string is in lowercase format
+                                        req[validationObject.type][validationObject.name] = req[validationObject.type][validationObject.name].toLowerCase();
+
+                                        //Use an equality operator to convert into a proper boolean value
+                                        req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 'true');
+                                }
+
+                                //Else the string is not a boolean
+                                else {
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'data-type',
+                                        errorName: validationObject.name,
+                                        errorDataType: validationObject.dataType
+                                    };
+                                }
+
+                            }
+
+                            //Else if it's not a boolean but actually a number
+                            else if(typeof req[validationObject.type][validationObject.name] === 'number') {
+
+                                //If it's a boolean in number format (aka a binary 1 or 0)
+                                if(req[validationObject.type][validationObject.name] == 0 ||
+                                    req[validationObject.type][validationObject.name] == 1) {
+
+                                        //Then use an equality operator to convert it into a boolean
+                                        req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 1);
+                                }
+
+                                //Else the number is not a boolean
+                                else {
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'data-type',
+                                        errorName: validationObject.name,
+                                        errorDataType: validationObject.dataType
+                                    };
+                                }
+                            }
+                        }
+                        
+                        else if (validationObject.dataType === 'string') {
+
+                            if (typeof req[validationObject.type][validationObject.name] !== 'string') {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+                            }
+
+                        }
+
+                        else if (validationObject.dataType === 'json') {
+
+                            //IF typeof is not a string and not an object
+                            //Then it's not json
+                            //(json will be a string if stringified beforehand)
+                            if (typeof req[validationObject.type][validationObject.name] !== 'string' &&
+                            typeof req[validationObject.type][validationObject.name] !== 'object') {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'data-type',
+                                    errorName: validationObject.name,
+                                    errorDataType: validationObject.dataType
+                                };
+                            }
+
+                            //If it's an object or array, then convert it into json
+                            else if(typeof req[validationObject.type][validationObject.name] === 'object') {
+                                req[validationObject.type][validationObject.name] = JSON.stringify(req[validationObject.type][validationObject.name]);
+                            }
+                            //Else it's already a string then it doesn't need to be stringified..
+
                         }
 
                         //If it's a protected resource and the user is not an admin
