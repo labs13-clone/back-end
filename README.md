@@ -218,10 +218,12 @@
 ### --- Sent
 
 #### Optional Query Parameters:
- - difficulty
- - created_by
- - approved
- - id
+ - difficulty: RANGE - Optional - String like '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
+ - created_by: NUMBER - Optional - ID number of user
+ - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
+ - id: NUMBER - Optional - ID of challenge
+ - category_name: STRING - Optional - Name of challenge
+ - category_id: NUMBER - Optional - ID of category
 
 #### Request Body:
 ```
@@ -237,12 +239,23 @@
 [
   {
     id number 
-    title: STRING - Required - Unique
-    description: STRING - Required
-    tests: JSON - Required
-    skeleton_function: STRING - Required
-    solution: STRING - Required
-    difficulty: INTEGER - Required
+    title: STRING
+    description: STRING
+    tests: JSON
+    skeleton_function: STRING
+    solution: STRING
+    difficulty: INTEGER
+    challenges: [
+      {
+        id: 1
+        name: 'Strings'
+      },
+      {
+        id: 2
+        name: 'Numbers'
+      },
+      ...
+    ]
   }
 ]
 ```
