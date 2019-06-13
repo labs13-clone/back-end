@@ -11,14 +11,14 @@ exports.seed = function(knex, Promise) {
                 completed:1,
                 solution:`
 function longestString(arr) {
-let result = '';
-for(let i = 0; i < arr.length;  i++){
+  let result = '';
+  for(let i = 0; i < arr.length;  i++){
     let currentItem = arr[i];
     if(currentItem.length > result){
-    result = arr[i];
+      result = arr[i];
     }
-}
-return result;
+  }
+  return result;
 }
                 `
               },
@@ -29,14 +29,14 @@ return result;
                 completed:1,
                 solution:`
 function longestString(arr) {
-let result = '';
-for(let i = 0; i < arr.length;  i++){
+  let result = '';
+  for(let i = 0; i < arr.length;  i++){
     let currentItem = arr[i];
     if(currentItem.length > result){
-    result = arr[i];
+      result = arr[i];
     }
-}
-return result;
+  }
+  return result;
 }
                 `
               },
@@ -48,11 +48,11 @@ return result;
                 completed:0,
                 solution:`
 function longestString(arr) {
-let result = '';
-for(let i = 0; i < arr.length;  i++){
-    console.log(i)
-}
-return result;
+  let result = '';
+  for(let i = 0; i < arr.length;  i++){
+    console.log(i);
+  }
+  return result;
 }
                 `
               }

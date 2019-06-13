@@ -32,19 +32,19 @@ console.log(longestString(strings2)); // <--- 'first long string!'
               skeleton_function:`
 function longestString(arr) {
 
-}
+};
               `,
               solution:`
 function longestString(arr) {
     let result = '';
     for(let i = 0; i < arr.length;  i++){
         let currentItem = arr[i];
-        if(currentItem.length > result){
+        if(currentItem.length > result.length){
         result = arr[i];
+        }
     }
-}
-return result;
-}
+    return result;
+};
               `,
               difficulty:10,
               approved:1
@@ -81,7 +81,7 @@ Output Example:
                 skeleton_function:`
 function reverseString(str) {
 
-}
+};
                 `,
                 solution:`
 function reverseString(str) {
@@ -91,7 +91,7 @@ function reverseString(str) {
         reversed += str[i - 1];
     }
     return reversed;
-}
+};
                 `,
                 difficulty:10,
                 approved:1
@@ -131,7 +131,7 @@ Output Example:
                 skeleton_function:`
 function reverseNumber(num) {
 
-}
+};
                 `,
                 solution:`
 function reverseNumber (num) {
@@ -143,7 +143,7 @@ function reverseNumber (num) {
     }
     let result = Number(reversed);
     return result;
-}                  
+};                  
                 `,
                 difficulty:10,
                 approved:1
@@ -178,7 +178,7 @@ console.log(reverseCase(string)); // <--- hello WORLD!
                 skeleton_function:`
 function reverseCase(str) {
 
-}
+};
                 `,
                 solution:`
 function reverseCase(str) {
@@ -188,7 +188,7 @@ function reverseCase(str) {
         return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
     })
     .join('');
-}          
+};          
                 `,
                 difficulty:15,
                 approved:1
@@ -228,16 +228,16 @@ Output Example:
                 skeleton_function:`
 function commonElements(arr1, arr2) {
 
-}
+};
                 `,
                 solution:`
 function commonElements(arr1, arr2) {
     return arr1.filter((item, index) => {
         if (arr1.indexOf(item) === index){
-        return arr2.includes(item);
+            return arr2.includes(item);
         }
     });
-}          
+};          
                 `,
                 difficulty:40,
                 approved:1
