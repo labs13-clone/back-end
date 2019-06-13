@@ -94,7 +94,6 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
-                            console.log('okk',err)
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });

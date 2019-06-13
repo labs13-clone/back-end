@@ -86,8 +86,6 @@ function getMany(filter = {}) {
         delete filter[key];
     });
 
-    console.log(filter)
-
     //If there's a difficulty range query parameter in the request
     //Then we need to alter the query and filter
     if (filter['challenges.difficulty'] !== undefined) {

@@ -50,7 +50,6 @@ router.get('/', auth, (req, res) => {
         res.status(200).send(dbRes);
     })
     .catch(err => {
-        console.log('challenges', err)
         res.status(500).send({
             message: 'Internal Server Error'
         });
