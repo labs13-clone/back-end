@@ -49,6 +49,5 @@ function getOne(filter = null) {
                 ...user,
                 xp: Number(xp.xp)
             }
-        })
-        .catch(err=> console.log(err))
+        });
 }
