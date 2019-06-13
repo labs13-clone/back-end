@@ -6,7 +6,6 @@ module.exports = function (req, res, next) {
 
     //If there's not a token in the authorization header then throw an error
     if (req.headers.authorization === undefined) {
-        console.log('login',err)
         res.status(401).send({
             message: 'Log In First'
         });
@@ -37,7 +36,6 @@ module.exports = function (req, res, next) {
 
                 //If the signature on the token is invalid throw an error
                 if (err) {
-                    console.log('invalid',err)
                     res.status(400).send({
                         message: 'Invalid Token'
                     });
@@ -96,7 +94,6 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
-                            console.log('internal',err)
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });
