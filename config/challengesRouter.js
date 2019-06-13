@@ -36,7 +36,7 @@ router.get('/', auth, (req, res) => {
         if(filter.approved === undefined) {
             filter.approved = true;
         } else if (filter.approved === false) {
-            filter.created_by = req.headers.user.id;  
+            filter.created_by = req.headers.user.id;
         }
     } else if (filter.approved === undefined) {
         filter.approved = true;

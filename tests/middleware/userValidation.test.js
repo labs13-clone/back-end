@@ -11,14 +11,6 @@ describe('userValidation Middleware Tests - Query Params', () => {
         return auth0Api.getPubKey();
     });
 
-    beforeEach(async () => {
-        await db('user_submissions').del();
-        await db('challenges_categories').del();
-        await db('categories').del();
-        await db('challenges').del();
-        await db('users').del();
-    });
-
     it('Required Query Param Included With Requests- Returns 200', done => {
 
         const testApp = express();
@@ -142,7 +134,6 @@ describe('userValidation Middleware Tests - Query Params', () => {
             unique: true,
             dbTable: 'users'
         }]), (req, res) => {
-            console.log('too late')
             res.status(200).json({
                 success: true
             });
@@ -151,7 +142,6 @@ describe('userValidation Middleware Tests - Query Params', () => {
         db('users').insert({
                 sub_id: 'test'
             })
-
             .then(_ => {
                 request(testApp)
                     .post('/')
@@ -181,21 +171,19 @@ describe('userValidation Middleware Tests - Query Params', () => {
             unique: true,
             dbTable: 'users'
         }]), (req, res) => {
-            console.log('too late')
             res.status(200).json({
                 success: true
             });
         });
 
         db('users').insert({
-                sub_id: 'test'
+                sub_id: 'not_unique'
             })
-
             .then(_ => {
                 request(testApp)
                     .post('/')
                     .query({
-                        sub_id: 'test'
+                        sub_id: 'not_unique'
                     })
                     .set('authorization', process.env.TEST_TOKEN)
                     .set('Content-Type', 'application/json')
@@ -207,7 +195,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             });
     });
 
-    it('Required Query Param Included With The Request Should Be Unique And IS Unique- Returns 422', done => {
+    it('Required Query Param Included With The Request Should Be Unique And IS Unique- Returns 200', done => {
 
         const testApp = express();
         testApp.use(auth);
@@ -229,7 +217,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
         request(testApp)
             .post('/')
             .query({
-                sub_id: 'test'
+                sub_id: 'jhfgjhfjhfg'
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
@@ -240,7 +228,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             });
     });
 
-    it('Optional Query Param Included With The Request Should Be Unique And IS Unique- Returns 422', done => {
+    it('Optional Query Param Included With The Request Should Be Unique And IS Unique- Returns 200', done => {
 
         const testApp = express();
         testApp.use(auth);
@@ -262,7 +250,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
         request(testApp)
             .post('/')
             .query({
-                sub_id: 'test'
+                sub_id: 'hjfjgfjhf'
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
@@ -272,14 +260,83 @@ describe('userValidation Middleware Tests - Query Params', () => {
                 done();
             });
     });
+
+    it('Query Param Range Is Within Limits- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'query',
+            dataType: 'range',
+            range: [48,51]
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .query({
+                range: '49-50'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Query Param Range Is Outside Limits- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'query',
+            dataType: 'range',
+            range: [48,51]
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .query({
+                range: '1-100'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
 });
 
 describe('userValidation Middleware Tests - Body', () => {
 
-    beforeAll(() => {
+    beforeAll(async () => {
+        await db('user_submissions').del();
+        await db('challenges_categories').del();
+        await db('challenges').del();
+        await db('categories').del();
+        await db('users').del();
         return auth0Api.getPubKey();
     });
-    
+
     it('Required Body Property Included In The Request- Returns 200', done => {
 
         const testApp = express();
@@ -287,7 +344,7 @@ describe('userValidation Middleware Tests - Body', () => {
         testApp.use(auth);
 
         testApp.post('/', validateUserInput([{
-            name: 'id',
+            name: 'string',
             required: true,
             type: 'body',
             dataType: 'string'
@@ -300,7 +357,7 @@ describe('userValidation Middleware Tests - Body', () => {
         request(testApp)
             .post('/')
             .send({
-                id: 'test'
+                string: 'test'
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
@@ -344,7 +401,7 @@ describe('userValidation Middleware Tests - Body', () => {
     it('Required Body Properties Are Of Proper Data Types- Returns 200', done => {
 
         const testApp = express();
-        testApp.use(express.json())
+        testApp.use(express.json());
         testApp.use(auth);
 
         testApp.post('/', validateUserInput([{
@@ -368,27 +425,42 @@ describe('userValidation Middleware Tests - Body', () => {
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'range',
+            required: true,
+            type: 'body',
+            dataType: 'range'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
             });
         });
 
-        request(testApp)
-            .post('/')
-            .send({
-                string: 'haha',
-                number: 1,
-                boolean: true,
-                id: 1
+        db('users')
+            .insert({
+                sub_id: 'gjkghkgh'
             })
-            .set('authorization', process.env.TEST_TOKEN)
-            .set('Content-Type', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                if (err) return done(err);
-                done();
+            .returning('id')
+            .then(users => {
+
+                request(testApp)
+                    .post('/')
+                    .send({
+                        string: 'haha',
+                        number: 1,
+                        boolean: true,
+                        id: users[0],
+                        range: '1-100'
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
             });
+
     });
 
     it('Optional Body Properties Are Of Proper Data Types- Returns 200', done => {
@@ -418,26 +490,39 @@ describe('userValidation Middleware Tests - Body', () => {
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
             });
         });
 
-        request(testApp)
-            .post('/')
-            .send({
-                string: 'haha',
-                number: 1,
-                boolean: true,
-                id: 1
+        db('users')
+            .insert({
+                sub_id: 'kghjkghl'
             })
-            .set('authorization', process.env.TEST_TOKEN)
-            .set('Content-Type', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                if (err) return done(err);
-                done();
+            .returning('id')
+            .then(users => {
+                request(testApp)
+                    .post('/')
+                    .send({
+                        string: 'haha',
+                        number: 1,
+                        boolean: true,
+                        id: users[0],
+                        range: '1-100'
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
             });
     });
 
@@ -468,26 +553,39 @@ describe('userValidation Middleware Tests - Body', () => {
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
             });
         });
 
-        request(testApp)
-            .post('/')
-            .send({
-                string: 'haha',
-                number: 1,
-                boolean: true,
-                id: 1
+        db('users')
+            .insert({
+                sub_id: 'lkjhkljgg'
             })
-            .set('authorization', process.env.TEST_TOKEN)
-            .set('Content-Type', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                if (err) return done(err);
-                done();
+            .returning('id')
+            .then(users => {
+                request(testApp)
+                    .post('/')
+                    .send({
+                        string: 'haha',
+                        number: 1,
+                        boolean: true,
+                        id: users[0],
+                        range: '1-100'
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
             });
     });
 
@@ -518,6 +616,11 @@ describe('userValidation Middleware Tests - Body', () => {
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
@@ -536,10 +639,10 @@ describe('userValidation Middleware Tests - Body', () => {
             });
     });
 
-    it('Optional And Required Body Properties Can Be Used (with required property)- Returns 200', done => {
+    it('Optional And Required Body Properties Can Be Used (with required property and NO optional)- Returns 200', done => {
 
         const testApp = express();
-        testApp.use(express.json())
+        testApp.use(express.json());
         testApp.use(auth);
 
         testApp.post('/', validateUserInput([{
@@ -563,23 +666,35 @@ describe('userValidation Middleware Tests - Body', () => {
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
             });
         });
 
-        request(testApp)
-            .post('/')
-            .send({
-                id: 1
+        db('users')
+            .insert({
+                sub_id: 'kjhkjhklhg'
             })
-            .set('authorization', process.env.TEST_TOKEN)
-            .set('Content-Type', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                if (err) return done(err);
-                done();
+            .returning('id')
+            .then(users => {
+                request(testApp)
+                    .post('/')
+                    .send({
+                        id: users[0]
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
             });
     });
 
@@ -616,18 +731,25 @@ describe('userValidation Middleware Tests - Body', () => {
             });
         });
 
-        request(testApp)
-            .post('/')
-            .send({
-                id: 1,
-                boolean: false
+        db('users')
+            .insert({
+                sub_id: 'hhjlkhlkhlkh'
             })
-            .set('authorization', process.env.TEST_TOKEN)
-            .set('Content-Type', 'application/json')
-            .expect(200)
-            .end(function (err, res) {
-                if (err) return done(err);
-                done();
+            .returning('id')
+            .then(users => {
+                request(testApp)
+                    .post('/')
+                    .send({
+                        id: users[0],
+                        boolean: false
+                    })
+                    .set('authorization', process.env.TEST_TOKEN)
+                    .set('Content-Type', 'application/json')
+                    .expect(200)
+                    .end(function (err, res) {
+                        if (err) return done(err);
+                        done();
+                    });
             });
     });
 
@@ -654,10 +776,15 @@ describe('userValidation Middleware Tests - Body', () => {
             dataType: 'boolean'
         }, {
             name: 'id',
-            required: true,
+            required: false,
             type: 'body',
             dataType: 'id',
             dbTable: 'users'
+        }, {
+            name: 'json',
+            required: true,
+            type: 'body',
+            dataType: 'json'
         }]), (req, res) => {
             res.status(200).json({
                 success: true
@@ -738,7 +865,38 @@ describe('userValidation Middleware Tests - Body', () => {
             });
     });
 
-    it('Body Property Supposed To Be A Boolean But Sent A Number- Returns 422', done => {
+    it('Body Property Supposed To Be A Boolean But Sent A Non-Boolean Number- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 94
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In Number Format (1)- Returns 200', done => {
 
         const testApp = express();
         testApp.use(express.json())
@@ -762,14 +920,45 @@ describe('userValidation Middleware Tests - Body', () => {
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
-            .expect(422)
+            .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
                 done();
             });
     });
 
-    it('Body Property Supposed To Be A Boolean But Sent A String- Returns 422', done => {
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In Number Format (0)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 0
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Non-Boolean String- Returns 422', done => {
 
         const testApp = express();
         testApp.use(express.json())
@@ -794,6 +983,130 @@ describe('userValidation Middleware Tests - Body', () => {
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')
             .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (true - lowercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'true'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (false - lowercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'false'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (true - uppercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'TRUE'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Boolean But Sent A Boolean In String Format (false - uppercase)- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'boolean',
+            required: false,
+            type: 'body',
+            dataType: 'boolean'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                boolean: 'FALSE'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
             .end(function (err, res) {
                 if (err) return done(err);
                 done();
@@ -852,6 +1165,163 @@ describe('userValidation Middleware Tests - Body', () => {
             .post('/')
             .send({
                 number: false
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Range But Sent A Number- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                range: 1
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Range But Sent A String- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                range: 'lkfjs'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Supposed To Be A Range But Sent A Boolean- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range'
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                range: false
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(422)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Range Is Within Limits- Returns 200', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range',
+            range: [48,51]
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                range: '49-50'
+            })
+            .set('authorization', process.env.TEST_TOKEN)
+            .set('Content-Type', 'application/json')
+            .expect(200)
+            .end(function (err, res) {
+                if (err) return done(err);
+                done();
+            });
+    });
+
+    it('Body Property Range Is Outside Limits- Returns 422', done => {
+
+        const testApp = express();
+        testApp.use(express.json())
+        testApp.use(auth);
+
+        testApp.post('/', validateUserInput([{
+            name: 'range',
+            required: false,
+            type: 'body',
+            dataType: 'range',
+            range: [48,51]
+        }]), (req, res) => {
+            res.status(200).json({
+                success: true
+            });
+        });
+
+        request(testApp)
+            .post('/')
+            .send({
+                range: '1-100'
             })
             .set('authorization', process.env.TEST_TOKEN)
             .set('Content-Type', 'application/json')

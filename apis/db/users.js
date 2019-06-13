@@ -33,5 +33,21 @@ function getOne(filter = null) {
     if (!filter) return new Error('No filter provided for the query');
     return db('users')
         .where(filter)
-        .first();
+        .first()
+        .then(async user => {
+
+            const xp = await db('user_submissions')
+            .sum('challenges.difficulty as xp')
+            .leftJoin('challenges', 'user_submissions.challenge_id', 'challenges.id')
+            .where({
+                'user_submissions.completed': 1,
+                'user_submissions.created_by': user.id
+            })
+            .first();
+
+            return {
+                ...user,
+                xp: Number(xp.xp)
+            }
+        });
 }

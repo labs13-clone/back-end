@@ -4,9 +4,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
 
-    //TODO: Calculate XP earned from submissions that are completed and return it
-
     //Return user information
+    //It is already populated from the middleware
     res.status(200).send(req.headers.user);
 });
 
