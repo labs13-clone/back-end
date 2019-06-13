@@ -36,18 +36,23 @@ function getOne(filter = null) {
         .first()
         .then(async user => {
 
-            const xp = await db('user_submissions')
-            .sum('challenges.difficulty as xp')
-            .leftJoin('challenges', 'user_submissions.challenge_id', 'challenges.id')
-            .where({
-                'user_submissions.completed': 1,
-                'user_submissions.created_by': user.id
-            })
-            .first();
+            if(user !== undefined) {
 
-            return {
-                ...user,
-                xp: Number(xp.xp)
+                const xp = await db('user_submissions')
+                .sum('challenges.difficulty as xp')
+                .leftJoin('challenges', 'user_submissions.challenge_id', 'challenges.id')
+                .where({
+                    'user_submissions.completed': 1,
+                    'user_submissions.created_by': user.id
+                })
+                .first();
+    
+                return {
+                    ...user,
+                    xp: Number(xp.xp)
+                }
+            } else {
+                return user;
             }
         });
 }
