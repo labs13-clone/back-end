@@ -13,11 +13,7 @@ const users = require('../apis/db/users');
 //     required: Boolean
 //     type: String ('query' || 'body' || 'params')
 //     default: Boolean || String || Number
-<<<<<<< Updated upstream
 //     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range' || 'json')
-=======
-//     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range')
->>>>>>> Stashed changes
 //     dbTable: String ('users' || 'categories' || 'challenges' || 'user_submissions' || 'challenges_categories')
 //     protected: Boolean
 //     unique: Boolean
