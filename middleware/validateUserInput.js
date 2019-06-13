@@ -417,6 +417,25 @@ module.exports = function validateUserInput(validationSchema) {
                             }
                             //Else it's already a string then it doesn't need to be stringified..
 
+                        //If the dataType is a range
+                        //And the range limit is specified
+                        else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
+
+                            //Convert range values from string form to an array of numbers
+                            const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+
+                            //If the array contains a number below the minimum
+                            //If the array contains a number above the maximum
+                            if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
+                                rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'out-of-range',
+                                    errorRange: req[validationObject.type][validationObject.name],
+                                    errorLimit: JSON.stringify(validationObject.range)
+                                };
+                            }
                         }
 
                         //If it's a protected resource and the user is not an admin
