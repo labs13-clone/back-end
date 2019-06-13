@@ -238,7 +238,8 @@
 ```
 [
   {
-    id number 
+    id number
+    approved: BOOLEAN
     title: STRING
     description: STRING
     tests: JSON

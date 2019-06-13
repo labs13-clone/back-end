@@ -103,6 +103,7 @@ function getMany(filter = {}) {
         return db
             .select(
                 'challenges.id',
+                'challenges.approved',
                 'challenges.title',
                 'challenges.description',
                 'challenges.tests',
@@ -147,6 +148,7 @@ function getMany(filter = {}) {
     else {
         return db.select(
                 'challenges.id',
+                'challenges.approved',
                 'challenges.title',
                 'challenges.description',
                 'challenges.tests',
