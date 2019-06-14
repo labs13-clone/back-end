@@ -12,14 +12,15 @@ exports.seed = function(knex, Promise) {
 Write a function that takes an array of strings and return the longest string in the array.
 
 For example:
-const strings1 = ['short', 'really, really long!', 'medium'];
+\`\`\`const strings1 = ['short', 'really, really long!', 'medium'];
 console.log(longestString(strings1)); // <--- 'really, really long!'
-
+\`\`\`
 Edge case: If you had an array which had two "longest" strings of equal length, your function should just return the first one.
 
 For example:
-const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
+\`\`\`const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
 console.log(longestString(strings2)); // <--- 'first long string!'
+\`\`\`
 `,
               tests:JSON.stringify([
                 {
@@ -32,7 +33,7 @@ console.log(longestString(strings2)); // <--- 'first long string!'
               skeleton_function:`
 function longestString(arr) {
 
-};
+}
               `,
               solution:`
 function longestString(arr) {
@@ -44,7 +45,7 @@ function longestString(arr) {
         }
     }
     return result;
-};
+}
               `,
               difficulty:10,
               approved:1
@@ -56,14 +57,16 @@ function longestString(arr) {
 Write a function called reverseString that accepts a string and returns a reversed copy of the string.
 
 Input Example:
-'hello world'
+\`\`\`'hello world'
 'asdf'
 'CS rocks!'
+\`\`\`
 
 Output Example:
-'dlrow olleh'
+\`\`\`'dlrow olleh'
 'fdsa'
 '!skcor SC'
+\`\`\`
   `,
                 tests:JSON.stringify([
                     {
@@ -81,7 +84,7 @@ Output Example:
                 skeleton_function:`
 function reverseString(str) {
 
-};
+}
                 `,
                 solution:`
 function reverseString(str) {
@@ -91,7 +94,7 @@ function reverseString(str) {
         reversed += str[i - 1];
     }
     return reversed;
-};
+}
                 `,
                 difficulty:10,
                 approved:1
@@ -103,12 +106,14 @@ function reverseString(str) {
 Write a function called reverseNumber that reverses a number.
 
 Input Example: 
-12345
+\`\`\`12345
 555
+\`\`\`
 
 Output Example:  
-54321
+\`\`\`54321
 555
+\`\`\`
   `,
 
                 tests:JSON.stringify([
@@ -131,7 +136,7 @@ Output Example:
                 skeleton_function:`
 function reverseNumber(num) {
 
-};
+}
                 `,
                 solution:`
 function reverseNumber (num) {
@@ -143,7 +148,7 @@ function reverseNumber (num) {
     }
     let result = Number(reversed);
     return result;
-};                  
+}                 
                 `,
                 difficulty:10,
                 approved:1
@@ -154,8 +159,9 @@ function reverseNumber (num) {
                   description:`
 Write a function that takes in a string, reverses the 'casing' of that string, and returns the "reversed-casing" string.
 
-const string = 'HELLO world!';
+\`\`\`const string = 'HELLO world!';
 console.log(reverseCase(string)); // <--- hello WORLD!
+\`\`\`
             `,
             
                 tests:JSON.stringify([
@@ -178,7 +184,7 @@ console.log(reverseCase(string)); // <--- hello WORLD!
                 skeleton_function:`
 function reverseCase(str) {
 
-};
+}
                 `,
                 solution:`
 function reverseCase(str) {
@@ -188,7 +194,7 @@ function reverseCase(str) {
         return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
     })
     .join('');
-};          
+}         
                 `,
                 difficulty:15,
                 approved:1
@@ -202,16 +208,18 @@ Return an array of all items that are present in both arrays.
 Do not modify the arrays that are passed in.
 
 Input Example:  
-
+\`\`\`
 [1, 2, 3, 4] [3, 4, 5, 6]
 ['a', 'b', 'c'] ['x', 'y', 'z', 'a']
 [1, 2, 3] [4, 5, 6]
+\`\`\`
 
 Output Example:  
-
+\`\`\`
 [3, 4]
 ['a']
 []
+\`\`\`
             `,
                 tests:JSON.stringify([
                     {
@@ -228,7 +236,7 @@ Output Example:
                 skeleton_function:`
 function commonElements(arr1, arr2) {
 
-};
+}
                 `,
                 solution:`
 function commonElements(arr1, arr2) {
@@ -237,7 +245,7 @@ function commonElements(arr1, arr2) {
             return arr2.includes(item);
         }
     });
-};          
+}         
                 `,
                 difficulty:40,
                 approved:1
