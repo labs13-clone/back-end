@@ -14,7 +14,7 @@ function longestString(arr) {
   let result = '';
   for(let i = 0; i < arr.length;  i++){
     let currentItem = arr[i];
-    if(currentItem.length > result){
+    if(currentItem.length > result.length){
       result = arr[i];
     }
   }
@@ -32,7 +32,7 @@ function longestString(arr) {
   let result = '';
   for(let i = 0; i < arr.length;  i++){
     let currentItem = arr[i];
-    if(currentItem.length > result){
+    if(currentItem.length > result.length){
       result = arr[i];
     }
   }
