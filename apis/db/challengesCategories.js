@@ -46,8 +46,7 @@ function insert(challengeCategory) {
                     ...challenge,
                     categories: challengeCategories
                 }
-            })
-            .catch(err => console.log(err))
+            });
     });
 }
 
