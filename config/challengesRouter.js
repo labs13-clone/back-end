@@ -42,6 +42,14 @@ router.get('/', auth, (req, res) => {
         filter.approved = true;
     }
 
+    if(filter.completed !== undefined) {
+        filter.completed_by = req.headers.user.id;
+    }
+
+    if(filter.started !== undefined) {
+        filter.started_by = req.headers.user.id;
+    }
+
     //Todo: Validate query parameters
     //Todo: Figure out how to use bridge table for matching categories to challenges and parsing the response
 
@@ -50,6 +58,7 @@ router.get('/', auth, (req, res) => {
         res.status(200).send(dbRes);
     })
     .catch(err => {
+        console.log(err)
         res.status(500).send({
             message: 'Internal Server Error'
         });

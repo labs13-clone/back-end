@@ -57,7 +57,8 @@ exports.up = function (knex, Promise) {
                 .defaultTo(0);
         })
         .createTable('challenges_categories', tbl => {
-            tbl.increments();
+
+            tbl.primary(['challenge_id', 'categories_id']);
 
             tbl.integer('challenge_id')
                 .notNullable()

@@ -127,6 +127,54 @@
 
 ---
 
+# Attaching a category (or categories) to a challenge
+
+## POST /api/categories/challenges
+
+- Accepts an array of objects containing category and challenge information
+
+### --- Sent 
+
+#### Request Body:
+```
+[
+  {
+    challenge_id: INTEGER - Required
+    categories_id: INTEGER - Required
+  },
+  ...
+]
+```
+
+### --- Received 201
+
+#### Returns the challenge's information:
+```
+{
+  id: NUMBER
+  approved: BOOLEAN
+  title: STRING
+  description: STRING
+  tests: JSON
+  skeleton_function: STRING
+  solution: STRING
+  difficulty: INTEGER
+  challenges: [
+    {
+      id: NUMBER
+      name: STRING
+    },
+    {
+      id: NUMBER
+      name: STRING
+    },
+    ...
+  ]
+}
+```
+
+---
+
 # Creating a new code challenge
 
 ## POST /api/challenges
@@ -218,12 +266,14 @@
 ### --- Sent
 
 #### Optional Query Parameters:
- - difficulty: RANGE - Optional - String like '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
+ - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
  - created_by: NUMBER - Optional - ID number of user
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
- - category_name: STRING - Optional - Name of challenge
+ - category_name: STRING - Optional - Name of category
  - category_id: NUMBER - Optional - ID of category
+ - completed: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
+ - started: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
 
 #### Request Body:
 ```
