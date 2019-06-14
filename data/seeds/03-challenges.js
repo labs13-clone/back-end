@@ -242,7 +242,72 @@ function stringZ(num) {
                 `,
                 difficulty:16,
                 approved:0
+              },
+             
+             
+             
+             
+             
+             
+             
+             
+              {
+
+                created_by: 1,
+                title: "To Camel case",
+                  description:`
+## Complete the function so that it converts dash-delimited ("kebab" case) & underscore-delimited ("snake" case) words into "camel" casing. 
+
+The first word within the output should be capitalized only if the original word was capitalized.
+\`\`\`toCamelCase("the-stealth-warrior")
+// returns "theStealthWarrior"
+toCamelCase("The_stealth_warrior")
+// returns "TheStealthWarrior"
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"Should return empty string provided empty string",
+                    argumentsToPass:[''],
+                    expectedResult:""
+                    },
+                    {
+                      descriptor:"Should accept underscore as well as hyphen",
+                      argumentsToPass:['the_stealth_warrior'],
+                      expectedResult:"theStealthWarrior"
+                    },
+                    {
+                        descriptor:"Should accept underscore as well as hyphen",
+                        argumentsToPass:['The-Stealth-Warrior'],
+                        expectedResult:"TheStealthWarrior"
+                    },
+                ]),
+                skeleton_function:`
+function toCamelCase(str){
+
+}
+               `,
+                solution:`
+function toCamelCase(str) {
+   if (str === '') return str;
+    let snakeCase = str[0];
+    strArr = str.split('');
+    for (let i = 1; i < strArr.length; i++) {
+      if (strArr[i] === '-') {
+        strArr[i + 1] = strArr[i + 1].toUpperCase();
+      }
+      else if (strArr[i] === '_') {
+        strArr[i + 1] = strArr[i + 1].toUpperCase();
+      }
+      else snakeCase += strArr[i];
+    }
+    return snakeCase;
+}       
+                `,
+                difficulty:20,
+                approved:1
               }
+
         ]);
       });
   };
