@@ -12,14 +12,15 @@ exports.seed = function(knex, Promise) {
 Write a function that takes an array of strings and return the longest string in the array.
 
 For example:
-const strings1 = ['short', 'really, really long!', 'medium'];
+\`\`\`const strings1 = ['short', 'really, really long!', 'medium'];
 console.log(longestString(strings1)); // <--- 'really, really long!'
-
+\`\`\`
 Edge case: If you had an array which had two "longest" strings of equal length, your function should just return the first one.
 
 For example:
-const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
+\`\`\`const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
 console.log(longestString(strings2)); // <--- 'first long string!'
+\`\`\`
 `,
               tests:JSON.stringify([
                 {
@@ -39,11 +40,11 @@ function longestString(arr) {
     let result = '';
     for(let i = 0; i < arr.length;  i++){
         let currentItem = arr[i];
-        if(currentItem.length > result){
+        if(currentItem.length > result.length){
         result = arr[i];
+        }
     }
-}
-return result;
+    return result;
 }
               `,
               difficulty:10,
@@ -56,14 +57,16 @@ return result;
 Write a function called reverseString that accepts a string and returns a reversed copy of the string.
 
 Input Example:
-'hello world'
+\`\`\`'hello world'
 'asdf'
 'CS rocks!'
+\`\`\`
 
 Output Example:
-'dlrow olleh'
+\`\`\`'dlrow olleh'
 'fdsa'
 '!skcor SC'
+\`\`\`
   `,
                 tests:JSON.stringify([
                     {
@@ -103,12 +106,14 @@ function reverseString(str) {
 Write a function called reverseNumber that reverses a number.
 
 Input Example: 
-12345
+\`\`\`12345
 555
+\`\`\`
 
 Output Example:  
-54321
+\`\`\`54321
 555
+\`\`\`
   `,
 
                 tests:JSON.stringify([
@@ -143,7 +148,7 @@ function reverseNumber (num) {
     }
     let result = Number(reversed);
     return result;
-}                  
+}                 
                 `,
                 difficulty:10,
                 approved:1
@@ -154,8 +159,9 @@ function reverseNumber (num) {
                   description:`
 Write a function that takes in a string, reverses the 'casing' of that string, and returns the "reversed-casing" string.
 
-const string = 'HELLO world!';
+\`\`\`const string = 'HELLO world!';
 console.log(reverseCase(string)); // <--- hello WORLD!
+\`\`\`
             `,
             
                 tests:JSON.stringify([
@@ -188,7 +194,7 @@ function reverseCase(str) {
         return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
     })
     .join('');
-}          
+}         
                 `,
                 difficulty:15,
                 approved:1
@@ -197,19 +203,19 @@ function reverseCase(str) {
                 created_by: 1,
                 title: "Stringzzz",
                   description:`
-Return the string "string" with as many Zs as the argument passed.
+## Return the string "string" with as many Zs as the argument passed.
 
-Input Example:  
+### Input Example:  
 
-1
+\`\`\`1
 4
-7
+7\`\`\`
 
-Output Example:  
+### Output Example:  
 
-'stringz'
+\`\`\`'stringz'
 'stringzzzz'
-'stringzzzzzzz'
+'stringzzzzzzz'\`\`\`
             `,
                 tests:JSON.stringify([
                     {

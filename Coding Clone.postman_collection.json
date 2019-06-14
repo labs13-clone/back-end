@@ -90,7 +90,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"id\": 1,\n  \"solution\": \"blow me\"\n}"
+									"raw": "{\n  \"id\": 1,\n  \"completed\":false,\n  \"solution\": \"(function(){\\n    return 'hello'\\n}())\\n\"\n}"
 								},
 								"url": {
 									"raw": "{{url}}/api/submissions",
@@ -150,7 +150,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{url}}/api/challenges?id=1&difficulty=EASY&approved=1&created_by=3",
+									"raw": "{{url}}/api/challenges?id=1&difficulty=1-100&approved=1&created_by=3",
 									"host": [
 										"{{url}}"
 									],
@@ -165,7 +165,7 @@
 										},
 										{
 											"key": "difficulty",
-											"value": "EASY"
+											"value": "1-100"
 										},
 										{
 											"key": "approved",
@@ -377,31 +377,31 @@
 	],
 	"variable": [
 		{
-			"id": "7a56fb80-8c06-4838-ae9a-02c44b098bee",
+			"id": "f2f2d121-bd29-422a-9e9d-f23639159858",
 			"key": "auth0_domain_url",
 			"value": "https://clone-coding-server.herokuapp.com/",
 			"type": "string"
 		},
 		{
-			"id": "809affc5-f8cd-4901-83a9-ad0f1489ac45",
+			"id": "2ef9d050-612a-4345-ae94-df4a7d62d802",
 			"key": "token",
 			"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik5VUkVRa05GT0RneE5EUTRRVVJHT1VJeU56RTJNekUzTkRNM04wRkRNRVZFTnpVNU9ESXdRUSJ9.eyJpc3MiOiJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1Y2Y4Mzc1OTJhYTI0MzBiZjdiY2Q1NmQiLCJhdWQiOlsiaHR0cDovL2xhYnMxM2NvZGluZ2Nsb25lLmNvbS9hcGkiLCJodHRwczovL2xhYnMxM2NvZGluZ2Nsb25lLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1NTk3NzU0MDQsImV4cCI6MTU1OTc4MjYwNCwiYXpwIjoiY1NzTnR5YkdSQWVaRVN1WlZKWGRhWWlsZDZPbk1ETFciLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIiwicGVybWlzc2lvbnMiOlsidXNlcjp1c2VyIl19.Cwxe7b_2__UXXoT7bEJFF33A9l06xeNGaj3yvK6mLeJSjqF2qUMDneHa-wgmT-a9TCtr2c3hVzM2s8XUEv8zoypaXFEeU3LTyLN8ue40DDMZ7qYFWCSKkZx3k4ZEoHFUMvHfSvnC0UpfdggEMU2sk1G6zc6LAYR1wKPqSp36SUT1n9mfW4xXepgxP8b05IN3xWkBHbDQl5_r8y2UO7wwpeVP1fqwFzEObX-B2lKfaIlpjRd7Cvn23kVrz2I-FboS6Y9cpFOU2RkCO9vir6htQyJw4bsWsxSMO-sdofBTQ-6hk6ujPfcqABTQNy7mFmR7rfIrQYzV4QbhveZD416dcQ",
 			"type": "string"
 		},
 		{
-			"id": "fd0de526-e52b-45c4-a598-d7d139cd678f",
+			"id": "9ab87fc3-0064-41df-abf4-6d05aa3d4dff",
 			"key": "local_url",
 			"value": "http://localhost:5000",
 			"type": "string"
 		},
 		{
-			"id": "38c6629b-c076-4cb7-88cf-5e9d51cd313f",
+			"id": "a0cec10f-6cad-43d4-accf-1e587173136e",
 			"key": "remote_url",
 			"value": "https://clone-coding-server.herokuapp.com",
 			"type": "string"
 		},
 		{
-			"id": "21a6a898-5eac-4929-846e-0e8a61ab7511",
+			"id": "151d8c54-860f-4ff8-b114-39059ca6c65d",
 			"key": "url",
 			"value": "http://localhost:5000",
 			"type": "string"
