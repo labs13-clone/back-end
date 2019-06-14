@@ -195,52 +195,47 @@ function reverseCase(str) {
               },
               {
                 created_by: 1,
-                title: "Common Elements",
+                title: "Stringzzz",
                   description:`
-Write a function called commonElements that has parameters for two arrays.
-Return an array of all items that are present in both arrays.
-Do not modify the arrays that are passed in.
+Return the string "string" with as many Zs as the argument passed.
 
 Input Example:  
 
-[1, 2, 3, 4] [3, 4, 5, 6]
-['a', 'b', 'c'] ['x', 'y', 'z', 'a']
-[1, 2, 3] [4, 5, 6]
+1
+4
+7
 
 Output Example:  
 
-[3, 4]
-['a']
-[]
+'stringz'
+'stringzzzz'
+'stringzzzzzzz'
             `,
                 tests:JSON.stringify([
                     {
-                    descriptor:"Returns an array of common elements for numbers",
-                    argumentsToPass:[[1, 2, 3, 4, 5], [4, 5, 6, 7]],
-                    expectedResult:[4, 5]
+                    descriptor:"Returns 1z",
+                    argumentsToPass:[1],
+                    expectedResult:"stringz"
                     },
                     {
-                    descriptor:"Returns an array of common elements for strings",
-                    argumentsToPass:[['a', 'b', 'c'], ['x', 'y', 'z', 'a']],
-                    expectedResult:["a"]
-                    },
+                      descriptor:"Returns 3z",
+                      argumentsToPass:[3],
+                      expectedResult:"stringzzz"
+                      },
                 ]),
                 skeleton_function:`
-function commonElements(arr1, arr2) {
+function stringZ(num) {
 
 }
                 `,
                 solution:`
-function commonElements(arr1, arr2) {
-    return arr1.filter((item, index) => {
-        if (arr1.indexOf(item) === index){
-        return arr2.includes(item);
-        }
-    });
+function stringZ(num) {
+    const z = 'z'; 
+    return 'string' + z.repeat(num)
 }          
                 `,
-                difficulty:40,
-                approved:1
+                difficulty:16,
+                approved:0
               }
         ]);
       });

@@ -272,6 +272,8 @@
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Name of category
  - category_id: NUMBER - Optional - ID of category
+ - completed: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
+ - started: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
 
 #### Request Body:
 ```

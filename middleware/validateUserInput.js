@@ -285,16 +285,16 @@ module.exports = function validateUserInput(validationSchema) {
                                 //If it's a boolean then it's not a number
                                 //This test is needed in addition to isNaN(Number(value))
                                 //Due to type coercion Number(boolean) convers to 1 || 0
-                                if(typeof req[validationObject.type][validationObject.name] === 'boolean') {
+                                if (typeof req[validationObject.type][validationObject.name] === 'boolean') {
 
                                     //Then throw an error
                                     return {
                                         errorType: 'data-type',
                                         errorName: validationObject.name,
                                         errorDataType: validationObject.dataType
-                                    };                        
+                                    };
                                 }
-                                
+
                                 //If the value can not be converted into a number via type conversion
                                 else if (isNaN(Number(req[validationObject.type][validationObject.name]))) {
 
@@ -313,9 +313,7 @@ module.exports = function validateUserInput(validationSchema) {
                                     req[validationObject.type][validationObject.name] = Number(req[validationObject.type][validationObject.name]);
                                 }
                             }
-                        }
-                        
-                        else if (validationObject.dataType === 'boolean') {
+                        } else if (validationObject.dataType === 'boolean') {
 
                             //If the typeof is not a boolean, string, or number then it's not of a proper boolean value
                             if (typeof req[validationObject.type][validationObject.name] !== 'boolean' &&
@@ -331,17 +329,17 @@ module.exports = function validateUserInput(validationSchema) {
                             }
 
                             //Else if it's not a boolean but actually a string
-                            else if(typeof req[validationObject.type][validationObject.name] === 'string'){
+                            else if (typeof req[validationObject.type][validationObject.name] === 'string') {
 
                                 //Check if it is a boolean in string format
-                                if(req[validationObject.type][validationObject.name].toLowerCase() == 'true' ||
+                                if (req[validationObject.type][validationObject.name].toLowerCase() == 'true' ||
                                     req[validationObject.type][validationObject.name].toLowerCase() == 'false') {
 
-                                        //Ensure boolean string is in lowercase format
-                                        req[validationObject.type][validationObject.name] = req[validationObject.type][validationObject.name].toLowerCase();
+                                    //Ensure boolean string is in lowercase format
+                                    req[validationObject.type][validationObject.name] = req[validationObject.type][validationObject.name].toLowerCase();
 
-                                        //Use an equality operator to convert into a proper boolean value
-                                        req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 'true');
+                                    //Use an equality operator to convert into a proper boolean value
+                                    req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 'true');
                                 }
 
                                 //Else the string is not a boolean
@@ -358,14 +356,14 @@ module.exports = function validateUserInput(validationSchema) {
                             }
 
                             //Else if it's not a boolean but actually a number
-                            else if(typeof req[validationObject.type][validationObject.name] === 'number') {
+                            else if (typeof req[validationObject.type][validationObject.name] === 'number') {
 
                                 //If it's a boolean in number format (aka a binary 1 or 0)
-                                if(req[validationObject.type][validationObject.name] == 0 ||
+                                if (req[validationObject.type][validationObject.name] == 0 ||
                                     req[validationObject.type][validationObject.name] == 1) {
 
-                                        //Then use an equality operator to convert it into a boolean
-                                        req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 1);
+                                    //Then use an equality operator to convert it into a boolean
+                                    req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 1);
                                 }
 
                                 //Else the number is not a boolean
@@ -379,9 +377,7 @@ module.exports = function validateUserInput(validationSchema) {
                                     };
                                 }
                             }
-                        }
-                        
-                        else if (validationObject.dataType === 'string') {
+                        } else if (validationObject.dataType === 'string') {
 
                             if (typeof req[validationObject.type][validationObject.name] !== 'string') {
 
@@ -393,15 +389,13 @@ module.exports = function validateUserInput(validationSchema) {
                                 };
                             }
 
-                        }
-
-                        else if (validationObject.dataType === 'json') {
+                        } else if (validationObject.dataType === 'json') {
 
                             //IF typeof is not a string and not an object
                             //Then it's not json
                             //(json will be a string if stringified beforehand)
                             if (typeof req[validationObject.type][validationObject.name] !== 'string' &&
-                            typeof req[validationObject.type][validationObject.name] !== 'object') {
+                                typeof req[validationObject.type][validationObject.name] !== 'object') {
 
                                 //Then throw an error
                                 return {
@@ -412,128 +406,129 @@ module.exports = function validateUserInput(validationSchema) {
                             }
 
                             //If it's an object or array, then convert it into json
-                            else if(typeof req[validationObject.type][validationObject.name] === 'object') {
+                            else if (typeof req[validationObject.type][validationObject.name] === 'object') {
                                 req[validationObject.type][validationObject.name] = JSON.stringify(req[validationObject.type][validationObject.name]);
                             }
                             //Else it's already a string then it doesn't need to be stringified..
 
-                        //If the dataType is a range
-                        //And the range limit is specified
-                        else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
+                            //If the dataType is a range
+                            //And the range limit is specified
+                            else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
 
-                            //Convert range values from string form to an array of numbers
-                            const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+                                //Convert range values from string form to an array of numbers
+                                const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
 
-                            //If the array contains a number below the minimum
-                            //If the array contains a number above the maximum
-                            if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
-                                rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+                                //If the array contains a number below the minimum
+                                //If the array contains a number above the maximum
+                                if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
+                                    rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
 
-                                //Then throw an error
-                                return {
-                                    errorType: 'out-of-range',
-                                    errorRange: req[validationObject.type][validationObject.name],
-                                    errorLimit: JSON.stringify(validationObject.range)
-                                };
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'out-of-range',
+                                        errorRange: req[validationObject.type][validationObject.name],
+                                        errorLimit: JSON.stringify(validationObject.range)
+                                    };
+                                }
+                            }
+
+                            //If it's a protected resource and the user is not an admin
+                            //Then force the query/param/body property to the default
+                            if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
+                                req[validationObject.type][validationObject.name] = validationObject.default;
+                            }
+
+                            //If it's a unique property
+                            //Then make sure it doesn't already exist
+                            if (validationObject.unique !== undefined && validationObject.unique) {
+
+                                //Get the applicable database API
+                                const applicableDbApi = dbTableSwitch(validationObject.dbTable);
+
+                                const filter = {};
+                                filter[validationObject.name] = req[validationObject.type][validationObject.name];
+
+                                //Fetch it from the proper table
+                                const item = await applicableDbApi.getOne(filter);
+
+                                //If it already exists...
+                                if (item !== undefined) {
+
+                                    //If not then throw an error
+                                    //Then throw an error because it's supposed to be unique
+                                    return {
+                                        errorType: 'unique',
+                                        errorName: validationObject.name,
+                                        errorDbTable: validationObject.dbTable
+                                    };
+                                }
                             }
                         }
 
-                        //If it's a protected resource and the user is not an admin
-                        //Then force the query/param/body property to the default
-                        if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
-                            req[validationObject.type][validationObject.name] = validationObject.default;
-                        }
-
-                        //If it's a unique property
-                        //Then make sure it doesn't already exist
-                        if (validationObject.unique !== undefined && validationObject.unique) {
-
-                            //Get the applicable database API
-                            const applicableDbApi = dbTableSwitch(validationObject.dbTable);
-
-                            const filter = {};
-                            filter[validationObject.name] = req[validationObject.type][validationObject.name];
-
-                            //Fetch it from the proper table
-                            const item = await applicableDbApi.getOne(filter);
-
-                            //If it already exists...
-                            if (item !== undefined) {
-
-                                //If not then throw an error
-                                //Then throw an error because it's supposed to be unique
-                                return {
-                                    errorType: 'unique',
-                                    errorName: validationObject.name,
-                                    errorDbTable: validationObject.dbTable
-                                };
-                            }
-                        }
                     }
 
-                }
+                    //After it is confirmed that the validationSchema is valid
+                    //Make sure no extra user inputs are passed that can cause unexpected bugs and vulnerabilities
+                    //And make sure user input values were not duplicated in the request
 
-                //After it is confirmed that the validationSchema is valid
-                //Make sure no extra user inputs are passed that can cause unexpected bugs and vulnerabilities
-                //And make sure user input values were not duplicated in the request
+                    //For each user input type
+                    const userInputTypes = ['query', 'params', 'body'];
+                    userInputTypes.forEach(type => {
 
-                //For each user input type
-                const userInputTypes = ['query', 'params', 'body'];
-                userInputTypes.forEach(type => {
+                        //Some request types will be undefined
+                        //Like body on a GET request
+                        if (req[type] !== undefined) {
 
-                    //Some request types will be undefined
-                    //Like body on a GET request
-                    if (req[type] !== undefined) {
+                            //Get the keys of the object that represents the request for that specific input type
+                            const keys = Object.keys(req[type]);
 
-                        //Get the keys of the object that represents the request for that specific input type
-                        const keys = Object.keys(req[type]);
+                            //Only If there's any keys in the request type
+                            if (keys.length >= 1) {
 
-                        //Only If there's any keys in the request type
-                        if (keys.length >= 1) {
+                                //Iterate through each key
+                                keys.forEach((key, index) => {
 
-                            //Iterate through each key
-                            keys.forEach((key, index) => {
+                                    //Look for the key in the validationSchema
+                                    const foundKey = validationSchema.find(schemaObject => schemaObject.type === type && schemaObject.name === key);
 
-                                //Look for the key in the validationSchema
-                                const foundKey = validationSchema.find(schemaObject => schemaObject.type === type && schemaObject.name === key);
+                                    //If it doesn't exist then throw an error..
+                                    if (!foundKey) {
 
-                                //If it doesn't exist then throw an error..
-                                if (!foundKey) {
-
-                                    //Including invalid properties (properties not included in the validation schema)
-                                    //On a request object could cause unintended consequences
-                                    return {
-                                        errorType: 'invalid-param',
-                                        errorKey: key,
-                                        errorParamType: type
-                                    };
-
-                                }
-
-                                //Else if they sent a duplicate key then throw an error
-                                else {
-
-                                    //Remove the key from the array of keys
-                                    const tempKeys = keys.splice(index, 0);
-
-                                    //Look for a duplicate key in the keys array
-                                    const duplicateKey = tempKeys.find(anotherKey => anotherKey === key);
-
-                                    //If found then throw an error
-                                    if (duplicateKey) {
-
+                                        //Including invalid properties (properties not included in the validation schema)
+                                        //On a request object could cause unintended consequences
                                         return {
-                                            errorType: 'duplicate-param',
+                                            errorType: 'invalid-param',
                                             errorKey: key,
                                             errorParamType: type
                                         };
-                                    }
-                                }
-                            });
-                        }
-                    }
 
-                });
+                                    }
+
+                                    //Else if they sent a duplicate key then throw an error
+                                    else {
+
+                                        //Remove the key from the array of keys
+                                        const tempKeys = keys.splice(index, 0);
+
+                                        //Look for a duplicate key in the keys array
+                                        const duplicateKey = tempKeys.find(anotherKey => anotherKey === key);
+
+                                        //If found then throw an error
+                                        if (duplicateKey) {
+
+                                            return {
+                                                errorType: 'duplicate-param',
+                                                errorKey: key,
+                                                errorParamType: type
+                                            };
+                                        }
+                                    }
+                                });
+                            }
+                        }
+
+                    });
+                }
             })
             .then(err => {
 
