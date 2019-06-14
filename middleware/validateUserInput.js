@@ -13,7 +13,11 @@ const users = require('../apis/db/users');
 //     required: Boolean
 //     type: String ('query' || 'body' || 'params')
 //     default: Boolean || String || Number
+<<<<<<< Updated upstream
 //     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range' || 'json')
+=======
+//     dataType: String ('boolean' || 'string' || 'number' || 'id' || 'range')
+>>>>>>> Stashed changes
 //     dbTable: String ('users' || 'categories' || 'challenges' || 'user_submissions' || 'challenges_categories')
 //     protected: Boolean
 //     unique: Boolean
@@ -103,11 +107,19 @@ module.exports = function validateUserInput(validationSchema) {
                                         };
                                     }
                                 }
+<<<<<<< Updated upstream
 
                                 //Else their id should be in created_by
                                 //Make sure they own the document
                                 else {
 
+=======
+
+                                //Else their id should be in created_by
+                                //Make sure they own the document
+                                else {
+
+>>>>>>> Stashed changes
                                     //Make sure their user id matches the created_by column
                                     if (req.headers.user.id !== item.created_by) {
                                         return {
@@ -134,7 +146,26 @@ module.exports = function validateUserInput(validationSchema) {
                     //Then validate its value
                     else if (req[validationObject.type][validationObject.name] !== undefined) {
 
+<<<<<<< Updated upstream
                         //If the dataType is id
+=======
+                        //Check it's the proper data type
+                        if ((typeof req[validationObject.type][validationObject.name] !== validationObject.dataType && validationObject.dataType !== 'id' && validationObject.dataType !== 'range') ||
+                            (typeof req[validationObject.type][validationObject.name] !== 'number' && validationObject.dataType === 'id') ||
+                            (typeof req[validationObject.type][validationObject.name] !== 'string' && validationObject.dataType === 'range') ||
+                            (validationObject.dataType === 'range' && req[validationObject.type][validationObject.name].split('-').reduce((prev, curr) => {
+                                return isNaN(Number(curr)) ? true : prev;
+                            }, false))) {
+
+                            return {
+                                errorType: 'data-type',
+                                errorName: validationObject.name,
+                                errorDataType: validationObject.dataType
+                            };
+                        }
+
+                        //If it is an id
+>>>>>>> Stashed changes
                         //If dataType is an ID of a database table entry
                         if (validationObject.dataType === 'id') {
 
@@ -159,6 +190,7 @@ module.exports = function validateUserInput(validationSchema) {
                             const item = await applicableDbApi.getOne({
                                 id: req[validationObject.type].id
                             });
+<<<<<<< Updated upstream
 
                             //If it doesn't exist...
                             if (item === undefined) {
@@ -417,6 +449,54 @@ module.exports = function validateUserInput(validationSchema) {
                             }
                             //Else it's already a string then it doesn't need to be stringified..
 
+=======
+
+                            //If it doesn't exist...
+                            if (item === undefined) {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'invalid-id',
+                                    errorName: validationObject.name,
+                                    errorDbTable: validationObject.dbTable
+                                };
+                            }
+
+                            //Else If it does exist:
+                            //Make sure it is they own the resource
+                            //If it is a protected resource and not an admin
+                            else if (validationObject.protected && req.headers.user.role !== 'admin') {
+
+                                //If it's on the user table
+                                if (validationObject.dbTable === 'users') {
+
+                                    //Then make sure their user id matches the id sent by the request
+                                    if (req.headers.user.id !== item.id) {
+
+                                        //If not then throw an error
+                                        return {
+                                            errorType: 'protected'
+                                        };
+                                    }
+                                }
+
+                                //Else their id should be in created_by
+                                //Make sure they own the document
+                                else {
+
+                                    //Make sure their user id matches the created_by column
+                                    if (req.headers.user.id !== item.created_by) {
+
+                                        //If not then throw an error
+                                        return {
+                                            errorType: 'protected'
+                                        };
+                                    }
+                                }
+                            }
+                        }
+
+>>>>>>> Stashed changes
                         //If the dataType is a range
                         //And the range limit is specified
                         else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
