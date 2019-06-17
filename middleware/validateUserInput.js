@@ -407,128 +407,148 @@ module.exports = function validateUserInput(validationSchema) {
 
                             //If it's an object or array, then convert it into json
                             else if (typeof req[validationObject.type][validationObject.name] === 'object') {
+
                                 req[validationObject.type][validationObject.name] = JSON.stringify(req[validationObject.type][validationObject.name]);
+
                             }
-                            //Else it's already a string then it doesn't need to be stringified..
 
-                            //If the dataType is a range
-                            //And the range limit is specified
-                            else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
-
-                                //Convert range values from string form to an array of numbers
-                                const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
-
-                                //If the array contains a number below the minimum
-                                //If the array contains a number above the maximum
-                                if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
-                                    rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
-
-                                    //Then throw an error
+                            //Else it's already a string then it doesn't need to be stringified
+                            //But verify make sure it is valid JSON
+                            else {
+                                try {
+                                    JSON.parse(req[validationObject.type][validationObject.name]);
+                                } catch (err) {
                                     return {
-                                        errorType: 'out-of-range',
-                                        errorRange: req[validationObject.type][validationObject.name],
-                                        errorLimit: JSON.stringify(validationObject.range)
-                                    };
-                                }
-                            }
-
-                            //If it's a protected resource and the user is not an admin
-                            //Then force the query/param/body property to the default
-                            if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
-                                req[validationObject.type][validationObject.name] = validationObject.default;
-                            }
-
-                            //If it's a unique property
-                            //Then make sure it doesn't already exist
-                            if (validationObject.unique !== undefined && validationObject.unique) {
-
-                                //Get the applicable database API
-                                const applicableDbApi = dbTableSwitch(validationObject.dbTable);
-
-                                const filter = {};
-                                filter[validationObject.name] = req[validationObject.type][validationObject.name];
-
-                                //Fetch it from the proper table
-                                const item = await applicableDbApi.getOne(filter);
-
-                                //If it already exists...
-                                if (item !== undefined) {
-
-                                    //If not then throw an error
-                                    //Then throw an error because it's supposed to be unique
-                                    return {
-                                        errorType: 'unique',
+                                        errorType: 'invalid-json',
                                         errorName: validationObject.name,
-                                        errorDbTable: validationObject.dbTable
+                                        errorDataType: validationObject.dataType
                                     };
                                 }
                             }
                         }
 
+                        //If the dataType is a range
+                        //And the range limit is specified
+                        else if (validationObject.dataType === 'range' && validationObject.range !== undefined) {
+
+                            //Convert range values from string form to an array of numbers
+                            const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+
+                            //If the array contains a number below the minimum
+                            //If the array contains a number above the maximum
+                            if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
+                                rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+
+                                //Then throw an error
+                                return {
+                                    errorType: 'out-of-range',
+                                    errorRange: req[validationObject.type][validationObject.name],
+                                    errorLimit: JSON.stringify(validationObject.range)
+                                };
+                            }
+                        }
+
+                        //If it's a protected resource and the user is not an admin
+                        //Then force the query/param/body property to the default
+                        if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
+                            req[validationObject.type][validationObject.name] = validationObject.default;
+                        }
+
+                        //If it's a unique property
+                        //Then make sure it doesn't already exist
+                        if (validationObject.unique !== undefined && validationObject.unique) {
+
+                            //Get the applicable database API
+                            const applicableDbApi = dbTableSwitch(validationObject.dbTable);
+
+                            const filter = {};
+                            filter[validationObject.name] = req[validationObject.type][validationObject.name];
+
+                            //Fetch it from the proper table
+                            const item = await applicableDbApi.getOne(filter);
+
+                            //If it already exists...
+                            if (item !== undefined) {
+
+                                //If not then throw an error
+                                //Then throw an error because it's supposed to be unique
+                                return {
+                                    errorType: 'unique',
+                                    errorName: validationObject.name,
+                                    errorDbTable: validationObject.dbTable
+                                };
+                            }
+                        }
                     }
 
-                    //After it is confirmed that the validationSchema is valid
-                    //Make sure no extra user inputs are passed that can cause unexpected bugs and vulnerabilities
-                    //And make sure user input values were not duplicated in the request
+                }
 
-                    //For each user input type
-                    const userInputTypes = ['query', 'params', 'body'];
-                    userInputTypes.forEach(type => {
+                //After it is confirmed that the validationSchema is valid
+                //Make sure no extra user inputs are passed that can cause unexpected bugs and vulnerabilities
+                //And make sure user input values were not duplicated in the request
 
-                        //Some request types will be undefined
-                        //Like body on a GET request
-                        if (req[type] !== undefined) {
+                //This variable will toggle from undefined if an error is found
+                let error = undefined;
 
-                            //Get the keys of the object that represents the request for that specific input type
-                            const keys = Object.keys(req[type]);
+                //For each user input type
+                const userInputTypes = ['query', 'params', 'body'];
+                userInputTypes.forEach(type => {
 
-                            //Only If there's any keys in the request type
-                            if (keys.length >= 1) {
+                    //Some request types will be undefined
+                    //Like body on a GET request
+                    if (req[type] !== undefined) {
 
-                                //Iterate through each key
-                                keys.forEach((key, index) => {
+                        //Get the keys of the object that represents the request for that specific input type
+                        const keys = Object.keys(req[type]);
 
-                                    //Look for the key in the validationSchema
-                                    const foundKey = validationSchema.find(schemaObject => schemaObject.type === type && schemaObject.name === key);
+                        //Only If there's any keys in the request type
+                        if (keys.length >= 1) {
 
-                                    //If it doesn't exist then throw an error..
-                                    if (!foundKey) {
+                            //Iterate through each key
+                            keys.forEach((key, index) => {
 
-                                        //Including invalid properties (properties not included in the validation schema)
-                                        //On a request object could cause unintended consequences
-                                        return {
-                                            errorType: 'invalid-param',
+                                //Look for the key in the validationSchema
+                                const foundKey = validationSchema.find(schemaObject => schemaObject.type === type && schemaObject.name === key);
+
+                                //If the key doesn't exist  in the validationSchema then throw an error..
+                                if (foundKey === undefined) {
+                                    
+                                    //Including invalid properties (properties not included in the validation schema)
+                                    //On a request object could cause unintended consequences
+                                    error = {
+                                        errorType: 'invalid-param',
+                                        errorKey: key,
+                                        errorParamType: type
+                                    };
+
+                                }
+
+                                //Else if they sent a duplicate key then throw an error
+                                else {
+
+                                    //Remove the key from the array of keys
+                                    const tempKeys = keys.splice(index, 0);
+
+                                    //Look for a duplicate key in the keys array
+                                    const duplicateKey = tempKeys.find(anotherKey => anotherKey === key);
+
+                                    //If found then throw an error
+                                    if (duplicateKey) {
+
+                                        error = {
+                                            errorType: 'duplicate-param',
                                             errorKey: key,
                                             errorParamType: type
                                         };
-
                                     }
-
-                                    //Else if they sent a duplicate key then throw an error
-                                    else {
-
-                                        //Remove the key from the array of keys
-                                        const tempKeys = keys.splice(index, 0);
-
-                                        //Look for a duplicate key in the keys array
-                                        const duplicateKey = tempKeys.find(anotherKey => anotherKey === key);
-
-                                        //If found then throw an error
-                                        if (duplicateKey) {
-
-                                            return {
-                                                errorType: 'duplicate-param',
-                                                errorKey: key,
-                                                errorParamType: type
-                                            };
-                                        }
-                                    }
-                                });
-                            }
+                                }
+                            });
                         }
+                    }
 
-                    });
-                }
+                });
+
+                return error;
             })
             .then(err => {
 

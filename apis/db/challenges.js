@@ -45,6 +45,10 @@ function update(selector = null, payload) {
 //Filterable by sending in an object literal that matches the challenges schema
 function getMany(filter = {}) {
 
+    //Filters can be on different tables...
+    //Filters can also necessitate different knex query builder functions
+    //Here we start with an initial query
+    //And dynamically build on top of it.
     const queryBuilder = db
         .select(
             'challenges.id',
@@ -63,24 +67,45 @@ function getMany(filter = {}) {
         .groupBy('challenges.id')
         .orderBy('challenges.id');
 
-    //Filters can be on different tables...
-    //Filters can also necessitate different knex query builder functions
-
-
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
-    const challenges = ['created_by', 'approved', 'id'];
+    const challenges = ['created_by', 'approved', 'id', 'difficulty'];
     const categories = ['category_id', 'category_name'];
     const user_submissions = ['completed', 'started'];
 
     //Parse Challenge Table Filters
     challenges.forEach(key => {
+
         //If the parameter exists on the filter object
         if (filter[key] !== undefined) {
-            //Assign table
-            filter[`challenges.${key}`] = filter[key];
-            //Delete invalid property that doesn't have the table
-            deleteKey(key);
+
+            //difficulty query param does not use .where()
+            //If there's a difficulty range query parameter in the request
+            //Then we need to alter the query and filter
+            if (key === 'difficulty') {
+
+                //It will be represented as a string IE. "1-33" || "33-66" || "66-100"
+                var difficulty = filter.difficulty;
+
+                //Convert it into an array with numbers
+                //That way it works with the knex query builder where function IE. .whereIn('difficulty'. [1-33])
+                difficulty = difficulty.split('-').map(str => Number(str));
+
+                //Remove difficulty from the filter object used in .where()
+                delete filter.difficulty;
+
+                //Add difficulty filter to the query builder
+                queryBuilder.whereBetween('difficulty', difficulty);
+
+            }
+            
+            //Else for all other query parameters in the challenges table
+            else {
+                //Assign table
+                filter[`challenges.${key}`] = filter[key];
+                //Delete invalid property that doesn't have the table
+                deleteKey(key);
+            }
         }
     });
 
@@ -118,7 +143,7 @@ function getMany(filter = {}) {
                 //Delete invalid property that doesn't have the table
                 deleteKey(key);
                 deleteKey('completed_by');
-            } else if(key === 'completed') {
+            } else if (key === 'completed') {
                 //Delete invalid property that doesn't have the table
                 deleteKey(key);
                 deleteKey('completed_by');
@@ -135,8 +160,8 @@ function getMany(filter = {}) {
                 //Delete invalid property that doesn't have the table
                 deleteKey(key);
                 deleteKey('started_by');
-                
-            } else if(key === 'started') {
+
+            } else if (key === 'started') {
                 //Delete invalid property that doesn't have the table
                 deleteKey(key);
                 deleteKey('started_by');
@@ -151,26 +176,6 @@ function getMany(filter = {}) {
     function deleteKey(key) {
         delete filter[key];
     }
-
-    //difficulty query param does not use .where()
-    //If there's a difficulty range query parameter in the request
-    //Then we need to alter the query and filter
-    if (filter.difficulty !== undefined) {
-
-        //It will be represented as a string IE. "1-33" || "33-66" || "66-100"
-        var difficulty = filter.difficulty;
-
-        //Convert it into an array with numbers
-        //That way it works with the knex query builder where function IE. .whereIn('difficulty'. [1-33])
-        difficulty = difficulty.split('-').map(str => Number(str));
-
-        //Remove difficulty from the filter object used in .where()
-        delete filter.difficulty;
-
-        //Add difficulty filter to the query builder
-        queryBuilder.whereBetween('difficulty', difficulty);
-    }
-
 
     //Finish building the query
     return queryBuilder

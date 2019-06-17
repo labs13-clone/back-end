@@ -4,6 +4,7 @@ const categoriesApi = require('../apis/db/categories');
 const challengesCategoriesApi = require('../apis/db/challengesCategories');
 const challengesApi = require('../apis/db/challenges');
 const userSubmissionsApi = require('../apis/db/userSubmissions');
+const validateUserInput = require('../middleware/validateUserInput');
 
 const router = express.Router();
 
@@ -30,7 +31,7 @@ router.post('/', auth, (req, res) => {
 });
 
 
-router.get('/', auth, (req, res) => {
+router.get('/', auth, validateUserInput([]), (req, res) => {
     const filter = req.query;
     if(req.headers.role === "user") {
         if(filter.approved === undefined) {
