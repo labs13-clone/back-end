@@ -355,7 +355,7 @@ Output
                 ]),
                 skeleton_function:`
 function sortString(str) {
-  
+
 }
          
 }
@@ -373,6 +373,122 @@ function sortString(str) {
                 approved:1
               },
 
+              {
+
+                created_by: 1,
+                title: "Vowel Count",
+                  description:`
+##  Write a function which counts the number of vowels in a given string. Return the count number.
+
+Input
+\`\`\`'hello world'
+//
+Output
+'3'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"discerns from the entire alphabet",
+                    argumentsToPass:['The quick brown fox jumped over the lazy dog.'],
+                    expectedResult:"12"
+                    },
+                    {
+                      descriptor:"does not count consonants",
+                      argumentsToPass:['-bcd-fgh-jklmn-pqrst-vwxyz-BCD-FGH-JKLMN-PQRST-VWXYZ'],
+                      expectedResult:"0"
+                    },
+                    {
+                        descriptor:"count UPPER and lower case vowels",
+                        argumentsToPass:['aeiouAEIOU'],
+                        expectedResult:"10"
+                    },
+                ]),
+                skeleton_function:`
+function vowelCount(str) {
+
+}
+                   
+}
+               `,
+                solution:`
+function vowelCount(str) {
+  let count = 0;
+  for (let i = 0; i < str.length; i++) {
+    // lowercase vowels
+    if (str.charAt(i) === 'a') count++;
+    if (str.charAt(i) === 'e') count++;
+    if (str.charAt(i) === 'i') count++;
+    if (str.charAt(i) === 'o') count++;
+    if (str.charAt(i) === 'u') count++;
+    // UPPERCASE vowels
+    if (str.charAt(i) === 'A') count++;
+    if (str.charAt(i) === 'E') count++;
+    if (str.charAt(i) === 'I') count++;
+    if (str.charAt(i) === 'O') count++;
+    if (str.charAt(i) === 'U') count++;
+  }
+  return count;
+}
+                     
+                `,
+                difficulty:25,
+                approved:1
+              },
+
+              {
+
+                created_by: 1,
+                title: "To Binary String",
+                  description:`
+##  Given a positive (or 0) number, return a string of 1's and 0's representing it's binary value:
+
+Input
+\`\`\`'toBinaryString(6)'
+//
+Output
+'110'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    // {
+                    // descriptor:"handles_zero",
+                    // argumentsToPass:['toBinaryString(0)'],
+                    // expectedResult:"0"
+                    // },
+                    
+                    {
+                        descriptor:"count UPPER and lower case vowels",
+                        argumentsToPass:['aeiouAEIOU'],
+                        expectedResult:"10"
+                    },
+                ]),
+                skeleton_function:`
+function toBinaryString(number) {
+
+}
+                   
+
+               `,
+                solution:`
+function toBinaryString(number) {
+  let num = Number(number); // Input remains unaltered
+  let result = '';
+  if (number === 0) return '0';
+  while (num > 0) {
+    result = (num % 2) + result;
+    num = Math.floor(num / 2);
+  }
+  console.log(number, num); // Input remains unaltered
+  return result;
+}
+                     
+                `,
+                difficulty:25,
+                approved:1
+              },
         ]);
       });
   };
