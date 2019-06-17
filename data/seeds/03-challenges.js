@@ -306,7 +306,81 @@ function toCamelCase(str) {
                 `,
                 difficulty:20,
                 approved:1
-              }
+              },
+
+              {
+
+                created_by: 1,
+                title: "Sort String",
+                  description:`
+##  Write a function called sortString that takes a string of letters and returns a string with the letters sorted in alphabetical order.
+
+
+Input
+\`\`\`'dcba'
+'zycxbwa'
+'AzycxbCwBaA'
+//
+Output
+'abcd'
+'abcwxyz'
+'AABCabcwxyz'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"returns string with letters in alphabetical order",
+                    argumentsToPass:['cba'],
+                    expectedResult:"abc"
+                    },
+                    {
+                      descriptor:"returns string with letters in alphabetical order",
+                      argumentsToPass:['ccc'],
+                      expectedResult:"ccc"
+                    },
+                    {
+                        descriptor:"returns string with letters in alphabetical order",
+                        argumentsToPass:['zzyyxxww'],
+                        expectedResult:"wwxxyyzz"
+                    },
+                    {
+                      descriptor:"sorts_uppercase_before_lowercase",
+                      argumentsToPass:['AzycxbCwBaA'],
+                      expectedResult:"AABCabcwxyz"
+                      },
+                      {
+                        descriptor:"sorts_uppercase_before_lowercase",
+                        argumentsToPass:['bBaA'],
+                        expectedResult:"ABab"
+                      },
+                      {
+                          descriptor:"returns a string",
+                          argumentsToPass:[''],
+                          expectedResult:""
+                      },
+                ]),
+                skeleton_function:`
+function sortString(str) {
+
+}
+                
+
+
+}
+               `,
+                solution:`
+function sortString(str) {
+  const arr = str.split('');
+  const sorted = arr.sort();
+  const joined = sorted.join('');
+  return joined;
+}
+                     
+                `,
+                difficulty:25,
+                approved:1
+              },
 
         ]);
       });
