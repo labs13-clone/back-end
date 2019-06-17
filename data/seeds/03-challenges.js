@@ -243,14 +243,7 @@ function stringZ(num) {
                 difficulty:16,
                 approved:0
               },
-             
-             
-             
-             
-             
-             
-             
-             
+        
               {
 
                 created_by: 1,
@@ -362,11 +355,9 @@ Output
                 ]),
                 skeleton_function:`
 function sortString(str) {
-
+  
 }
-                
-
-
+         
 }
                `,
                 solution:`
