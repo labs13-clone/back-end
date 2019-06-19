@@ -33,7 +33,7 @@ module.exports = function (req, res, next) {
             },
 
             //jwt.verify callback
-            async function (err, decodedAccessToken) {
+            function (err, decodedAccessToken) {
 
                 //If the signature on the token is invalid throw an error
                 if (err) {
@@ -41,10 +41,6 @@ module.exports = function (req, res, next) {
                         message: 'Invalid Token'
                     });
                 } else {
-
-                    //Get the decoded token from the 
-                    //https://labs13codingclone.auth0.com/userinfo
-                    const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
 
                     //Set the users role according to the permissions property
                     if (decodedAccessToken.permissions.includes('admin:admin')) {
@@ -59,10 +55,14 @@ module.exports = function (req, res, next) {
                     return usersDbApi.getOne({
                             sub_id: decodedAccessToken.sub
                         })
-                        .then(user => {
+                        .then(async user => {
 
                             //If no user is found
                             if (user === undefined) {
+
+                                //Get the decoded token from the 
+                                //https://labs13codingclone.auth0.com/userinfo
+                                const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
 
                                 //Insert them into the database
                                 usersDbApi.insert({
@@ -70,13 +70,10 @@ module.exports = function (req, res, next) {
                                         nickname: decodedIdentityToken.nickname,
                                         picture: decodedIdentityToken.picture,
                                     })
-
                                     //Add user info to request headers
                                     .then(user => {
                                         req.headers.user = {
                                             ...user,
-                                            nickname: decodedIdentityToken.nickname,
-                                            picture: decodedIdentityToken.picture,
                                             role
                                         };
 
@@ -85,6 +82,38 @@ module.exports = function (req, res, next) {
                                         //Returning null because of this warning:
                                         //(node:11538) Warning: a promise was created in a handler but was not returned from it, see http://goo.gl/rRqMUw
                                         return null;
+                                    })
+                                    .catch(err => {
+
+                                        //TODO: Find a better way to do this
+                                        //When someone registers for the first time
+                                        //It will try to insert them several times
+                                        //And get a unique key restraint error
+                                        //This is a temporary workaround
+                                        if (err.code === '23505') {
+
+                                            //Get user info
+                                            usersDbApi.getOne({
+                                                    sub_id: decodedAccessToken.sub
+                                                })
+
+                                                //Add user info to request headers
+                                                .then(user => {
+                                                    req.headers.user = {
+                                                        ...user,
+                                                        role
+                                                    };
+
+                                                    next();
+
+                                                    //Returning null because of this warning:
+                                                    //(node:11538) Warning: a promise was created in a handler but was not returned from it, see http://goo.gl/rRqMUw
+                                                    return null;
+                                                })
+                                        } else {
+                                            console.log(typeof err.code, err.code)
+                                        }
+
                                     })
                             }
 
@@ -103,7 +132,6 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
-                            console.log(err)
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });

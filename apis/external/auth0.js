@@ -41,7 +41,7 @@ function getUserProfile(accessToken) {
             return res.data;
         })
         .catch(err => {
-            console.log('Error retrieving JKWS from Auth0', err.message);
+            console.log('Error retrieving user profile information from Auth0', err.message);
         });
 }
 
