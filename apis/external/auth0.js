@@ -29,7 +29,7 @@ function getPubKey() {
 
 //Get the public key from the Auth0 api to confirm the validity of the token
 function getUserProfile(accessToken) {
-
+ 
     return axios({
             method: 'get',
             url: `https://labs13codingclone.auth0.com/userinfo`,
@@ -41,6 +41,7 @@ function getUserProfile(accessToken) {
             return res.data;
         })
         .catch(err => {
+            
             console.log('Error retrieving user profile information from Auth0', err.message);
         });
 }
