@@ -26,13 +26,14 @@ module.exports = function (req, res, next) {
                 ignoreExpiration: true,
                 //iss and aud are used to verify Auth0 created token for our app
                 iss: 'https://labs13codingclone.auth0.com/',
-                aud: ['http://labs13codingclone.com/api',
+                aud: [
+                    'http://labs13codingclone.com/api',
                     'https://labs13codingclone.auth0.com/userinfo'
                 ]
             },
 
             //jwt.verify callback
-            function (err, decoded) {
+            function (err, decodedAccessToken) {
 
                 //If the signature on the token is invalid throw an error
                 if (err) {
@@ -42,7 +43,7 @@ module.exports = function (req, res, next) {
                 } else {
 
                     //Set the users role according to the permissions property
-                    if (decoded.permissions.includes('admin:admin')) {
+                    if (decodedAccessToken.permissions.includes('admin:admin')) {
 
                         //var used to declare role so the variable is accessible outside this if/else statement
                         var role = 'admin';
@@ -52,18 +53,23 @@ module.exports = function (req, res, next) {
 
                     //Query the database by sub id to see if any users have the same sub id
                     return usersDbApi.getOne({
-                            sub_id: decoded.sub
+                            sub_id: decodedAccessToken.sub
                         })
-                        .then(user => {
+                        .then(async user => {
 
                             //If no user is found
                             if (user === undefined) {
 
+                                //Get the decoded token from the 
+                                //https://labs13codingclone.auth0.com/userinfo
+                                const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
+
                                 //Insert them into the database
                                 usersDbApi.insert({
-                                        sub_id: decoded.sub
+                                        sub_id: decodedAccessToken.sub,
+                                        nickname: decodedIdentityToken.nickname,
+                                        picture: decodedIdentityToken.picture,
                                     })
-
                                     //Add user info to request headers
                                     .then(user => {
                                         req.headers.user = {
@@ -77,9 +83,41 @@ module.exports = function (req, res, next) {
                                         //(node:11538) Warning: a promise was created in a handler but was not returned from it, see http://goo.gl/rRqMUw
                                         return null;
                                     })
+                                    .catch(err => {
+
+                                        //TODO: Find a better way to do this
+                                        //When someone registers for the first time
+                                        //It will try to insert them several times
+                                        //And get a unique key restraint error
+                                        //This is a temporary workaround
+                                        if (err.code === '23505') {
+
+                                            //Get user info
+                                            usersDbApi.getOne({
+                                                    sub_id: decodedAccessToken.sub
+                                                })
+
+                                                //Add user info to request headers
+                                                .then(user => {
+                                                    req.headers.user = {
+                                                        ...user,
+                                                        role
+                                                    };
+
+                                                    next();
+
+                                                    //Returning null because of this warning:
+                                                    //(node:11538) Warning: a promise was created in a handler but was not returned from it, see http://goo.gl/rRqMUw
+                                                    return null;
+                                                })
+                                        } else {
+                                            console.log(typeof err.code, err.code)
+                                        }
+
+                                    })
                             }
 
-                            //Else user was found, combine user info from db with decoded token
+                            //Else user was found, combine user info from db with decodedAccessToken token
                             else {
                                 req.headers.user = {
                                     ...user,
@@ -94,7 +132,6 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
-                            console.log(err)
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });
