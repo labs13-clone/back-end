@@ -56,8 +56,6 @@ function getMany(filter = {}) {
             //Map over each challenge
             const parsed = challenges.map(async challenge => {
 
-                console.log(challenge.created_by)
-
                 //Retrieve category info in an array
                 const challengeCategories = await db.select(
                         'categories.id',
@@ -255,8 +253,6 @@ function parseFilter(filter) {
     function deleteKey(key) {
         delete filter[key];
     }
-
-    console.log(filter)
 
     //Apply the parsed filter to the query builder
     queryBuilder.where(filter)

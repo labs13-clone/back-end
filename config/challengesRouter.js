@@ -11,46 +11,47 @@ const router = express.Router();
 
 router.post('/', auth,
 
-    validateUserInput([{
-            name: 'title',
-            required: true,
-            type: 'body',
-            dataType: 'string',
-            unique: true,
-            dbTable: 'challenges'
-        },
-        {
-            name: 'description',
-            required: true,
-            type: 'body',
-            dataType: 'string'
-        },
-        {
-            name: 'tests',
-            required: true,
-            type: 'body',
-            dataType: 'json'
-        },
-        {
-            name: 'skeleton_function',
-            required: true,
-            type: 'body',
-            dataType: 'string'
-        },
-        {
-            name: 'solution',
-            required: true,
-            type: 'body',
-            dataType: 'string'
-        },
-        {
-            name: 'difficulty',
-            required: true,
-            type: 'body',
-            dataType: 'number',
-            range: [1, 100]
-        }
-    ]), (req, res) => {
+    // validateUserInput([{
+    //         name: 'title',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'string',
+    //         unique: true,
+    //         dbTable: 'challenges'
+    //     },
+    //     {
+    //         name: 'description',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'string'
+    //     },
+    //     {
+    //         name: 'tests',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'json'
+    //     },
+    //     {
+    //         name: 'skeleton_function',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'string'
+    //     },
+    //     {
+    //         name: 'solution',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'string'
+    //     },
+    //     {
+    //         name: 'difficulty',
+    //         required: true,
+    //         type: 'body',
+    //         dataType: 'number',
+    //         range: [1, 100]
+    //     }
+    // ]),
+     (req, res) => {
 
         const challenge = {
             ...req.body,
@@ -73,55 +74,59 @@ router.post('/', auth,
     });
 
 
-router.get('/', auth, validateUserInput([{
-        name: 'difficulty',
-        required: false,
-        type: 'query',
-        dataType: 'range'
-    },
-    {
-        name: 'created_by',
-        required: false,
-        type: 'query',
-        dataType: 'id',
-        dbTable: 'users',
-        protected: true
-    },
-    {
-        name: 'approved',
-        required: false,
-        type: 'query',
-        dataType: 'boolean',
-        // protected: true,
-        // default: true
-    },
-    {
-        name: 'id',
-        required: false,
-        type: 'query',
-        dataType: 'id',
-        dbTable: 'challenges'
-    },
-    {
-        name: 'category_id',
-        required: false,
-        type: 'query',
-        dataType: 'id',
-        dbTable: 'categories'
-    },
-    {
-        name: 'completed',
-        required: false,
-        type: 'query',
-        dataType: 'boolean'
-    },
-    {
-        name: 'started',
-        required: false,
-        type: 'query',
-        dataType: 'boolean'
-    }
-]), (req, res) => {
+router.get('/', auth,
+
+// validateUserInput([{
+//         name: 'difficulty',
+//         required: false,
+//         type: 'query',
+//         dataType: 'range'
+//     },
+//     {
+//         name: 'created_by',
+//         required: false,
+//         type: 'query',
+//         dataType: 'id',
+//         dbTable: 'users',
+//         protected: true
+//     },
+//     {
+//         name: 'approved',
+//         required: false,
+//         type: 'query',
+//         dataType: 'boolean',
+//         // protected: true,
+//         // default: true
+//     },
+//     {
+//         name: 'id',
+//         required: false,
+//         type: 'query',
+//         dataType: 'id',
+//         dbTable: 'challenges'
+//     },
+//     {
+//         name: 'category_id',
+//         required: false,
+//         type: 'query',
+//         dataType: 'id',
+//         dbTable: 'categories'
+//     },
+//     {
+//         name: 'completed',
+//         required: false,
+//         type: 'query',
+//         dataType: 'boolean'
+//     },
+//     {
+//         name: 'started',
+//         required: false,
+//         type: 'query',
+//         dataType: 'boolean'
+//     }
+// ]),
+
+(req, res) => {
     const filter = req.query;
 
     //If it's a normal user

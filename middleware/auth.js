@@ -26,13 +26,14 @@ module.exports = function (req, res, next) {
                 ignoreExpiration: true,
                 //iss and aud are used to verify Auth0 created token for our app
                 iss: 'https://labs13codingclone.auth0.com/',
-                aud: ['http://labs13codingclone.com/api',
+                aud: [
+                    'http://labs13codingclone.com/api',
                     'https://labs13codingclone.auth0.com/userinfo'
                 ]
             },
 
             //jwt.verify callback
-            function (err, decoded) {
+            async function (err, decodedAccessToken) {
 
                 //If the signature on the token is invalid throw an error
                 if (err) {
@@ -41,8 +42,12 @@ module.exports = function (req, res, next) {
                     });
                 } else {
 
+                    //Get the decoded token from the 
+                    //https://labs13codingclone.auth0.com/userinfo
+                    const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
+
                     //Set the users role according to the permissions property
-                    if (decoded.permissions.includes('admin:admin')) {
+                    if (decodedAccessToken.permissions.includes('admin:admin')) {
 
                         //var used to declare role so the variable is accessible outside this if/else statement
                         var role = 'admin';
@@ -52,7 +57,7 @@ module.exports = function (req, res, next) {
 
                     //Query the database by sub id to see if any users have the same sub id
                     return usersDbApi.getOne({
-                            sub_id: decoded.sub
+                            sub_id: decodedAccessToken.sub
                         })
                         .then(user => {
 
@@ -61,13 +66,15 @@ module.exports = function (req, res, next) {
 
                                 //Insert them into the database
                                 usersDbApi.insert({
-                                        sub_id: decoded.sub
+                                        sub_id: decodedAccessToken.sub
                                     })
 
                                     //Add user info to request headers
                                     .then(user => {
                                         req.headers.user = {
                                             ...user,
+                                            nickname: decodedIdentityToken.nickname,
+                                            picture: decodedIdentityToken.picture,
                                             role
                                         };
 
@@ -79,10 +86,12 @@ module.exports = function (req, res, next) {
                                     })
                             }
 
-                            //Else user was found, combine user info from db with decoded token
+                            //Else user was found, combine user info from db with decodedAccessToken token
                             else {
                                 req.headers.user = {
                                     ...user,
+                                    nickname: decodedIdentityToken.nickname,
+                                    picture: decodedIdentityToken.picture,
                                     role
                                 };
 
