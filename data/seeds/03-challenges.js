@@ -358,7 +358,6 @@ function sortString(str) {
 
 }
          
-}
                `,
                 solution:`
 function sortString(str) {
@@ -410,7 +409,6 @@ function vowelCount(str) {
 
 }
                    
-}
                `,
                 solution:`
 function vowelCount(str) {
@@ -434,6 +432,276 @@ function vowelCount(str) {
                      
                 `,
                 difficulty:25,
+                approved:1
+              },
+
+              {
+
+                created_by: 1,
+                title: "Sum of Digits",
+                  description:`
+##  Write a function called sumOfDigits. When given a positive integer, sumOfDigits returns the sum of its digits.
+ Assume all numbers will be positive.
+
+Input
+\`\`\`'23'
+//
+Output
+'5'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"should_correctly_add_digits",
+                    argumentsToPass:['23'],
+                    expectedResult:"5"
+                    },
+                    {
+                      descriptor:"should_correctly_add_digits",
+                      argumentsToPass:['101010101'],
+                      expectedResult:"5"
+                    },
+                    // {
+                    //     descriptor:"should_return_a_number",
+                    //     argumentsToPass:['23'],
+                    //     expectedResult:"number"
+                    // },
+                ]),
+                skeleton_function:`
+function sumOfDigits(num) {
+
+}
+                   
+               `,
+                solution:`
+function sumOfDigits (num) {
+  const integerStrings = ('' + num).split('');     // does the same thing as the next line
+  // const integerStrings = String(num).split(''); // I find this reads better
+  console.log(integerStrings);                     // <--- should return an array of strings
+  console.log(typeof(integerStrings));             // <--- 'object' (JS arrays are special kinds of objects - Everything Is Objects!!!)
+  // declaring variables to be used in the for loop
+  const len = integerStrings.length;
+  let i = 0,
+    sum = 0;
+  // For-Loop Love!
+  for (i; i < len; i++) {
+    sum += Number(integerStrings[i]); // <--- turns the strings into type: integers
+    console.log(sum);                 // <--- sum of adding up all ints in the array of ints
+  }
+  return sum;
+}
+                     
+                `,
+                difficulty:25,
+                approved:1
+              },
+
+              {
+
+                created_by: 1,
+                title: "String Compression",
+                  description:`
+##  Implement a method to perform basic string compression using the counts of repeated characters.
+
+Input
+\`\`\`'aabcccccaaa'
+//
+Output
+'a2b1c5a3'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"abcd",
+                    argumentsToPass:['abcd'],
+                    expectedResult:"abcd"
+                    },
+                    {
+                      descriptor:"aaaa",
+                      argumentsToPass:['aaaa'],
+                      expectedResult:"a4"
+                    },
+                    {
+                        descriptor:"aaaaqqqqqqqqqwertyuiop",
+                        argumentsToPass:['aaaaqqqqqqqqqwertyuiop'],
+                        expectedResult:"aaaaqqqqqqqqqwertyuiop"
+                    },
+                    {
+                      descriptor:"aaaaqqqqqqqqqwer",
+                      argumentsToPass:['aaaaqqqqqqqqqwer'],
+                      expectedResult:"a4q9w1e1r1"
+                  },
+                ]),
+                skeleton_function:`
+function stringCompression(str) {
+
+}
+                   
+               `,
+                solution:`
+                function stringCompression(str) {
+                    let curChar = null;
+                    let cmpresd = '';
+                    let count = 1;
+                    for (let i = 0; i <= str.length; i++) {
+                      if (str[i] === curChar) count++;
+                      if (curChar === null) curChar = str[i];
+                      if (str[i] !== curChar || str[i] === undefined) {
+                        cmpresd += curChar;
+                        cmpresd += count;
+                        count = 1;
+                        curChar = str[i];
+                      }
+                    }
+                    return cmpresd.length < str.length ? cmpresd : str;
+                  }
+                  
+                     
+                `,
+                difficulty:40,
+                approved:1
+              },
+
+              {
+
+                created_by: 1,
+                title: "Quick Sort",
+                  description:`
+## Implement the quick sort sorting algorithm. Assume the input is an array of integers.
+
+https://en.wikipedia.org/wiki/Quicksort
+
+https://www.khanacademy.org/computing/computer-science/algorithms#quick-sort 
+
+Input
+\`\`\`'9,8,7,6,5,4,3'
+//
+Output
+'3,4,5,6,7,8,9'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"should_sort_an_array",
+                    argumentsToPass:['0,1,2,3,4,5,6'],
+                    expectedResult:"[0,1,2,3,4,5,6]"
+                    },
+                    {
+                      descriptor:"should_sort_an_array",
+                      argumentsToPass:['9,8,7,6,5,4,3'],
+                      expectedResult:"[3,4,5,6,7,8,9]"
+                    },
+                    {
+                        descriptor:"should_be_able_to_handle_negative_numbers",
+                        argumentsToPass:['55,-5,-10,4'],
+                        expectedResult:"[-10,-5,4,55]"
+                    },
+                    {
+                      descriptor:"should_be_able_to_handle_multiple_occurrences_of_same_number",
+                      argumentsToPass:['9,5,5,5,5,5,1'],
+                      expectedResult:"[1,5,5,5,5,5,9]"
+                  },
+                //   {
+                //     descriptor:"should_return_an_array",
+                //     argumentsToPass:['0'],
+                //     expectedResult:"true"
+                // },
+                ]),
+                skeleton_function:`
+function quickSort(nums) {
+
+}
+                   
+               `,
+                solution:`
+                function quickSort(nums) {
+                  const arr = nums.slice();
+                  if (nums.length < 2) return nums;
+                  
+                  const lessThanOrEqualToPivot = [];
+                  const greaterThanPivot = [];
+                  const middleIndex = Math.floor(arr.length / 2);
+                  const pivot = arr.splice(middleIndex, 1);
+                
+                  for (let i = 0; i < arr.length; i++) {
+                    if (arr[i] <= pivot[0]) {
+                      lessThanOrEqualToPivot.push(arr[i]);
+                    } else {
+                      greaterThanPivot.push(arr[i]);
+                    }
+                  }
+                
+                  return [].concat(quickSort(lessThanOrEqualToPivot), pivot, quickSort(greaterThanPivot));
+                }
+                  
+                     
+                `,
+                difficulty:60,
+                approved:1
+              },
+
+              {
+
+                created_by: 1,
+                title: "Insertion Sort",
+                  description:`
+##Insertion sort is a basic sorting algorithm.
+Insertion sort iterates over an array, growing a sorted array behind the current location.
+It takes each element from the input and finds the spot, up to the current point, where that element belongs.
+It does this until it gets to the end of the array.
+Input
+\`\`\`'[12, 44, 10, 2, 35, 1098, 356 ]'
+//
+Output
+'[2, 44, 10, 35, 356, 12, 1098]'
+// 
+\`\`\`
+            `,
+                tests:JSON.stringify([
+                    {
+                    descriptor:"unsorted_array2",
+                    argumentsToPass:['1, 34, 111, 250, 157, 12'],
+                    expectedResult:"[1, 12, 34, 111, 157, 250]"
+                    },
+                    {
+                      descriptor:"simple_array_from_one_to_five_backwards_with_repeating_numbers",
+                      argumentsToPass:['5,5,5,4,4,4,3,3,3,2,2,2,1,1,1'],
+                      expectedResult:"[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5]"
+                    },
+                    {
+                        descriptor:"unsorted_array",
+                        argumentsToPass:['2, 1, 3, 7, 4, 2, 9, 3, 8'],
+                        expectedResult:"[1, 2, 2, 3, 3, 4, 7, 8, 9]"
+                    },
+                    {
+                      descriptor:"simple_array_from_1_to_5_backwards",
+                      argumentsToPass:['5,4,3,2,1'],
+                      expectedResult:"[1,2,3,4,5]"
+                  },
+                ]),
+                skeleton_function:`
+function insertionSort(array) {
+
+}
+                   
+               `,
+                solution:`
+                function insertionSort(array) {
+                  for (let i = 1; i < array.length; i++) {
+                   let temp = array[i];
+                   let j;
+                   for (j = i - 1; j >= 0 && array[j] > temp; j--) {
+                     array[j + 1] = array[j];
+                   }
+                   array[j + 1] = temp;
+                 }
+                 return array;
+               }
+                `,
+                difficulty:30,
                 approved:1
               },
 
