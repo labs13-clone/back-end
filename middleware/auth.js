@@ -66,7 +66,9 @@ module.exports = function (req, res, next) {
 
                                 //Insert them into the database
                                 usersDbApi.insert({
-                                        sub_id: decodedAccessToken.sub
+                                        sub_id: decodedAccessToken.sub,
+                                        nickname: decodedIdentityToken.nickname,
+                                        picture: decodedIdentityToken.picture,
                                     })
 
                                     //Add user info to request headers
@@ -90,8 +92,6 @@ module.exports = function (req, res, next) {
                             else {
                                 req.headers.user = {
                                     ...user,
-                                    nickname: decodedIdentityToken.nickname,
-                                    picture: decodedIdentityToken.picture,
                                     role
                                 };
 
