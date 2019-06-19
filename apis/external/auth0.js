@@ -2,7 +2,8 @@ const axios = require('axios');
 
 module.exports = {
     pubKey,
-    getPubKey
+    getPubKey,
+    getUserProfile
 }
 
 let publicKey;
@@ -23,6 +24,24 @@ function getPubKey() {
         })
         .catch(err => {
             console.log('Error retrieving JKWS from Auth0', err);
+        });
+}
+
+//Get the public key from the Auth0 api to confirm the validity of the token
+function getUserProfile(accessToken) {
+
+    return axios({
+            method: 'get',
+            url: `https://labs13codingclone.auth0.com/userinfo`,
+            headers: {
+                Authorization: accessToken
+            }
+        })
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            console.log('Error retrieving user profile information from Auth0', err.message);
         });
 }
 

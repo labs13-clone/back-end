@@ -8,6 +8,12 @@ exports.up = function (knex, Promise) {
             tbl.string('sub_id')
                 .unique()
                 .notNullable();
+
+            tbl.string('nickname')
+                .notNullable();
+
+            tbl.string('picture')
+                .notNullable();
         })
         .createTable('categories', tbl => {
             tbl.increments();
