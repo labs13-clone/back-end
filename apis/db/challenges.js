@@ -70,7 +70,8 @@ function getMany(filter = {}) {
                 //Add categories property on response
                 return {
                     ...challenge,
-                    categories: challengeCategories
+                    categories: challengeCategories,
+                    popularity: parseInt(challenge.popularity, 10)
                 }
             });
 
@@ -136,6 +137,7 @@ function parseFilter(filter) {
             'challenges.solution',
             'challenges.difficulty'
         )
+        .count('user_submissions.id as popularity')
         .from('challenges')
         .leftJoin('challenges_categories', 'challenges.id', 'challenges_categories.challenge_id')
         .leftJoin('categories', 'challenges_categories.categories_id', 'categories.id')
