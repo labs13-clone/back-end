@@ -525,11 +525,7 @@ module.exports = function validateUserInput(validationSchema) {
                                         req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 1);
                                     }
 
-<<<<<<< Updated upstream
                                     //Else since the number provided is not a boolean
-=======
-                                    //Else the number is not a boolean
->>>>>>> Stashed changes
                                     else {
 
                                         //Then throw an error
