@@ -174,51 +174,54 @@ router.get('/', auth,
 });
 
 
-router.put('/', auth, validateUserInput([{
-        name: 'id',
-        required: true,
-        type: 'body',
-        dataType: 'number'
-    }, {
-        name: 'title',
-        required: true,
-        type: 'body',
-        dataType: 'string',
-        unique: true,
-        dbTable: 'challenges'
-    },
-    {
-        name: 'description',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'tests',
-        required: true,
-        type: 'body',
-        dataType: 'json'
-    },
-    {
-        name: 'skeleton_function',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'solution',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'difficulty',
-        required: true,
-        type: 'body',
-        dataType: 'number',
-        range: [1 - 100]
-    }
-]), (req, res) => {
+router.put('/', auth, 
+// validateUserInput([{
+//         name: 'id',
+//         required: true,
+//         type: 'body',
+//         dataType: 'number'
+//     }, {
+//         name: 'title',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string',
+//         unique: true,
+//         dbTable: 'challenges'
+//     },
+//     {
+//         name: 'description',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'tests',
+//         required: true,
+//         type: 'body',
+//         dataType: 'json'
+//     },
+//     {
+//         name: 'skeleton_function',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'solution',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'difficulty',
+//         required: true,
+//         type: 'body',
+//         dataType: 'number',
+//         range: [1 - 100]
+//     }
+// ])
+// , 
+(req, res) => {
 
     console.log('user',req.headers.user)
     console.log('body',req.body)
