@@ -177,6 +177,7 @@ function parseFilter(filter) {
 
             //Else for all other query parameters in the challenges table
             else {
+                console.log(key)
                 //Assign table
                 filter[`challenges.${key}`] = filter[key];
 

@@ -73,7 +73,6 @@ router.post('/', auth,
             });
     });
 
-
 router.get('/', auth,
 
 // validateUserInput([{
@@ -150,11 +149,10 @@ router.get('/', auth,
         filter.approved = true;
     }
 
-    //If requesting the user's completed or started challenges
-    //Then assign their user ID to completed_by or _started_by
     if (filter.completed !== undefined) {
         filter.completed_by = req.headers.user.id;
     }
+
     if (filter.started !== undefined) {
         filter.started_by = req.headers.user.id;
     }
@@ -174,54 +172,55 @@ router.get('/', auth,
 });
 
 
-router.put('/', auth, validateUserInput([{
-        name: 'id',
-        required: true,
-        type: 'body',
-        dataType: 'number'
-    }, {
-        name: 'title',
-        required: true,
-        type: 'body',
-        dataType: 'string',
-        unique: true,
-        dbTable: 'challenges'
-    },
-    {
-        name: 'description',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'tests',
-        required: true,
-        type: 'body',
-        dataType: 'json'
-    },
-    {
-        name: 'skeleton_function',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'solution',
-        required: true,
-        type: 'body',
-        dataType: 'string'
-    },
-    {
-        name: 'difficulty',
-        required: true,
-        type: 'body',
-        dataType: 'number',
-        range: [1 - 100]
-    }
-]), (req, res) => {
+router.put('/', auth,
 
-    console.log('user',req.headers.user)
-    console.log('body',req.body)
+// validateUserInput([{
+//         name: 'id',
+//         required: true,
+//         type: 'body',
+//         dataType: 'number'
+//     }, {
+//         name: 'title',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string',
+//         unique: true,
+//         dbTable: 'challenges'
+//     },
+//     {
+//         name: 'description',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'tests',
+//         required: true,
+//         type: 'body',
+//         dataType: 'json'
+//     },
+//     {
+//         name: 'skeleton_function',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'solution',
+//         required: true,
+//         type: 'body',
+//         dataType: 'string'
+//     },
+//     {
+//         name: 'difficulty',
+//         required: true,
+//         type: 'body',
+//         dataType: 'number',
+//         range: [1 - 100]
+//     }
+// ]),
+
+(req, res) => {
 
     const selector = {
         id: req.body.id

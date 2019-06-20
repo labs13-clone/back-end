@@ -193,6 +193,7 @@ module.exports = function validateUserInput(validationSchema) {
                         //And it has a default specified in the validationObject
                         //Then set its value equal to the default
                         else if (req[validationObject.type][validationObject.name] === undefined && validationObject.default !== undefined) {
+<<<<<<< Updated upstream
 
                             //If dataType is an ID of a database table entry
                             if (validationObject.dataType === 'id') {
@@ -213,6 +214,27 @@ module.exports = function validateUserInput(validationSchema) {
                                     //Log the error to the console and return internal server error
                                     console.log(`The default validationObject specified as ${validationObject.name} in ${validationObject.dbTable} does not exist in the database`);
 
+=======
+
+                            //If dataType is an ID of a database table entry
+                            if (validationObject.dataType === 'id') {
+
+                                //Get the applicable database API
+                                const applicableDbApi = dbTableSwitch(validationObject.dbTable);
+
+                                //Fetch it from the proper table
+                                const item = await applicableDbApi.getOne({
+                                    id: validationObject.default
+                                });
+
+                                //If it doesn't exist...
+                                if (item === undefined) {
+
+                                    //Defaults should never not exist in the database
+                                    //If it occurs then the validationSchema is incorrect
+                                    //Log the error to the console and return internal server error
+                                    console.log(`The default validationObject specified as ${validationObject.name} in ${validationObject.dbTable} does not exist in the database`);
+>>>>>>> Stashed changes
                                     return {
                                         errorType: 'default'
                                     };
@@ -268,6 +290,11 @@ module.exports = function validateUserInput(validationSchema) {
                             //If dataType is an ID of a database table entry
                             if (validationObject.dataType === 'id') {
 
+<<<<<<< Updated upstream
+=======
+                                console.log('id')
+
+>>>>>>> Stashed changes
                                 //If it is an ID, Not a number, and not able to be converted into a number
                                 if (typeof req[validationObject.type][validationObject.name] !== 'number' && isNaN(Number(req[validationObject.type][validationObject.name]))) {
 
@@ -302,6 +329,7 @@ module.exports = function validateUserInput(validationSchema) {
                                 //Make sure it is they own the resource
                                 //If it is a protected resource and not an admin
                                 else if (validationObject.protected && req.headers.user.role !== 'admin') {
+<<<<<<< Updated upstream
 
                                     //If it's on the user table
                                     if (validationObject.dbTable === 'users') {
@@ -323,6 +351,29 @@ module.exports = function validateUserInput(validationSchema) {
                                         //Make sure their user id matches the created_by column
                                         if (req.headers.user.id !== item.created_by) {
 
+=======
+
+                                    //If it's on the user table
+                                    if (validationObject.dbTable === 'users') {
+
+                                        //Then make sure their user id matches the id sent by the request
+                                        if (req.headers.user.id !== item.id) {
+
+                                            //If not then throw an error
+                                            return {
+                                                errorType: 'protected'
+                                            };
+                                        }
+                                    }
+
+                                    //Else their id should be in created_by
+                                    //Make sure they own the document
+                                    else {
+
+                                        //Make sure their user id matches the created_by column
+                                        if (req.headers.user.id !== item.created_by) {
+
+>>>>>>> Stashed changes
                                             //If not then throw an error
                                             return {
                                                 errorType: 'protected'
@@ -383,10 +434,17 @@ module.exports = function validateUserInput(validationSchema) {
 
                                 //If a range limit is set in the schema
                                 if (validationObject.range !== undefined) {
+<<<<<<< Updated upstream
 
                                     //Convert range values from string form to an array of numbers
                                     const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
 
+=======
+
+                                    //Convert range values from string form to an array of numbers
+                                    const rangeValues = req[validationObject.type][validationObject.name].split('-').map(str => Number(str));
+
+>>>>>>> Stashed changes
                                     //If the array contains a number below the minimum
                                     //If the array contains a number above the maximum
                                     if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
@@ -413,6 +471,7 @@ module.exports = function validateUserInput(validationSchema) {
                                     //This test is needed in addition to isNaN(Number(value))
                                     //Due to type coercion Number(boolean) convers to 1 || 0
                                     if (typeof req[validationObject.type][validationObject.name] === 'boolean') {
+<<<<<<< Updated upstream
 
                                         //Then throw an error
                                         return {
@@ -457,14 +516,66 @@ module.exports = function validateUserInput(validationSchema) {
                                     }
                                 }
 
+=======
+
+                                        //Then throw an error
+                                        return {
+                                            errorType: 'data-type',
+                                            errorName: validationObject.name,
+                                            errorDataType: validationObject.dataType
+                                        };
+                                    }
+
+                                    //If the value can not be converted into a number via type conversion
+                                    else if (isNaN(Number(req[validationObject.type][validationObject.name]))) {
+
+                                        //Then throw an error
+                                        return {
+                                            errorType: 'data-type',
+                                            errorName: validationObject.name,
+                                            errorDataType: validationObject.dataType
+                                        };
+                                    }
+
+                                    //Otherwise, it's supposed to be an number
+                                    //And can be converted into an number
+                                    //So convert it into a number
+                                    else {
+                                        req[validationObject.type][validationObject.name] = Number(req[validationObject.type][validationObject.name]);
+                                    
+                                        //If it has a range set, check that it's within the range
+                                        if (validationObject.range !== undefined) {
+
+                                            //If it's outside the limits
+                                            if(req[validationObject.type][validationObject.name] < validationObject.range[0] ||
+                                                req[validationObject.type][validationObject.name] > validationObject.range[1]) {
+                                                
+                                                //Then throw an error
+                                                return {
+                                                    errorType: 'exceeds-limits',
+                                                    errorName: validationObject.name,
+                                                    errorLimits: JSON.stringify(validationObject.range)
+                                                };
+                                            }
+                                        }
+                                    }
+                                }
+                                
+>>>>>>> Stashed changes
                                 //Else it had already been confirmed as a number
                                 //If it has a range set, check that it's within the range
                                 else if (validationObject.range !== undefined) {
 
                                     //If it's outside the limits
+<<<<<<< Updated upstream
                                     if (req[validationObject.type][validationObject.name] < validationObject.range[0] ||
                                         req[validationObject.type][validationObject.name] > validationObject.range[1]) {
 
+=======
+                                    if(req[validationObject.type][validationObject.name] < validationObject.range[0] ||
+                                        req[validationObject.type][validationObject.name] > validationObject.range[1]) {
+                                        
+>>>>>>> Stashed changes
                                         //Then throw an error
                                         return {
                                             errorType: 'exceeds-limits',
@@ -526,7 +637,11 @@ module.exports = function validateUserInput(validationSchema) {
                                         req[validationObject.type][validationObject.name] = (req[validationObject.type][validationObject.name] === 1);
                                     }
 
+<<<<<<< Updated upstream
                                     //Else since the number provided is not a boolean
+=======
+                                    //Else the number is not a boolean
+>>>>>>> Stashed changes
                                     else {
 
                                         //Then throw an error
@@ -598,6 +713,7 @@ module.exports = function validateUserInput(validationSchema) {
                                 //If the array contains a number above the maximum
                                 if (rangeValues[0] < validationObject.range[0] || rangeValues[1] < validationObject.range[0] ||
                                     rangeValues[0] > validationObject.range[1] || rangeValues[1] > validationObject.range[1]) {
+<<<<<<< Updated upstream
 
                                     //Then throw an error
                                     return {
@@ -645,6 +761,37 @@ module.exports = function validateUserInput(validationSchema) {
                                 //Fetch it from the proper table
                                 const item = await applicableDbApi.getOne(filter);
 
+=======
+
+                                    //Then throw an error
+                                    return {
+                                        errorType: 'out-of-range',
+                                        errorRange: req[validationObject.type][validationObject.name],
+                                        errorLimit: JSON.stringify(validationObject.range)
+                                    };
+                                }
+                            }
+
+                            //If it's a protected resource and the user is not an admin
+                            //Then force the query/param/body property to the default
+                            if (validationObject.protected !== undefined && validationObject.protected && req.headers.user.role !== 'admin') {
+                                req[validationObject.type][validationObject.name] = validationObject.default;
+                            }
+
+                            //If it's a unique property
+                            //Then make sure it doesn't already exist
+                            if (validationObject.unique !== undefined && validationObject.unique) {
+
+                                //Get the applicable database API
+                                const applicableDbApi = dbTableSwitch(validationObject.dbTable);
+
+                                const filter = {};
+                                filter[validationObject.name] = req[validationObject.type][validationObject.name];
+
+                                //Fetch it from the proper table
+                                const item = await applicableDbApi.getOne(filter);
+
+>>>>>>> Stashed changes
                                 //If it already exists...
                                 if (item !== undefined) {
 
