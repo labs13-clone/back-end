@@ -32,8 +32,8 @@ console.log(longestString(strings2)); // <--- 'first long string!'
                 },
             ])
               ,
-              skeleton_function:`
-function longestString(arr) {
+              skeleton_function:
+`function longestString(arr) {
 
 }
               `,
@@ -363,7 +363,7 @@ Output
                       {
                           descriptor:"returns a string",
                           argumentsToPass:[''],
-                          expectedResult:" "
+                          expectedResult:""
                       },
                 ]),
                 skeleton_function:
@@ -594,34 +594,34 @@ Implement the quick sort sorting algorithm. Assume the input is an array of inte
 
 Input
 \`\`\`
-'9,8,7,6,5,4,3'
+[9,8,7,6,5,4,3]
 \`\`\`
 
 Output
 \`\`\`
-'3,4,5,6,7,8,9'
+[3,4,5,6,7,8,9]
 \`\`\`
             `,
                 tests:JSON.stringify([
                     {
                     descriptor:"should_sort_an_array",
-                    argumentsToPass:['0,1,2,3,4,5,6'],
-                    expectedResult:"[0,1,2,3,4,5,6]"
+                    argumentsToPass:[[0,1,2,3,4,5,6]],
+                    expectedResult:[0,1,2,3,4,5,6]
                     },
                     {
                       descriptor:"should_sort_an_array",
-                      argumentsToPass:['9,8,7,6,5,4,3'],
-                      expectedResult:"[3,4,5,6,7,8,9]"
+                      argumentsToPass:[[9,8,7,6,5,4,3]],
+                      expectedResult:[3,4,5,6,7,8,9]
                     },
                     {
                         descriptor:"should_be_able_to_handle_negative_numbers",
-                        argumentsToPass:['55,-5,-10,4'],
-                        expectedResult:"[-10,-5,4,55]"
+                        argumentsToPass:[[55,-5,-10,4]],
+                        expectedResult:[-10,-5,4,55]
                     },
                     {
                       descriptor:"should_be_able_to_handle_multiple_occurrences_of_same_number",
-                      argumentsToPass:['9,5,5,5,5,5,1'],
-                      expectedResult:"[1,5,5,5,5,5,9]"
+                      argumentsToPass:[[9,5,5,5,5,5,1]],
+                      expectedResult:[1,5,5,5,5,5,9]
                   },
                 //   {
                 //     descriptor:"should_return_an_array",
@@ -629,8 +629,8 @@ Output
                 //     expectedResult:"true"
                 // },
                 ]),
-                skeleton_function:`
-function quickSort(nums) {
+                skeleton_function:
+`function quickSort(nums) {
 
 }
                    
@@ -675,34 +675,34 @@ It does this until it gets to the end of the array.
 
 Input
 \`\`\`
-'[12, 44, 10, 2, 35, 1098, 356 ]'
+[12, 44, 10, 2, 35, 1098, 356]
 \`\`\`
 
 Output
 \`\`\`
-'[2, 44, 10, 35, 356, 12, 1098]'
+[2, 44, 10, 35, 356, 12, 1098]
 \`\`\`
             `,
                 tests:JSON.stringify([
                     {
                     descriptor:"unsorted_array2",
-                    argumentsToPass:['1, 34, 111, 250, 157, 12'],
-                    expectedResult:"[1, 12, 34, 111, 157, 250]"
+                    argumentsToPass:[[1, 34, 111, 250, 157, 12]],
+                    expectedResult:[1, 12, 34, 111, 157, 250]
                     },
                     {
                       descriptor:"simple_array_from_one_to_five_backwards_with_repeating_numbers",
-                      argumentsToPass:['5,5,5,4,4,4,3,3,3,2,2,2,1,1,1'],
-                      expectedResult:"[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5]"
+                      argumentsToPass:[[5,5,5,4,4,4,3,3,3,2,2,2,1,1,1]],
+                      expectedResult:[1,1,1,2,2,2,3,3,3,4,4,4,5,5,5]
                     },
                     {
                         descriptor:"unsorted_array",
-                        argumentsToPass:['2, 1, 3, 7, 4, 2, 9, 3, 8'],
-                        expectedResult:"[1, 2, 2, 3, 3, 4, 7, 8, 9]"
+                        argumentsToPass:[[2, 1, 3, 7, 4, 2, 9, 3, 8]],
+                        expectedResult:[1, 2, 2, 3, 3, 4, 7, 8, 9]
                     },
                     {
                       descriptor:"simple_array_from_1_to_5_backwards",
-                      argumentsToPass:['5,4,3,2,1'],
-                      expectedResult:"[1,2,3,4,5]"
+                      argumentsToPass:[[5,4,3,2,1]],
+                      expectedResult:[1,2,3,4,5]
                   },
                 ]),
                 skeleton_function:
