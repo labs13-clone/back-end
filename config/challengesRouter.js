@@ -1,9 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const categoriesApi = require('../apis/db/categories');
-const challengesCategoriesApi = require('../apis/db/challengesCategories');
 const challengesApi = require('../apis/db/challenges');
-const userSubmissionsApi = require('../apis/db/userSubmissions');
 const validateUserInput = require('../middleware/validateUserInput');
 const challengesValidation = require('./challengesValidation');
 
