@@ -10,35 +10,84 @@ module.exports = {
 //Add a challenge to the database
 //Returns the updated challenge object
 function insert(challenge) {
+
     challenge.tests = JSON.stringify(challenge.tests);
+
     return db('challenges')
         .insert(challenge)
         .returning('id')
         .then(idArr => {
-            const id = idArr[0];
-            return db('challenges')
-                .where({
-                    id
-                }).first();
-        })
+
+            //Use the new id to return a standard challenge object
+            return parseFilter({
+                    id: idArr[0]
+                })
+                //Only return the challenge object inserted
+                .first()
+                .then(async challenge => {
+
+                    //Retrieve category info in an array
+                    const challengeCategories = await db.select(
+                            'categories.id',
+                            'categories.name'
+                        )
+                        .from('categories')
+                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                        .where({
+                            'challenges_categories.challenge_id': challenge.id
+                        });
+
+                    //Add categories property on response
+                    return {
+                        ...challenge,
+                        categories: challengeCategories,
+                        popularity: parseInt(challenge.popularity, 10)
+                    }
+                });
+        });
 }
 
 //Update a challenge
 //Returns the updated challenge object
 function update(selector = null, payload) {
+
+    //Parse tests and throw error if no challenge was selected
     if (payload.tests !== undefined) payload.tests = JSON.stringify(payload.tests);
     if (!selector) return new Error('No selector provided for the update');
+
+    //Update the challenge object
     return db('challenges')
         .where(selector)
         .update(payload)
         .returning('id')
         .then(idArr => {
-            const id = idArr[0];
-            return db('challenges')
-                .where({
-                    id
-                }).first();
-        })
+
+            //Use the new id to return a standard challenge object
+            return parseFilter({
+                    id: idArr[0]
+                })
+                //Only return the challenge object that was updated
+                .first()
+                .then(async challenge => {
+                    //Retrieve category info in an array
+                    const challengeCategories = await db.select(
+                            'categories.id',
+                            'categories.name'
+                        )
+                        .from('categories')
+                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                        .where({
+                            'challenges_categories.challenge_id': challenge.id
+                        });
+
+                    //Add categories property on response
+                    return {
+                        ...challenge,
+                        categories: challengeCategories,
+                        popularity: parseInt(challenge.popularity, 10)
+                    }
+                });
+        });
 }
 
 //Get multiple challenges in the database
@@ -89,17 +138,17 @@ function getOne(filter = null) {
     //Parse filter and edit query
     const queryBuilder = parseFilter(filter);
 
-    //getOne(), so only return one object
-    queryBuilder.first();
-
     return queryBuilder
         .where(filter)
+        //getOne only returns one challenge object
+        .first()
         .then(async challenge => {
 
             //Sometimes IDs that do not exist are looked up by the middleware
             //If the ID does not exist then the following code will cause an error.
             if (challenge !== undefined) {
 
+                //Retrieve category info in an array
                 const challengeCategories = await db.select(
                         'categories.id',
                         'categories.name'
@@ -110,9 +159,11 @@ function getOne(filter = null) {
                         'challenges_categories.challenge_id': challenge.id
                     });
 
+                //Add categories property on response
                 return {
                     ...challenge,
-                    categories: challengeCategories
+                    categories: challengeCategories,
+                    popularity: parseInt(challenge.popularity, 10)
                 }
             }
 

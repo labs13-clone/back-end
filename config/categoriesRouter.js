@@ -9,6 +9,7 @@ router.get('/', (req, res) => {
     //Get an array of categories from the database
     categoriesApi.getMany()
     .then(response => {
+
         //Return an array of category information
         res.status(200).send(response);
     })
@@ -19,10 +20,11 @@ router.get('/', (req, res) => {
 
 router.post('/challenges', (req, res) => {
 
-    //Todo: Validation of format of payload
-
+    //Attach a category to a challenge via the challenges_categories table
     challengesCategoriesApi.insert(req.body)
         .then(dbRes => {
+
+            //Returns an updated challenge object
             res.status(201).send(dbRes);
         })
         .catch(err => {

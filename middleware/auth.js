@@ -4,8 +4,6 @@ const usersDbApi = require('../apis/db/users');
 
 module.exports = function (req, res, next) {
 
-    console.log('hey')
-
     //If there's not a token in the authorization header then throw an error
     if (req.headers.authorization === undefined) {
         res.status(401).send({

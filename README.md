@@ -159,6 +159,7 @@
   skeleton_function: STRING
   solution: STRING
   difficulty: INTEGER
+  popularity: INTEGER
   challenges: [
     {
       id: NUMBER
@@ -209,6 +210,18 @@
   skeleton_function: STRING
   solution: STRING
   difficulty: INTEGER
+  popularity: INTEGER
+  challenges: [
+    {
+      id: NUMBER
+      name: STRING
+    },
+    {
+      id: NUMBER
+      name: STRING
+    },
+    ...
+  ]
 }
 ```
 
@@ -240,6 +253,18 @@
   skeleton_function: STRING
   solution: STRING
   difficulty: INTEGER
+  popularity: INTEGER
+  challenges: [
+    {
+      id: NUMBER
+      name: STRING
+    },
+    {
+      id: NUMBER
+      name: STRING
+    },
+    ...
+  ]
 }
 ```
 
