@@ -4,6 +4,8 @@ const usersDbApi = require('../apis/db/users');
 
 module.exports = function (req, res, next) {
 
+    console.log('hey')
+
     //If there's not a token in the authorization header then throw an error
     if (req.headers.authorization === undefined) {
         res.status(401).send({
@@ -63,6 +65,8 @@ module.exports = function (req, res, next) {
                                 //Get the decoded token from the 
                                 //https://labs13codingclone.auth0.com/userinfo
                                 const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
+
+                                console.log(decodedIdentityToken)
 
                                 //Insert them into the database
                                 usersDbApi.insert({

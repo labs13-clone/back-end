@@ -216,11 +216,7 @@
 
 ## PUT /api/challenges/
 
-- Only owner of challenge can edit
-- For users to edit unapproved challenges they created
-- For admins to edit any unapproved challenges
-- Expects a payload of challenge data
-- Validate payload data
+- For admins to approve challenges
 
 ### --- Sent
 
@@ -228,12 +224,7 @@
 ```
 {
   id: INTEGER - Required
-  title: STRING - Required - Unique
-  description: STRING - Required
-  tests: JSON - Required
-  skeleton_function: STRING - Required
-  solution: STRING - Required
-  difficulty: INTEGER - Required
+  approved: BOOLEAN - Required
 }
 ```
 
@@ -267,13 +258,13 @@
 
 #### Optional Query Parameters:
  - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
- - created_by: NUMBER - Optional - ID number of user
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Name of category
  - category_id: NUMBER - Optional - ID of category
- - completed: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
- - started: BOOLEAN - Optional - Only TRUE works for now - FALSE returns all challenges
+ - created: N/A (value is ignored) - Optional - All challenges the user created
+ - completed: N/A (value is ignored) - Optional - All challenges the user completed
+ - started: N/A (value is ignored) - Optional - All challenges the user started
 
 #### Request Body:
 ```
@@ -296,6 +287,7 @@
     skeleton_function: STRING
     solution: STRING
     difficulty: INTEGER
+    popularity: INTEGER
     challenges: [
       {
         id: NUMBER

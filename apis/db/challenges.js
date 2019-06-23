@@ -20,7 +20,7 @@ function insert(challenge) {
                 .where({
                     id
                 }).first();
-        });
+        })
 }
 
 //Update a challenge
@@ -38,7 +38,7 @@ function update(selector = null, payload) {
                 .where({
                     id
                 }).first();
-        }).catch(err => console.log(err));
+        })
 }
 
 //Get multiple challenges in the database
@@ -70,7 +70,8 @@ function getMany(filter = {}) {
                 //Add categories property on response
                 return {
                     ...challenge,
-                    categories: challengeCategories
+                    categories: challengeCategories,
+                    popularity: parseInt(challenge.popularity, 10)
                 }
             });
 
@@ -97,7 +98,7 @@ function getOne(filter = null) {
 
             //Sometimes IDs that do not exist are looked up by the middleware
             //If the ID does not exist then the following code will cause an error.
-            if(challenge !== undefined) {
+            if (challenge !== undefined) {
 
                 const challengeCategories = await db.select(
                         'categories.id',
@@ -108,7 +109,7 @@ function getOne(filter = null) {
                     .where({
                         'challenges_categories.challenge_id': challenge.id
                     });
-    
+
                 return {
                     ...challenge,
                     categories: challengeCategories
@@ -136,6 +137,7 @@ function parseFilter(filter) {
             'challenges.solution',
             'challenges.difficulty'
         )
+        .count('user_submissions.id as popularity')
         .from('challenges')
         .leftJoin('challenges_categories', 'challenges.id', 'challenges_categories.challenge_id')
         .leftJoin('categories', 'challenges_categories.categories_id', 'categories.id')
@@ -147,7 +149,7 @@ function parseFilter(filter) {
     //Possible .where() filters and their applicable tables
     const challenges = ['created_by', 'approved', 'id', 'difficulty'];
     const categories = ['category_id', 'category_name'];
-    const user_submissions = ['completed', 'started'];
+    const user_submissions = ['completed_by', 'started_by'];
 
     //Parse Challenge Table Filters
     challenges.forEach(key => {
@@ -177,7 +179,7 @@ function parseFilter(filter) {
 
             //Else for all other query parameters in the challenges table
             else {
-                console.log(key)
+
                 //Assign table
                 filter[`challenges.${key}`] = filter[key];
 
@@ -189,16 +191,20 @@ function parseFilter(filter) {
 
     //Parse Challenge Table Filters
     categories.forEach(key => {
+
         //If the parameter exists on the filter object
         if (filter[key] !== undefined) {
+
             //Rename category_id to id
             if (key === 'category_id') {
                 filter[`categories.id`] = filter[key];
             }
+
             //Rename category_name to name
             else if (key == 'category_name') {
                 filter[`categories.name`] = filter[key];
             }
+
             //Delete invalid property that doesn't have the table
             deleteKey(key);
         }
@@ -210,39 +216,30 @@ function parseFilter(filter) {
         //If the parameter exists on the filter object
         if (filter[key] !== undefined) {
 
-            //If completed and completed boolean is true
-            if (key === 'completed' && (filter[key] == 'true' || filter[key] == true)) {
+            //If completed_by
+            if (key === 'completed_by') {
 
-                //Then add a where filter for user_submissions.completed
-                //Completed challenges will always have an existing user_submissions
-                filter[`user_submissions.completed`] = filter[key];
+                //Then add a where filter for user_submissions.completed === true
+                //Completed challenges will always have an existing user_submissions row
+                filter[`user_submissions.completed`] = true;
                 filter[`user_submissions.created_by`] = filter.completed_by;
 
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
+                //Delete the invalid filter property
                 deleteKey('completed_by');
-            } else if (key === 'completed') {
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
-                deleteKey('completed_by');
+
             }
 
-            //If started and completed boolean is true
-            else if (key === 'started' && (filter[key] == 'true' || filter[key] == true)) {
+            //If started_by
+            else if (key === 'started_by') {
 
                 //Then add a where filter for user_submissions.completed = false
                 //But it exists, so they have started on the challenge
                 filter[`user_submissions.created_by`] = filter.started_by;
                 filter[`user_submissions.completed`] = false;
 
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
+                //Delete the invalid filter property
                 deleteKey('started_by');
 
-            } else if (key === 'started') {
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
-                deleteKey('started_by');
             }
         }
     });

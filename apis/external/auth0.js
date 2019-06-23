@@ -27,7 +27,8 @@ function getPubKey() {
         });
 }
 
-//Get the public key from the Auth0 api to confirm the validity of the token
+//Get the user profile information from the Auth0 api
+//The information is used to get the user's Github picture and nickname
 function getUserProfile(accessToken) {
  
     return axios({
@@ -41,7 +42,7 @@ function getUserProfile(accessToken) {
             return res.data;
         })
         .catch(err => {
-            
+            console.log(err)
             console.log('Error retrieving user profile information from Auth0', err.message);
         });
 }
