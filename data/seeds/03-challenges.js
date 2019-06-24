@@ -541,23 +541,23 @@ function stringCompression(str) {
                    
                `,
                 solution:`
-                function stringCompression(str) {
-                    let curChar = null;
-                    let cmpresd = '';
-                    let count = 1;
-                    for (let i = 0; i <= str.length; i++) {
-                      if (str[i] === curChar) count++;
-                      if (curChar === null) curChar = str[i];
-                      if (str[i] !== curChar || str[i] === undefined) {
-                        cmpresd += curChar;
-                        cmpresd += count;
-                        count = 1;
-                        curChar = str[i];
-                      }
-                    }
-                    return cmpresd.length < str.length ? cmpresd : str;
-                  }
-                  
+function stringCompression(str) {
+  let curChar = null;
+  let cmpresd = '';
+  let count = 1;
+  for (let i = 0; i <= str.length; i++) {
+    if (str[i] === curChar) count++;
+    if (curChar === null) curChar = str[i];
+    if (str[i] !== curChar || str[i] === undefined) {
+      cmpresd += curChar;
+      cmpresd += count;
+      count = 1;
+      curChar = str[i];
+    }
+  }
+  return cmpresd.length < str.length ? cmpresd : str;
+}
+
                      
                 `,
                 difficulty:40,
@@ -617,25 +617,25 @@ function quickSort(nums) {
                    
                `,
                 solution:`
-                function quickSort(nums) {
-                  const arr = nums.slice();
-                  if (nums.length < 2) return nums;
-                  
-                  const lessThanOrEqualToPivot = [];
-                  const greaterThanPivot = [];
-                  const middleIndex = Math.floor(arr.length / 2);
-                  const pivot = arr.splice(middleIndex, 1);
-                
-                  for (let i = 0; i < arr.length; i++) {
-                    if (arr[i] <= pivot[0]) {
-                      lessThanOrEqualToPivot.push(arr[i]);
-                    } else {
-                      greaterThanPivot.push(arr[i]);
-                    }
-                  }
-                
-                  return [].concat(quickSort(lessThanOrEqualToPivot), pivot, quickSort(greaterThanPivot));
-                }
+  function quickSort(nums) {
+    const arr = nums.slice();
+    if (nums.length < 2) return nums;
+    
+    const lessThanOrEqualToPivot = [];
+    const greaterThanPivot = [];
+    const middleIndex = Math.floor(arr.length / 2);
+    const pivot = arr.splice(middleIndex, 1);
+  
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] <= pivot[0]) {
+        lessThanOrEqualToPivot.push(arr[i]);
+      } else {
+        greaterThanPivot.push(arr[i]);
+      }
+    }
+  
+    return [].concat(quickSort(lessThanOrEqualToPivot), pivot, quickSort(greaterThanPivot));
+  }
                   
                      
                 `,
