@@ -145,7 +145,7 @@ function getOne(filter = null) {
         .then(async challenge => {
 
             //Sometimes IDs that do not exist are looked up by the middleware
-            //If the ID does not exist then the following code will cause an error.
+            //If the ID does not exist then the following code within the if block will cause an error.
             if (challenge !== undefined) {
 
                 //Retrieve category info in an array
@@ -198,7 +198,7 @@ function parseFilter(filter) {
 
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
-    const challenges = ['created_by', 'approved', 'id', 'difficulty'];
+    const challenges = ['created_by', 'approved', 'id', 'difficulty', 'challenge_id'];
     const categories = ['category_id', 'category_name'];
     const user_submissions = ['completed_by', 'started_by'];
 
@@ -221,11 +221,21 @@ function parseFilter(filter) {
                 difficulty = difficulty.split('-').map(str => Number(str));
 
                 //Remove difficulty from the filter object used in .where()
-                delete filter.difficulty;
+                deleteKey(key);
 
                 //Add difficulty filter to the query builder
                 queryBuilder.whereBetween('difficulty', difficulty);
 
+            }
+
+            //Else if the validation middleware is validating a challenge_id while validating a POST to /api/submissions
+            else if (key === 'challenge_id') {
+
+                //Change the column to id instead
+                filter[`challenges.id`] = filter[key];
+
+                //Delete invalid property that doesn't have the table
+                deleteKey(key);
             }
 
             //Else for all other query parameters in the challenges table

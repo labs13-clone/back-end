@@ -1,6 +1,6 @@
 const express = require('express');
-const categoriesApi = require('../apis/db/categories');
-const challengesCategoriesApi = require('../apis/db/challengesCategories');
+const categoriesApi = require('../../apis/db/categories');
+const challengesCategoriesApi = require('../../apis/db/challengesCategories');
 
 const router = express.Router();
 
@@ -33,8 +33,5 @@ router.post('/challenges', (req, res) => {
             });
         });
 });
-
-module.exports = router;
-
 
 module.exports = router;

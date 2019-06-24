@@ -64,8 +64,6 @@ module.exports = function (req, res, next) {
                                 //https://labs13codingclone.auth0.com/userinfo
                                 const decodedIdentityToken = await auth0Api.getUserProfile(req.headers.authorization);
 
-                                console.log(decodedIdentityToken)
-
                                 //Insert them into the database
                                 usersDbApi.insert({
                                         sub_id: decodedAccessToken.sub,
@@ -121,6 +119,7 @@ module.exports = function (req, res, next) {
 
                             //Else user was found, combine user info from db with decodedAccessToken token
                             else {
+
                                 req.headers.user = {
                                     ...user,
                                     role
@@ -134,6 +133,7 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
+                            console.log('Internal Error auth.js', err);
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });

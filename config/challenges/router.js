@@ -1,13 +1,13 @@
 const express = require('express');
-const auth = require('../middleware/auth');
-const challengesApi = require('../apis/db/challenges');
-const validateUserInput = require('../middleware/validateUserInput');
-const challengesValidation = require('./challengesValidation');
+const auth = require('../../middleware/auth');
+const challengesApi = require('../../apis/db/challenges');
+const validate = require('../../middleware/validate');
+const validationSchema = require('./validation');
 
 const router = express.Router();
 
 
-router.post('/', auth, validateUserInput(challengesValidation.post), (req, res) => {
+router.post('/', validate(validationSchema.post), (req, res) => {
     
     //Insert a challenge into the database
     challengesApi.insert(req.body)
@@ -23,7 +23,7 @@ router.post('/', auth, validateUserInput(challengesValidation.post), (req, res) 
         });
 });
 
-router.get('/', auth, validateUserInput(challengesValidation.get), (req, res) => {
+router.get('/', auth, validate(validationSchema.get), (req, res) => {
 
     //Get an array of challenge objects
     //Filterable by query parameters
@@ -41,7 +41,7 @@ router.get('/', auth, validateUserInput(challengesValidation.get), (req, res) =>
 });
 
 
-router.put('/', auth, validateUserInput(challengesValidation.put), (req, res) => {
+router.put('/', validate(validationSchema.put), (req, res) => {
 
     //Remove the row's id from the body
     const id = req.body.id;

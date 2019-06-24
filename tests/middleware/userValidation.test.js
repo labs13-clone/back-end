@@ -131,7 +131,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             required: false,
             type: 'query',
             dataType: 'string',
-            unique: true,
+            dbUnique: true,
             dbTable: 'users'
         }]), (req, res) => {
             res.status(200).json({
@@ -168,7 +168,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             required: true,
             type: 'query',
             dataType: 'string',
-            unique: true,
+            dbUnique: true,
             dbTable: 'users'
         }]), (req, res) => {
             res.status(200).json({
@@ -177,13 +177,13 @@ describe('userValidation Middleware Tests - Query Params', () => {
         });
 
         db('users').insert({
-                sub_id: 'not_unique'
+                sub_id: 'not_dbUnique'
             })
             .then(_ => {
                 request(testApp)
                     .post('/')
                     .query({
-                        sub_id: 'not_unique'
+                        sub_id: 'not_dbUnique'
                     })
                     .set('authorization', process.env.TEST_TOKEN)
                     .set('Content-Type', 'application/json')
@@ -205,7 +205,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             required: true,
             type: 'query',
             dataType: 'string',
-            unique: true,
+            dbUnique: true,
             dbTable: 'users'
         }]), (req, res) => {
 
@@ -238,7 +238,7 @@ describe('userValidation Middleware Tests - Query Params', () => {
             required: false,
             type: 'query',
             dataType: 'string',
-            unique: true,
+            dbUnique: true,
             dbTable: 'users'
         }]), (req, res) => {
 

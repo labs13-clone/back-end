@@ -365,8 +365,8 @@
 # Creating A Submission
 
 ## POST /api/submissions
-- Populate skeleton function 
 - Takes the ID of the challenge
+- Automatically populates a skeleton function
 - Check to make sure the challenge exists- If not throw an error
 - Check to make sure submission does not exist for user- if one exists throw error
 
@@ -429,14 +429,14 @@
 ]
 ```
 
-# Validating a Challenge Submission Has A Correct Answer
+# Validate A Submission Has A Correct Answer
 
-## PUT /api/validation
+## PUT /api/submissions/submit
 * Validate a user has the correct answer and update the database entry accordingly
-* Similar to /api/submissions PUT tests code
-* Uses the ID of the applicable user_submission entry 
-* Users should only be able to request validation on submissions they created
-* Users should only be able to request validation of solutions which have not already been verified as correct
+* Needs the ID of the applicable user_submission entry
+* Users should only be able to submit submissions they created
+* Users should only be able to submit submissions where correct is false
+    * Users need to reset their submission in order to attempt the challenge again via PUT /api/submissions
 
 ### --- Sent
 
@@ -527,10 +527,15 @@
 ```
 {
   id: UUID
-  created_at: DATETIME - Optional - Defaults to current time
+  created_at: DATETIME - Optional - Defaults to current timestamp
   created_by: UUID - Required - Foreign key in USERS table
   challenge_id: UUID - Required - Foreign key in CHALLENGES table
-  attempts: INTEGER - Required - Defaults to 1
+  code_execs: INTEGER - Required - Defaults to 0
+  total_code_execs: INTEGER - Required - Defaults to 0
+  test_execs: INTEGER - Required - Defaults to 0
+  total_test_execs: INTEGER - Required - Defaults to 0
+  attempts: INTEGER - Required - Defaults to 0
+  total_attempts: INTEGER - Required - Defaults to 0
   completed: BOOLEAN - Optional - Defaults to false
   solution: STRING - Optional - Defaults to skeleton code
 }

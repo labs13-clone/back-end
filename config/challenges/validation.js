@@ -3,7 +3,7 @@ const post = [{
         required: true,
         type: 'body',
         dataType: 'string',
-        unique: true,
+        dbUnique: true,
         dbTable: 'challenges'
     },
     {
@@ -52,7 +52,6 @@ const post = [{
         name: 'approved',
         required: false,
         type: 'body',
-        default: 'false',
         evals: [
             'req.body.approved = false;'
         ]
@@ -91,9 +90,9 @@ const get = [{
         required: false,
         type: 'query',
         dataType: 'boolean',
-        default: true,
         evals: [
-            "if (req.query.approved === false && req.headers.user.role === 'user') req.query.created_by = req.headers.user.id;"
+            "if (req.query.approved !== undefined && req.query.approved === false && req.headers.user.role === 'user') req.query.created_by = req.headers.user.id;",
+            "if (req.query.approved === undefined) req.query.approved = true;"
         ]
     },
     {

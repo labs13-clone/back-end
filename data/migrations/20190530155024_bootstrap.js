@@ -100,9 +100,29 @@ exports.up = function (knex, Promise) {
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
 
+            tbl.integer('test_execs')
+                .notNullable()
+                .defaultTo(0);
+
+            tbl.integer('total_test_execs')
+                .notNullable()
+                .defaultTo(0);
+
+            tbl.integer('code_execs')
+                .notNullable()
+                .defaultTo(0);
+
+            tbl.integer('total_code_execs')
+                .notNullable()
+                .defaultTo(0);
+
             tbl.integer('attempts')
                 .notNullable()
-                .defaultTo(1);
+                .defaultTo(0);
+
+            tbl.integer('total_attempts')
+                .notNullable()
+                .defaultTo(0);
 
             tbl.boolean('completed')
                 .defaultTo(0);

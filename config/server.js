@@ -1,11 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-const usersRouter = require('./usersRouter');
-const challengesRouter = require('./challengesRouter');
-const submissionsRouter = require('./submissionsRouter');
-const validationRouter = require('./validationRouter');
-const categoriesRouter = require('./categoriesRouter');
+const usersRouter = require('./users/router');
+const challengesRouter = require('./challenges/router');
+const submissionsRouter = require('./submissions/router');
+const categoriesRouter = require('./categories/router');
 const auth = require('../middleware/auth');
 const auth0Api = require('../apis/external/auth0');
 
@@ -22,7 +21,6 @@ server.use(express.json());
 server.use('/api/users', auth, usersRouter);
 server.use('/api/challenges', auth, challengesRouter);
 server.use('/api/submissions', auth, submissionsRouter);
-server.use('/api/validation', auth, validationRouter);
 server.use('/api/categories', auth, categoriesRouter);
 
 server.get('/', (req, res) => {
