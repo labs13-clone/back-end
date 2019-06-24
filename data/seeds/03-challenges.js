@@ -22,8 +22,7 @@ For example:
 \`\`\`
 const strings2 = ['short', 'first long string!!', 'medium', 'abcdefghijklmnopqr'];
 console.log(longestString(strings2)); // <--- 'first long string!'
-\`\`\`
-`,
+\`\`\``,
               tests:JSON.stringify([
                 {
                 descriptor:"longest_string_at_the_end_of_the_array",
@@ -35,8 +34,7 @@ console.log(longestString(strings2)); // <--- 'first long string!'
               skeleton_function:
 `function longestString(arr) {
 
-}
-              `,
+}`,
               solution:
 `function longestString(arr) {
     let result = '';
@@ -47,8 +45,7 @@ console.log(longestString(strings2)); // <--- 'first long string!'
         }
     }
     return result;
-}
-              `,
+}`,
               difficulty:10,
               approved:1
             },
@@ -70,8 +67,7 @@ Output Example:
 'dlrow olleh'
 'fdsa'
 '!skcor SC'
-\`\`\`
-  `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"Returns a reversed version of the string argument",
@@ -88,8 +84,7 @@ Output Example:
                 skeleton_function:
 `function reverseString(str) {
 
-}
-                `,
+}`,
                 solution:
 `function reverseString(str) {
     let len = str.length;
@@ -98,8 +93,7 @@ Output Example:
         reversed += str[i - 1];
     }
     return reversed;
-}
-                `,
+}`,
                 difficulty:10,
                 approved:1
               },
@@ -119,8 +113,7 @@ Output Example:
 \`\`\`
 54321
 555
-\`\`\`
-  `,
+\`\`\``,
 
                 tests:JSON.stringify([
                     {
@@ -142,8 +135,7 @@ Output Example:
                 skeleton_function:
 `function reverseNumber(num) {
 
-}
-                `,
+}`,
                 solution:
 `function reverseNumber (num) {
     let str = num.toString();
@@ -154,8 +146,7 @@ Output Example:
     }
     let result = Number(reversed);
     return result;
-}                 
-                `,
+}`,
                 difficulty:10,
                 approved:1
               },
@@ -168,8 +159,7 @@ Write a function that takes in a string, reverses the 'casing' of that string, a
 \`\`\`
 const string = 'HELLO world!';
 console.log(reverseCase(string)); // <--- hello WORLD!
-\`\`\`
-            `,
+\`\`\``,
             
                 tests:JSON.stringify([
                     {
@@ -191,8 +181,7 @@ console.log(reverseCase(string)); // <--- hello WORLD!
                 skeleton_function:
 `function reverseCase(str) {
 
-}
-                `,
+}`,
                 solution:
 `function reverseCase(str) {
     return str
@@ -201,8 +190,7 @@ console.log(reverseCase(string)); // <--- hello WORLD!
         return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
     })
     .join('');
-}         
-                `,
+}`,
                 difficulty:15,
                 approved:1
               },
@@ -226,8 +214,7 @@ Output Example:
 'stringz'
 'stringzzzz'
 'stringzzzzzzz'
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"Returns 1z",
@@ -243,14 +230,12 @@ Output Example:
                 skeleton_function:
 `function stringZ(num) {
 
-}
-                `,
+}`,
                 solution:
 `function stringZ(num) {
     const z = 'z'; 
     return 'string' + z.repeat(num)
-}          
-                `,
+}`,
                 difficulty:16,
                 approved:0
               },
@@ -268,8 +253,7 @@ toCamelCase("the-stealth-warrior")
 // returns "theStealthWarrior"
 toCamelCase("The_stealth_warrior")
 // returns "TheStealthWarrior"
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"Should return empty string provided empty string",
@@ -290,8 +274,7 @@ toCamelCase("The_stealth_warrior")
                 skeleton_function:
 `function toCamelCase(str){
 
-}
-               `,
+}`,
                 solution:
 `function toCamelCase(str) {
    if (str === '') return str;
@@ -307,8 +290,7 @@ toCamelCase("The_stealth_warrior")
       else snakeCase += strArr[i];
     }
     return snakeCase;
-}       
-                `,
+}`,
                 difficulty:20,
                 approved:1
               },
@@ -332,8 +314,7 @@ Output
 'abcd'
 'abcwxyz'
 'AABCabcwxyz'
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"returns string with letters in alphabetical order",
@@ -369,16 +350,14 @@ Output
                 skeleton_function:
 `function sortString(str) {
 
-}
-               `,
+}`,
                 solution:
 `function sortString(str) {
   const arr = str.split('');
   const sorted = arr.sort();
   const joined = sorted.join('');
   return joined;
-}
-                `,
+}`,
                 difficulty:25,
                 approved:1
               },
@@ -398,8 +377,7 @@ Input
 Output
 \`\`\`
 '3'
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"discerns from the entire alphabet",
@@ -420,8 +398,7 @@ Output
                 skeleton_function:
 `function vowelCount(str) {
 
-}
-               `,
+}`,
                 solution:
 `function vowelCount(str) {
   let count = 0;
@@ -440,8 +417,7 @@ Output
     if (str.charAt(i) === 'U') count++;
   }
   return count;
-}
-                `,
+}`,
                 difficulty:25,
                 approved:1
               },
@@ -462,8 +438,7 @@ Input
 Output
 \`\`\`
 '5'
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"should_correctly_add_digits",
@@ -475,17 +450,11 @@ Output
                       argumentsToPass:['101010101'],
                       expectedResult:"5"
                     },
-                    // {
-                    //     descriptor:"should_return_a_number",
-                    //     argumentsToPass:['23'],
-                    //     expectedResult:"number"
-                    // },
                 ]),
                 skeleton_function:
 `function sumOfDigits(num) {
 
-}
-               `,
+}`,
                 solution:
 `function sumOfDigits (num) {
   const integerStrings = ('' + num).split('');     // does the same thing as the next line
@@ -502,8 +471,7 @@ Output
     console.log(sum);                 // <--- sum of adding up all ints in the array of ints
   }
   return sum;
-}
-                `,
+}`,
                 difficulty:25,
                 approved:1
               },
@@ -523,8 +491,7 @@ Input
 Output
 \`\`\`
 'a2b1c5a3'
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"abcd",
@@ -550,8 +517,7 @@ Output
                 skeleton_function:
 `function stringCompression(str) {
 
-}
-               `,
+}`,
                 solution:
 `function stringCompression(str) {
     let curChar = null;
@@ -568,8 +534,7 @@ Output
       }
     }
     return cmpresd.length < str.length ? cmpresd : str;
-  }
-                `,
+  }`,
                 difficulty:40,
                 approved:1
               },
@@ -593,8 +558,7 @@ Input
 Output
 \`\`\`
 [3,4,5,6,7,8,9]
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"should_sort_an_array",
@@ -616,17 +580,11 @@ Output
                       argumentsToPass:[[9,5,5,5,5,5,1]],
                       expectedResult:[1,5,5,5,5,5,9]
                   },
-                //   {
-                //     descriptor:"should_return_an_array",
-                //     argumentsToPass:['0'],
-                //     expectedResult:"true"
-                // },
                 ]),
                 skeleton_function:
 `function quickSort(nums) {
 
-}
-               `,
+}`,
                 solution:
 `function quickSort(nums) {
   const arr = nums.slice();
@@ -646,8 +604,7 @@ Output
   }
 
   return [].concat(quickSort(lessThanOrEqualToPivot), pivot, quickSort(greaterThanPivot));
-}   
-                `,
+}`,
                 difficulty:60,
                 approved:1
               },
@@ -673,8 +630,7 @@ Input
 Output
 \`\`\`
 [2, 44, 10, 35, 356, 12, 1098]
-\`\`\`
-            `,
+\`\`\``,
                 tests:JSON.stringify([
                     {
                     descriptor:"unsorted_array2",
@@ -700,8 +656,7 @@ Output
                 skeleton_function:
 `function insertionSort(array) {
 
-}
-               `,
+}`,
                 solution:
 `function insertionSort(array) {
   for (let i = 1; i < array.length; i++) {
@@ -713,8 +668,7 @@ Output
     array[j + 1] = temp;
   }
   return array;
-}
-                `,
+}`,
                 difficulty:30,
                 approved:1
               },
