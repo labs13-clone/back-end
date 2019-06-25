@@ -287,9 +287,9 @@
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match support
  - category_id: NUMBER - Optional - ID of category
- - created: N/A (value is ignored) - Optional - All challenges the user created
- - completed: N/A (value is ignored) - Optional - All challenges the user completed
- - started: N/A (value is ignored) - Optional - All challenges the user started
+ - created: Boolean - Optional - Currently only works for true
+ - completed: Boolean - Optional - Currently only works for true
+ - started: Boolean - Optional - Currently only works for true
 
 #### Request Body:
 ```

@@ -1,4 +1,4 @@
-const validate = require('../../middleware/oldValidate');
+const validate = require('../../utility/validate');
 
 const post = (req, res, next) => {
 

@@ -18,7 +18,8 @@ function insert(userSubmission) {
                     id
                 })
                 .first();
-        });
+        })
+        .catch(err => console.log(err));
 }
 
 //Update a user submission

@@ -137,10 +137,19 @@ function existsWhere(table, filter) {
         });
 }
 
+function getWhere(table, filter) {
+    const api = dbTableSwitch(table);
+    return api.getOne(filter)
+        .then(res => {
+            return res;
+        });
+}
+
 module.exports = {
     convertBoolean,
     convertRange,
     existsWhere,
+    getWhere,
     isArray,
     isBoolean,
     isInteger,
