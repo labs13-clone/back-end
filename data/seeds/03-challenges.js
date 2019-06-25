@@ -1118,12 +1118,12 @@ Dates may be in any combination of ISO, short or long formats.
                   
 Input
 \`\`\`
-[1, 7, 2, 4, 5, 6, 8, 9, 6, 4]
+'11/05/2017', '11/04/2017'
 \`\`\`
 
 Output
 \`\`\`
-4
+'-1'
 \`\`\``,
                 tests:JSON.stringify([
                     {
