@@ -608,7 +608,6 @@ Output
                 difficulty:60,
                 approved:1
               },
-
               {
 
                 created_by: 1,
@@ -1158,7 +1157,176 @@ Output
                 difficulty:60,
                 approved:1
               },
+              {
 
+                created_by: 1,
+                title: "Deep Equality",
+                  description:`
+ Write a function that, given two objects, returns whether or not the two are deeply equivalen
+  - meaning the contents of the two objects are equal for all keys and sub-keys.
+
+Input
+\`\`\`
+const johnA = {
+  name: 'John',
+  address: {
+    line1: '321 Anytown',
+    line2: 'Stoke-on-Trent'
+  }
+};
+
+const johnB = {
+  name: 'John',
+  address: {
+    line1: '321 Anytown',
+    line2: 'Stoke-on-Trent'
+  }
+};
+
+const johnC = {
+  name: 'John Charles',
+  address: {
+    line1: '321 Anytown',
+    line2: 'Stoke-on-Trent'
+  }
+};
+\`\`\`
+
+Output
+\`\`\`
+deepEquals(johnA, johnB); // true
+deepEquals(johnA, johnC); // false
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"deep_equals_should_return_false",
+                      argumentsToPass:[{
+                        name: 'John',
+                        address: {
+                          line1: '321 Anytown',
+                          line2: 'Stoke-on-Trent'
+                        }}, {
+                          name: 'John Charles',
+                          address: {
+                            line1: '321 Anytown',
+                            line2: 'Stoke-on-Trent'
+                          }}],
+                      expectedResult:false
+                    },
+                    {
+                      descriptor:"deep_equals_should_return_true",
+                      argumentsToPass:[{
+                        name: 'John',
+                        address: {
+                          line1: '321 Anytown',
+                          line2: 'Stoke-on-Trent'
+                        }}, {
+                        name: 'John',
+                        address: {
+                          line1: '321 Anytown',
+                          line2: 'Stoke-on-Trent'
+                        }}],
+                      expectedResult:true
+                    },
+                ]),
+                skeleton_function:
+`function deepEquals(obj1, obj2) {
+  
+}`,
+                solution:
+`function deepEquals(obj1, obj2) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2);
+}`,
+              difficulty:60,
+                approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Armstrong Numbers",
+                description:`
+An Armstrong number is an n-digit number that is equal to the sum of the n'th powers of its digits. Determine if the input number is an Armstrong number.  Return either true or false .
+true
+
+Input
+\`\`\`
+6
+153
+351
+\`\`\`
+
+Output
+\`\`\`
+true
+true
+false
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[153],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[370],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[371],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[407],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[5],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_zero_and_one",
+                    argumentsToPass:[0],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_true_for_armstrong_numbers",
+                    argumentsToPass:[1],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"should_return_false_for_non_armstrong_numbers",
+                    argumentsToPass:[15],
+                    expectedResult:false
+                  },
+                  {
+                    descriptor:"should_return_false_for_non_armstrong_numbers",
+                    argumentsToPass:[999],
+                    expectedResult:false
+                  },
+                  {
+                    descriptor:"should_return_false_for_non_armstrong_numbers",
+                    argumentsToPass:[10],
+                    expectedResult:false
+                  },
+              ]),
+              skeleton_function:
+`function isArmstrongNumber(n) {
+
+}`,
+              solution:
+`function isArmstrongNumber(n) {
+  let nums = n.toString().split('');
+   nums = nums.map(num => Math.pow(parseInt(num), nums.length));
+   const sum = nums.reduce((num, total) => num + total);
+   return n === sum;
+ }`,
+              difficulty:60,
+              approved:1
+            },
         ]);
       });
   };
