@@ -672,6 +672,492 @@ Output
                 difficulty:30,
                 approved:1
               },
+              {
+
+                created_by: 1,
+                title: "To Binary String",
+                  description:`
+ Given a positive (or 0) number, return a string of 1's and 0's representing it's binary value:
+toBinaryString(6) should return "110" (no leading 0).
+
+Input
+\`\`\`
+console.log(toBinaryString(9));
+\`\`\`
+
+Output
+\`\`\`
+1001
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"array_containing_both_negative_and_positive_numbers",
+                      argumentsToPass:[0],
+                      expectedResult:"0"
+                    },
+                    {
+                      descriptor:"Base_Tests",
+                      argumentsToPass:[9],
+                      expectedResult:"1001"
+                    },
+                    {
+                      descriptor:"Base_Tests",
+                      argumentsToPass:[5],
+                      expectedResult:"101"
+                    },
+                    {
+                      descriptor:"Base_Tests",
+                      argumentsToPass:[8],
+                      expectedResult:"1000"
+                    },
+                    {
+                      descriptor:"Base_Tests",
+                      argumentsToPass:[6],
+                      expectedResult:"110"
+                    },
+                ]),
+                skeleton_function:
+`function toBinaryString(number) {
+  
+}`,
+                solution:
+`function toBinaryString(number) {
+  let num = Number(number); // Input remains unaltered
+  let result = '';
+  if (number === 0) return '0';
+  while (num > 0) {
+    result = (num % 2) + result;
+    num = Math.floor(num / 2);
+  }
+  console.log(number, num); // Input remains unaltered
+  return result;
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+
+                created_by: 1,
+                title: "Roman Numeralize",
+                  description:`
+Define a function that takes in a positive integer and returns the Roman Numeral representation of that number.  
+
+Input
+\`\`\`
+Symbol    Value
+  I         1
+  IV        4
+  V         5
+  IX        9
+  X         10
+  XL        40
+  L         50
+  XC        90
+  C         100
+  CD        400
+  D         500
+  CM        900
+  M         1,000  
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[11],
+                      expectedResult:"XI"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[22],
+                      expectedResult:"XXII"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[1000],
+                      expectedResult:"M"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[1001],
+                      expectedResult:"MI"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[1990],
+                      expectedResult:"MCMXC"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[2007],
+                      expectedResult:"MMVII"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[2008],
+                      expectedResult:"MMVIII"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[59],
+                      expectedResult:"LIX"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[95],
+                      expectedResult:"XCV"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[50],
+                      expectedResult:"L"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[45],
+                      expectedResult:"XLV"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[591],
+                      expectedResult:"DXCI"
+                    },
+                    {
+                      descriptor:"Given_numbers_ranging_from_10_to_2009_should_return_roman_numerals_for_each_number_inputted",
+                      argumentsToPass:[985],
+                      expectedResult:"CMLXXXV"
+                    },
+
+                ]),
+                skeleton_function:
+`function romanNumeralize(n) {
+
+}`,
+                solution:
+`function romanNumeralize(n) {
+  let number = n;
+  const rome = [
+  [1000, 'M'],
+  [900, 'CM'],
+  [500, 'D'],
+  [400, 'CD'],
+  [100, 'C'],
+  [90, 'XC'],
+  [50, 'L'],
+  [40, 'XL'],
+  [10, 'X'],
+  [9, 'IX'],
+  [5, 'V'],
+  [4, 'IV'],
+  [1, 'I']
+];
+// BASE CASE
+if (number === 0) {
+  return '';
+}
+for (let i = 0; i < rome.length; i++) {
+  if (number >= rome[i][0]) {
+  // RECURSIVE FUNCTION CALL
+  return rome[i][1] + romanNumeralize(number - rome[i][0]);
+    }
+  }
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+
+                created_by: 1,
+                title: "Next Palindromic Number",
+                  description:`
+Given a number, find the next smallest palindrome number larger than the number. 
+
+Input
+\`\`\`
+125
+\`\`\`
+
+Output
+\`\`\`
+131
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"should_return_131_given_125",
+                      argumentsToPass:[125],
+                      expectedResult:"131"
+                    },
+                    {
+                      descriptor:"should_not_return_a_negative_number",
+                      argumentsToPass:[-55],
+                      expectedResult:"0"
+                    },
+                ]),
+                skeleton_function:
+`function nextPalindrome(n) {
+  
+}`,
+                solution:
+`function nextPalindrome(n) {
+  let search = true;
+  let m = n + 1;
+  while (search) {
+    if ((m + '') === (m + '').split('').reverse().join('')) return m;
+    m++;
+  }
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+                created_by: 1,
+                title: "Largest Contiguous Sum",
+                  description:`
+Given an array of numbers containing at least one positive number (or zero),
+ find the greatest contiguous sum of numbers.
+Input
+\`\`\`
+[1, 2, 3]
+\`\`\`
+
+Output
+\`\`\`
+6
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"array_containing_both_negative_and_positive_numbers",
+                      argumentsToPass:[[-5,0,6,-9,-2,11,5,-12,6]],
+                      expectedResult:"16"
+                    },
+                    {
+                      descriptor:"array_containing_4_neg1_5",
+                      argumentsToPass:[[4,-1,5]],
+                      expectedResult:"8"
+                    },
+                    {
+                      descriptor:"array_containing_1_2_3",
+                      argumentsToPass:[[1,2,3]],
+                      expectedResult:"6"
+                    },
+                    {
+                      descriptor:"array_containing_10_neg11_11",
+                      argumentsToPass:[[10, -11, 11]],
+                      expectedResult:"11"
+                    },
+                ]),
+                skeleton_function:
+`function sumArray(arr) {
+  
+}`,
+                solution:
+`function sumArray(arr) {
+  let ans = 0;
+  let sum = 0;
+
+  for (let i = 0; i < arr.length; i++) {
+    ans = Math.max(0, ans + arr[i]);
+    sum = Math.max(sum, ans);
+  }
+
+  return sum;
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+                created_by: 1,
+                title: "Bubble sort",
+                  description:`
+Bubble sort is the most basic sorting algorithm.
+It compares the first element of an array with the second element.
+If the first element is greater than the second element then it swaps them.
+Then it compares the second and third elements and swaps them if the second is larger.
+Then it compares the third and fourth elements and does the same.
+This continues and the the larger elements begin to "bubble" towards the end.
+The loop then restarts and repeats this process until it makes a clean pass
+without performing any swaps.
+Input
+\`\`\`
+[2, 1, 3]
+\`\`\`
+
+Output
+\`\`\`
+[1, 2, 3]
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"should_sort_an_array_with_two_items",
+                      argumentsToPass:[[4,1]],
+                      expectedResult:[1,4]
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_two_items",
+                      argumentsToPass:[[3,2]],
+                      expectedResult:[2,3]
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_two_items",
+                      argumentsToPass:[[-5,5]],
+                      expectedResult:[-5,5]
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_three_or_more_items",
+                      argumentsToPass:[[4,1,2,3]],
+                      expectedResult:[1,2,3,4]
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_three_or_more_items",
+                      argumentsToPass:[[9,8,7,6,5,4,3,2,1]],
+                      expectedResult:[1,2,3,4,5,6,7,8,9]
+                    },
+                ]),
+                skeleton_function:
+`function bubbleSort(arr) {
+  
+}`,
+                solution:
+`function bubbleSort(arr) {
+  let swappedValue;
+  do {
+    swappedValue = false;
+    for (let i = 0; i < arr.length - 1; i++) {
+      if (arr[i] > arr[i + 1]) {
+        let temp = arr[i];
+        arr[i] = arr[i + 1];
+        arr[i + 1] = temp;
+        swappedValue = true;
+      }
+    }
+  } while (swappedValue);
+  return arr;
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+                created_by: 1,
+                title: "Even Occurrences",
+                  description:`
+Find the first item that occurs an even number of times in an array.
+
+Remember to handle multiple even-occurrence items and return the first one.
+
+Return null if there are no even-occurrence items.
+                  
+Input
+\`\`\`
+[1, 7, 2, 4, 5, 6, 8, 9, 6, 4]
+\`\`\`
+
+Output
+\`\`\`
+4
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"Should_return_a_number_if_it_occurs_even_amount_of_times",
+                      argumentsToPass:[[1, 7, 2, 4, 5, 6, 8, 9, 4]],
+                      expectedResult:"4"
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_two_items",
+                      argumentsToPass:[[1, 7, 2, 4, 5, 6, 8, 9, 1]],
+                      expectedResult:"1"
+                    },
+                    {
+                      descriptor:"should_sort_an_arshould_handle_multiple_even_occurrences_by_returning_the_first_even_occurring_numberray_with_two_items",
+                      argumentsToPass:[[1, 7, 2, 4, 5, 6, 8, 9, 6, 4, 1]],
+                      expectedResult:"1"
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_three_or_more_items",
+                      argumentsToPass:[[1, 7, 2, 4, 5, 6, 8, 9, 6, 4, 2]],
+                      expectedResult:"2"
+                    },
+                    {
+                      descriptor:"should_sort_an_array_with_three_or_more_items",
+                      argumentsToPass:[[1, 7, 2, 4, 5, 6, 7, 4, 6, 7, 7]],
+                      expectedResult:"7"
+                    },
+                ]),
+                skeleton_function:
+`function evenOccurrence(arr) {
+  
+}`,
+                solution:
+`function evenOccurrence(arr) {
+  const obj = {};
+  for (let i = 0; i < arr.length; i++) {
+    if (obj[arr[i]] === undefined) {
+      obj[arr[i]] = 1;
+    }
+    else if (obj[arr[i]] === 1) {
+      obj[arr[i]] = 2;
+    }
+    else if (obj[arr[i]] === 2) {
+      obj[arr[i]] = 1;
+    }
+  }
+  for (let i = 0; i < arr.length; i++) {
+    if (obj[arr[i]] === 2) {
+      return arr[i];
+    }
+  }
+  return null;
+}`,
+                difficulty:60,
+                approved:1
+              },
+              {
+                created_by: 1,
+                title: "Days Between",
+                  description:`
+Calculate and return the number of days between two dates as a string.
+
+Dates may be in any combination of ISO, short or long formats.
+                  
+Input
+\`\`\`
+[1, 7, 2, 4, 5, 6, 8, 9, 6, 4]
+\`\`\`
+
+Output
+\`\`\`
+4
+\`\`\``,
+                tests:JSON.stringify([
+                    {
+                      descriptor:"should_return_negative_number_if_days_are_inverted",
+                      argumentsToPass:['11/05/2017', '11/04/2017'],
+                      expectedResult:'-1'
+                    },
+                    {
+                      descriptor:"should_return_date_as_string",
+                      argumentsToPass:['Nov 4, 2017', '11/05/2017'],
+                      expectedResult:"1"
+                    },
+                    {
+                      descriptor:"should_process_mixed_formats",
+                      argumentsToPass:['November 4, 2017', '5 Nov, 2017'],
+                      expectedResult:"1"
+                    },
+                    {
+                      descriptor:"should_return_zero_when_dates_match",
+                      argumentsToPass:['Nov 4, 2017', '11/04/2017'],
+                      expectedResult:"0"
+                    },
+                ]),
+                skeleton_function:
+`function daysBetween (start, end) {
+  
+}`,
+                solution:
+`function daysBetween (start, end) {
+  return ((Date.parse(end) - Date.parse(start))/(1000 * 60 * 60 * 24)).toString();
+}`,
+                difficulty:60,
+                approved:1
+              },
 
         ]);
       });
