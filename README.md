@@ -285,7 +285,7 @@
  - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
- - category_name: STRING - Optional - Name of category
+ - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match support
  - category_id: NUMBER - Optional - ID of category
  - created: N/A (value is ignored) - Optional - All challenges the user created
  - completed: N/A (value is ignored) - Optional - All challenges the user completed

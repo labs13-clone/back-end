@@ -1,6 +1,7 @@
 const express = require('express');
 const categoriesApi = require('../../apis/db/categories');
 const challengesCategoriesApi = require('../../apis/db/challengesCategories');
+const validate = require('./validation');
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get('/', (req, res) => {
     })
 });
 
-router.post('/challenges', (req, res) => {
+router.post('/challenges', validate.post, (req, res) => {
 
     //Attach a category to a challenge via the challenges_categories table
     challengesCategoriesApi.insert(req.body)

@@ -1,13 +1,10 @@
 const express = require('express');
-const auth = require('../../middleware/auth');
 const challengesApi = require('../../apis/db/challenges');
-const validate = require('../../middleware/validate');
-const validationSchema = require('./validation');
+const validate = require('./validation');
 
 const router = express.Router();
 
-
-router.post('/', validate(validationSchema.post), (req, res) => {
+router.post('/', validate.post, (req, res) => {
     
     //Insert a challenge into the database
     challengesApi.insert(req.body)
@@ -17,13 +14,14 @@ router.post('/', validate(validationSchema.post), (req, res) => {
             res.status(201).send(dbRes);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).send({
                 message: 'Internal Server Error'
             });
         });
 });
 
-router.get('/', auth, validate(validationSchema.get), (req, res) => {
+router.get('/', validate.get, (req, res) => {
 
     //Get an array of challenge objects
     //Filterable by query parameters
@@ -41,7 +39,7 @@ router.get('/', auth, validate(validationSchema.get), (req, res) => {
 });
 
 
-router.put('/', validate(validationSchema.put), (req, res) => {
+router.put('/', validate.put, (req, res) => {
 
     //Remove the row's id from the body
     const id = req.body.id;

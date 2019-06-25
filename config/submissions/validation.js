@@ -1,4 +1,35 @@
-const post = [{
+const get = (req,res,next) => {
+
+};
+
+const oldGet = [{
+        name: 'challenge_id',
+        required: false,
+        type: 'query',
+        dataType: 'id',
+        dbTable: 'user_submissions',
+        dbProtected: true,
+        evals: [
+            'req.query.created_by = req.headers.user.id;',
+        ]
+    },
+    {
+        name: 'completed',
+        required: false,
+        type: 'query',
+        dataType: 'boolean',
+        evals: [
+            'req.query.created_by = req.headers.user.id;',
+        ]
+    }
+]
+
+
+const post = (req,res,next) => {
+
+};
+
+const oldPost = [{
         name: 'created_by',
         required: false,
         type: 'body',
@@ -24,7 +55,11 @@ const post = [{
     }
 ]
 
-const putExec = [{
+const putExec = (req,res,next) => {
+
+};
+
+const oldPutExec = [{
         name: 'id',
         required: true,
         type: 'body',
@@ -48,7 +83,11 @@ const putExec = [{
     }
 ]
 
-const putTest = [{
+const putTest = (req,res,next) => {
+
+};
+
+const oldPutTest = [{
         name: 'id',
         required: true,
         type: 'body',
@@ -72,8 +111,11 @@ const putTest = [{
     }
 ]
 
+const putAttempt = (req,res,next) => {
 
-const putAttempt = [{
+};
+
+const oldPutAttempt = [{
         name: 'id',
         required: true,
         type: 'body',
@@ -97,7 +139,11 @@ const putAttempt = [{
     }
 ]
 
-const putReset = [{
+const putReset = (req,res,next) => {
+
+};
+
+const oldPutReset = [{
         name: 'id',
         required: true,
         type: 'body',
@@ -128,33 +174,11 @@ const putReset = [{
     }
 ]
 
-const get = [{
-        name: 'challenge_id',
-        required: false,
-        type: 'query',
-        dataType: 'id',
-        dbTable: 'user_submissions',
-        dbProtected: true,
-        evals: [
-            'req.query.created_by = req.headers.user.id;',
-        ]
-    },
-    {
-        name: 'completed',
-        required: false,
-        type: 'query',
-        dataType: 'boolean',
-        evals: [
-            'req.query.created_by = req.headers.user.id;',
-        ]
-    }
-]
-
 module.exports = {
+    get,
     post,
     putExec,
     putTest,
     putAttempt,
-    putReset,
-    get
+    putReset
 }

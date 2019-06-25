@@ -125,7 +125,8 @@ function getMany(filter = {}) {
             });
 
             return Promise.all(parsed);
-        });
+        })
+        .catch(err => console.log(err));
 
 }
 
@@ -198,7 +199,7 @@ function parseFilter(filter) {
 
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
-    const challenges = ['created_by', 'approved', 'id', 'difficulty', 'challenge_id'];
+    const challenges = ['created_by', 'approved', 'id', 'difficulty'];
     const categories = ['category_id', 'category_name'];
     const user_submissions = ['completed_by', 'started_by'];
 
@@ -212,30 +213,9 @@ function parseFilter(filter) {
             //If there's a difficulty range query parameter in the request
             //Then we need to alter the query and filter
             if (key === 'difficulty') {
-
-                //It will be represented as a string IE. "1-33" || "33-66" || "66-100"
-                var difficulty = filter.difficulty;
-
-                //Convert it into an array with numbers
-                //That way it works with the knex query builder where function IE. .whereIn('difficulty'. [1-33])
-                difficulty = difficulty.split('-').map(str => Number(str));
-
-                //Remove difficulty from the filter object used in .where()
-                deleteKey(key);
-
-                //Add difficulty filter to the query builder
-                queryBuilder.whereBetween('difficulty', difficulty);
-
-            }
-
-            //Else if the validation middleware is validating a challenge_id while validating a POST to /api/submissions
-            else if (key === 'challenge_id') {
-
-                //Change the column to id instead
-                filter[`challenges.id`] = filter[key];
-
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
+                
+                //Add difficulty filter to the query builder using whereBetween()
+                queryBuilder.whereBetween('difficulty', filter[key]);
             }
 
             //Else for all other query parameters in the challenges table
@@ -243,10 +223,10 @@ function parseFilter(filter) {
 
                 //Assign table
                 filter[`challenges.${key}`] = filter[key];
-
-                //Delete invalid property that doesn't have the table
-                deleteKey(key);
             }
+
+            //Delete invalid property that doesn't have the table
+            deleteKey(key);
         }
     });
 
@@ -261,9 +241,13 @@ function parseFilter(filter) {
                 filter[`categories.id`] = filter[key];
             }
 
-            //Rename category_name to name
+            //category_name uses a different knex query
             else if (key == 'category_name') {
-                filter[`categories.name`] = filter[key];
+
+                //Unlike all other query filters
+                //category_name uses a partial string match query
+                //queryBuilder.where('categories.name', 'like', filter[key])
+                queryBuilder.whereRaw("LOWER(categories.name) LIKE '%' || LOWER(?) || '%' ", filter[key])
             }
 
             //Delete invalid property that doesn't have the table
@@ -285,23 +269,20 @@ function parseFilter(filter) {
                 filter[`user_submissions.completed`] = true;
                 filter[`user_submissions.created_by`] = filter.completed_by;
 
-                //Delete the invalid filter property
-                deleteKey('completed_by');
-
             }
-
+            
             //If started_by
             else if (key === 'started_by') {
-
+                
                 //Then add a where filter for user_submissions.completed = false
                 //But it exists, so they have started on the challenge
                 filter[`user_submissions.created_by`] = filter.started_by;
                 filter[`user_submissions.completed`] = false;
-
-                //Delete the invalid filter property
-                deleteKey('started_by');
-
+                
             }
+
+            //Delete the invalid filter property
+            deleteKey(key);
         }
     });
 

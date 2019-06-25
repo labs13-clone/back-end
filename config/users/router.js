@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
     //Return user information
     //It is already populated from the auth middleware
     res.status(200).send(user);
+    
 });
 
 router.get('/all', async (req, res) => {
@@ -25,8 +26,7 @@ router.get('/all', async (req, res) => {
 
     .catch(err => {
         res.status(500).send({message: 'Internal server error'})
-    })
-
+    });
     
 });
 

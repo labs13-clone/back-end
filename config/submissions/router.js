@@ -1,12 +1,11 @@
 const express = require('express');
 const challengesApi = require('../../apis/db/challenges');
 const userSubmissionsApi = require('../../apis/db/userSubmissions');
-const validate = require('../../middleware/validate');
-const validationSchema = require('./validation');
+const validate = require('./validation');
 
 const router = express.Router();
 
-router.post('/', validate(validationSchema.post), (req, res) => {
+router.post('/', validate.post, (req, res) => {
 
     //Insert the new challenge into the database
     userSubmissionsApi.insert({
@@ -25,7 +24,7 @@ router.post('/', validate(validationSchema.post), (req, res) => {
         });
 });
 
-router.put('/exec', validate(validationSchema.putExec), (req, res) => {
+router.put('/exec', validate.putExec, (req, res) => {
 
     //Remove the user ID from the request body
     const id = req.body.id;
@@ -47,7 +46,7 @@ router.put('/exec', validate(validationSchema.putExec), (req, res) => {
         });
 });
 
-router.put('/test', validate(validationSchema.putTest), (req, res) => {
+router.put('/test', validate.putTest, (req, res) => {
 
     //Remove the user ID from the request body
     const id = req.body.id;
@@ -69,7 +68,7 @@ router.put('/test', validate(validationSchema.putTest), (req, res) => {
         });
 });
 
-router.put('/attempt', validate(validationSchema.putAttempt), (req, res) => {
+router.put('/attempt', validate.putAttempt, (req, res) => {
 
     //Todo: Validate their solution passes all tests for the code challenge
     //For now we assume they pass all tests
@@ -96,7 +95,7 @@ router.put('/attempt', validate(validationSchema.putAttempt), (req, res) => {
         });
 });
 
-router.put('/reset', validate(validationSchema.putReset), (req, res) => {
+router.put('/reset', validate.putReset, (req, res) => {
 
     //Remove the user ID from the request body
     const id = req.body.id;
@@ -117,7 +116,7 @@ router.put('/reset', validate(validationSchema.putReset), (req, res) => {
         });
 });
 
-router.get('/', validate(validationSchema.get), (req, res) => {
+router.get('/', validate.get, (req, res) => {
 
     //Get all applicable submissions
     userSubmissionsApi.getMany(req.query)
