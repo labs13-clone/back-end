@@ -60,6 +60,66 @@ exports.seed = function(knex, Promise) {
           challenge_id:12,
           categories_id:8
         },
+        {
+          challenge_id:13,
+          categories_id:1
+        },
+        {
+          challenge_id:14,
+          categories_id:7
+        },
+        {
+          challenge_id:15,
+          categories_id:6
+        },
+        {
+          challenge_id:15,
+          categories_id:7
+        },
+        {
+          challenge_id:16,
+          categories_id:6
+        },
+        {
+          challenge_id:16,
+          categories_id:7
+        },
+        {
+          challenge_id:17,
+          categories_id:3
+        },
+        {
+          challenge_id:17,
+          categories_id:8
+        },
+        {
+          challenge_id:18,
+          categories_id:6
+        },
+        {
+          challenge_id:19,
+          categories_id:6
+        },
+        {
+          challenge_id:19,
+          categories_id:7
+        },
+        {
+          challenge_id:20,
+          categories_id:23
+        },
+        {
+          challenge_id:20,
+          categories_id:33
+        },
+        {
+          challenge_id:21,
+          categories_id:6
+        },
+        {
+          challenge_id:21,
+          categories_id:7
+        },
       ]);
     });
 };
