@@ -243,7 +243,7 @@ const post = (req, res, next) => {
 
                             }
                         }
-                        
+
                         //Resolve the inner promise.
                         //No issues found with this property
                         innerResolve();
@@ -791,6 +791,19 @@ const putReset = (req, res, next) => {
                                     innerReject({
                                         code: 422,
                                         message: `The user does not have a submission for this challenge`
+                                    });
+                                }
+
+                                //Else If the submission is not already completed
+                                else if (!await validate.existsWhere('user_submissions', {
+                                        id: obj[key],
+                                        created_by: req.headers.user.id,
+                                        completed: true
+                                    })) {
+
+                                    innerReject({
+                                        code: 422,
+                                        message: `You have can not reset a challenge you haven't completed`
                                     });
                                 }
                             }

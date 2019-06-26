@@ -275,7 +275,7 @@ function get(req, res, next) {
                 return new Promise(async (innerResolve, innerReject) => {
 
                     //Check if the property is in the list of valid properties
-                    const validProperties = ['difficulty', 'id', 'category_name', 'category_id', 'approved', 'created', 'completed', 'started'];
+                    const validProperties = ['difficulty', 'id', 'category_name', 'title', 'category_id', 'approved', 'created', 'completed', 'started'];
                     if (!validProperties.includes(key)) {
                         innerReject({
                             code: 422,
@@ -361,6 +361,27 @@ function get(req, res, next) {
                         }
                     }
 
+                    //Else run title specific checks
+                    else if (key === 'title') {
+
+                        //Make sure it's string
+                        if (!validate.isString(obj[key])) {
+
+                            innerReject({
+                                code: 422,
+                                message: `${key} must be a string`
+                            });
+                        }
+
+                        //Prep string for knex query
+                        else {
+
+                            //Will use partial string match like .where('categories.title', 'like', '%searchterm%')
+                            obj[key] = '%' + obj[key] + '%';
+                            req.query[key] = obj[key];
+                        }
+                    }
+
                     //Else run category_id specific checks
                     else if (key === 'category_id') {
 
@@ -409,7 +430,7 @@ function get(req, res, next) {
                             }
 
                             //If a non-admin is requesting unapproved challenges
-                            if (!obj[key] && req.headers.user.role === 'admin') {
+                            if (!obj[key] && req.headers.user.role !== 'admin') {
 
                                 //Then make sure they can only retrieve the unapproved challenges they created
                                 req.query.created_by = req.headers.user.id;

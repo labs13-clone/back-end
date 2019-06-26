@@ -29,42 +29,46 @@
 ## Get user ID out of the req.headers.users which is populated in the auth middleware
 - **GET /api/users**
   - Get logged in user profile information
-    - Can be used to see if the user is logged in
     - Can be used to get the role of the user
+    - Can be used to get the user's picture or nickname
 - **GET /api/categories**
   - Get an array of categories for:
     - Create Challenge Form
     - Search Challenges Category Filter
+- **POST /api/categories/challenges**
+  - Attach categories to challenges:
+    - Accepts a single category or multiple categories
 - **POST /api/challenges**
   - Create a new code challenge
 - **PUT /api/challenges**
   - Edit a code challenge
-    - Users can edit unapproved challenges they created
-    - Admins can edit any unapproved challenges
     - Admins can approve a challenge
 - **GET /api/challenges**
   - Get code challenge(s)
+    - All users can get approved challenges
+    - Filter challenges by numerous query parameters
     - Users can get unapproved challenges they created
     - Admins can get any unapproved challenges
-    - Users and Admins can get any approved challenges
-    - Users and Admins can filter challenges by difficulty
 - **POST /api/submissions**
   - Create a new submission
     - User is starting a code challenge
-- **PUT /api/submissions**
-  - Edit a submission
-    - Users can only edit submissions they created
-    - Users can update their answer
-    - Users can retake a challenge they already completed
 - **GET /api/submissions**
   - Get submission(s)
-    - Users can get submissions they created
-    - Users can get all submissions they have completed
-    - Users can get all submissions they started on
+    - Users can get all submissions they created
+    - Users can get all submissions they completed
+    - Users can get all submissions they started
     - Users can get a submission for a specific challenge
-- **PUT /api/validation**
-  - Validate a submission's answer
+- **PUT /api/submissions/exec**
+  - User executed code client-side while attempting a challenge
+    - Users can optionally update their answer
+- **PUT /api/submissions/test**
+  - User executed tests client-side while attempting a challenge
+    - Users can optionally update their answer
+- **PUT /api/submissions/attempt**
+  - User submitted their solution for a code challenge
     - Users can optionally update their answer when validating
+- **PUT /api/submissions/reset**
+  - User can reset an already completed challenge to retake it
 
 # Getting user profile information
 
@@ -127,11 +131,11 @@
 
 ---
 
-# Attaching a category (or categories) to a challenge
+# Attach a category (or multiple categories) to a challenge
 
 ## POST /api/categories/challenges
 
-- Accepts an array of objects containing category and challenge information
+- Accepts an array of objects (or a single object) containing category and challenge information
 
 ### --- Sent 
 
@@ -145,7 +149,13 @@
   ...
 ]
 ```
-
+## OR
+```
+{
+  challenge_id: INTEGER - Required
+  categories_id: INTEGER - Required
+}
+```
 ### --- Received 201
 
 #### Returns the challenge's information:
@@ -180,21 +190,20 @@
 
 ## POST /api/challenges
 
-- Allow any registered user to create a challenge
-- Double check the approved column is false
-- Validate format of payload
+- Any registered user can create a challenge
+- Challenges need to be manually approved by an administrator
 
 ### --- Sent
 
 #### Request Body:
 ```
 {
-  title: STRING - Required - Unique
+  title: STRING - Required - **Unique**
   description: STRING - Required
   tests: JSON - Required
   skeleton_function: STRING - Required
   solution: STRING - Required
-  difficulty: INTEGER - Required
+  difficulty: INTEGER - Required - Inbetween 1 to 100 (inclusive)
 }
 ```
 
@@ -228,8 +237,7 @@
 # Editing an existing code challenge
 
 ## PUT /api/challenges/
-
-- For admins to approve challenges
+- Currently only used for admins to approve challenges
 
 ### --- Sent
 
@@ -281,7 +289,7 @@
 
 ### --- Sent
 
-#### Optional Query Parameters:
+#### Query Parameters:
  - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
@@ -329,46 +337,11 @@
 ```
 ---
 
-# Updating A Submission
-
-## PUT /api/submissions
-* Save a user's submission answer and completed state from true to false
-* Takes the ID of the submission
-* Solution should be the only column users are allowed to updated
-* Users should only be able to update their own submissions
-* Check to make sure the submission exists- If not throw an error
-
-### --- Sent
-
-#### Request Body:
-```
-{
-  id: NUMBER - Required
-  completed: BOOLEAN - Optional
-  solution: STRING - Optional
-}
-```
-
-### --- Received 200
-
-#### Returns the updated submission:
-```
-{
-  id
-  challenge_id
-  attempts
-  completed
-  solution
-}
-```
-
 # Creating A Submission
 
 ## POST /api/submissions
-- Takes the ID of the challenge
+- Needs the ID of the challenge
 - Automatically populates a skeleton function
-- Check to make sure the challenge exists- If not throw an error
-- Check to make sure submission does not exist for user- if one exists throw error
 
 ### --- Sent
 
@@ -384,11 +357,16 @@
 #### Returns the new challenge submission:
 ```
 {
-  id
-  challenge_id
-  attempts
-  completed
-  solution
+  id - INTEGER
+  challenge_id - INTEGER
+  attempts - INTEGER
+  total_attempts - INTEGER
+  code_execs - INTEGER
+  total_code_execs - INTEGER
+  test_execs - INTEGER
+  total_test_execs - INTEGER
+  completed - BOOLEAN
+  solution - STRING
 }
 ```
 
@@ -396,16 +374,16 @@
 
 ## GET /api/submissions
 
-- Object-literal query parameters located in req.query can be used to filter query results
-- Users should only be able to access their own submissions
 - Any registered user can access this endpoint
+- Users can only access their own submissions
+- Object-literal query parameters located in req.query can be used to filter query results
 - Returns an array of submissions
 
 ### --- Sent
 
-#### Optional Query Parameters:
- - challenge_id
- - completed
+#### Query Parameters:
+ - challenge_id - INTEGER - Optional
+ - completed - BOOLEAN - Optional
 
 #### Request Body:
 ```
@@ -420,23 +398,101 @@
 ```
 [
   {
-   id
-   challenge_id
-   attempts
-   completed
-   solution
+    id - INTEGER
+    challenge_id - INTEGER
+    attempts - INTEGER
+    total_attempts - INTEGER
+    code_execs - INTEGER
+    total_code_execs - INTEGER
+    test_execs - INTEGER
+    total_test_execs - INTEGER
+    completed - BOOLEAN
+    solution - STRING
   }
 ]
 ```
 
-# Validate A Submission Has A Correct Answer
+# User executed code client-side while attempting a challenge
 
-## PUT /api/submissions/submit
-* Validate a user has the correct answer and update the database entry accordingly
+## PUT /api/submissions/exec
+* Requires the ID of the submission
+* Saves a user's solution if included in the request
+* Users can only update their own submissions
+* Increments `code_execs` and `total_code_execs` by one
+
+### --- Sent
+
+#### Request Body:
+```
+{
+  id: NUMBER - Required - ID of the submission
+  solution: STRING - Optional
+}
+```
+
+### --- Received 200
+
+#### Returns the updated submission:
+```
+{
+  id - INTEGER
+  challenge_id - INTEGER
+  attempts - INTEGER
+  total_attempts - INTEGER
+  code_execs - INTEGER
+  total_code_execs - INTEGER
+  test_execs - INTEGER
+  total_test_execs - INTEGER
+  completed - BOOLEAN
+  solution - STRING
+}
+```
+
+# User executed tests client-side while attempting a challenge
+
+## PUT /api/submissions/test
+* Requires the ID of the submission
+* Saves a user's solution if included in the request
+* Users can only update their own submissions
+* Increments `test_execs` and `total_test_execs` by one
+
+### --- Sent
+
+#### Request Body:
+```
+{
+  id: NUMBER - Required - ID of the submission
+  solution: STRING - Optional
+}
+```
+
+### --- Received 200
+
+#### Returns the updated submission:
+```
+{
+  id - INTEGER
+  challenge_id - INTEGER
+  attempts - INTEGER
+  total_attempts - INTEGER
+  code_execs - INTEGER
+  total_code_execs - INTEGER
+  test_execs - INTEGER
+  total_test_execs - INTEGER
+  completed - BOOLEAN
+  solution - STRING
+}
+```
+
+# User submitted their solution for a code challenge
+
+## PUT /api/submissions/attempt
+* Validates that a user has the correct answer
 * Needs the ID of the applicable user_submission entry
-* Users should only be able to submit submissions they created
-* Users should only be able to submit submissions where correct is false
-    * Users need to reset their submission in order to attempt the challenge again via PUT /api/submissions
+* Users can only attempt submissions they created
+* Updates users solution if provided in request
+* Users can only attempt uncompleted challenges
+    * If completed, users need to reset their submission in order to attempt the challenge again via PUT /api/submissions/reset
 
 ### --- Sent
 
@@ -444,7 +500,7 @@
 ```
 {
   id: STRING - Required - ID of the applicable user_submission
-  solution: STRING - Required
+  solution: STRING - Optional
 }
 ```
 
@@ -453,11 +509,50 @@
 #### Returns an updated submission:
 ```
 {
-  id
-  challenge_id
-  attempts
-  completed
-  solution
+  id - INTEGER
+  challenge_id - INTEGER
+  attempts - INTEGER
+  total_attempts - INTEGER
+  code_execs - INTEGER
+  total_code_execs - INTEGER
+  test_execs - INTEGER
+  total_test_execs - INTEGER
+  completed - BOOLEAN
+  solution - STRING
+}
+```
+
+# User can reset challenges they already created
+
+## PUT /api/submissions/reset
+* Requires the ID of the submission
+* Users can only reset their own submissions
+* Users can only reset completed challenges
+
+### --- Sent
+
+#### Request Body:
+```
+{
+  id: NUMBER - Required - ID of the submission
+}
+```
+
+### --- Received 200
+
+#### Returns the updated submission:
+```
+{
+  id - INTEGER
+  challenge_id - INTEGER
+  attempts - INTEGER
+  total_attempts - INTEGER
+  code_execs - INTEGER
+  total_code_execs - INTEGER
+  test_execs - INTEGER
+  total_test_execs - INTEGER
+  completed - BOOLEAN
+  solution - STRING
 }
 ```
 

@@ -199,7 +199,7 @@ function parseFilter(filter) {
 
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
-    const challenges = ['created_by', 'approved', 'id', 'difficulty'];
+    const challenges = ['created_by', 'approved', 'id', 'difficulty', 'title'];
     const categories = ['category_id', 'category_name'];
     const user_submissions = ['completed_by', 'started_by'];
 
@@ -216,6 +216,14 @@ function parseFilter(filter) {
                 
                 //Add difficulty filter to the query builder using whereBetween()
                 queryBuilder.whereBetween('difficulty', filter[key]);
+            }
+            
+            //Unlike most other query filters, title uses a different knex query
+            else if (key == 'title') {
+
+                //title uses a partial string match query
+                //queryBuilder.where('challenges.title', 'like', filter[key])
+                queryBuilder.whereRaw("LOWER(challenges.title) LIKE '%' || LOWER(?) || '%' ", filter[key])
             }
 
             //Else for all other query parameters in the challenges table
@@ -285,6 +293,8 @@ function parseFilter(filter) {
             deleteKey(key);
         }
     });
+
+    console.log(filter)
 
     //Delete the old property
     //It will cause an invalid column error
