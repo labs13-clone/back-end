@@ -294,8 +294,6 @@ function parseFilter(filter) {
         }
     });
 
-    console.log(filter)
-
     //Delete the old property
     //It will cause an invalid column error
     //Because the table is not specified

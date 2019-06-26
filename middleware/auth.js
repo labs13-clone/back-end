@@ -111,7 +111,7 @@ module.exports = function (req, res, next) {
                                                     return null;
                                                 })
                                         } else {
-                                            console.log(typeof err.code, err.code)
+                                            console.log('Auth module error', err);
                                         }
 
                                     })

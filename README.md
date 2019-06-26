@@ -290,7 +290,7 @@
 ### --- Sent
 
 #### Query Parameters:
- - difficulty: RANGE (STRING) - Optional - `1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
+ - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match supported
