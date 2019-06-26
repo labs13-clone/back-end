@@ -280,20 +280,20 @@
 
 ## GET /api/challenges
 
-- Query parameters can be used to filter results
-- By default it returns all approved challenges
 - Any registered user can access this endpoint
-- Regular users should only be able to access approved challenges no matter if they created them or not, and unapproved challenges that they created
-- Only admins can access all challenges
 - Returns an array of challenges
+- Returns all approved challenges by default
+- Query parameters can be used to filter results
+- Regular users can only access approved challenges they did not create, and unapproved challenges that they created
+- Admins can access all challenges
 
 ### --- Sent
 
 #### Query Parameters:
- - difficulty: RANGE (STRING) - Optional - '1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
+ - difficulty: RANGE (STRING) - Optional - `1-100' (all), '1-33' (easy), '33-66' (medium), or '66-100' (hard)
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
- - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match support
+ - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match supported
  - category_id: NUMBER - Optional - ID of category
  - created: Boolean - Optional - Currently only works for true
  - completed: Boolean - Optional - Currently only works for true
