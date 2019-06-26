@@ -75,18 +75,6 @@ const get = (req, res, next) => {
                                     message: `The challenge you're creating a submission for has not been approved`
                                 });
                             }
-
-                            //else if the user already has a user submission for this challenge
-                            else if (!await validate.existsWhere('user_submissions', {
-                                    challenge_id: obj[key],
-                                    created_by: req.headers.user.id
-                                })) {
-
-                                innerReject({
-                                    code: 422,
-                                    message: `The user does not have a submission for this challenge`
-                                });
-                            }
                         }
                     }
 
@@ -145,7 +133,7 @@ const post = (req, res, next) => {
 
                 //Force the following fields to exist and be of a certain value
 
-                //Populate the skeleton function                
+                //Populate the skeleton function             
                 const applicableChallenge = await validate.getWhere('challenges', {
                     id: req.body.challenge_id
                 });
