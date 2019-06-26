@@ -11,7 +11,7 @@ const post = (req, res, next) => {
 
     } else if (validate.isArray(req.body)) {
 
-        //Iterate through the array if necc.
+        //Iterate through the array if necessary
         const validations = req.body.map(item => {
 
             //Validate object

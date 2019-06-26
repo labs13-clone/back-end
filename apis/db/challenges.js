@@ -195,7 +195,6 @@ function parseFilter(filter) {
         .leftJoin('categories', 'challenges_categories.categories_id', 'categories.id')
         .leftJoin('user_submissions', 'challenges.id', 'user_submissions.challenge_id')
         .groupBy('challenges.id')
-        .orderBy('challenges.id');
 
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
@@ -213,11 +212,11 @@ function parseFilter(filter) {
             //If there's a difficulty range query parameter in the request
             //Then we need to alter the query and filter
             if (key === 'difficulty') {
-                
+
                 //Add difficulty filter to the query builder using whereBetween()
                 queryBuilder.whereBetween('difficulty', filter[key]);
             }
-            
+
             //Unlike most other query filters, title uses a different knex query
             else if (key == 'title') {
 
@@ -278,15 +277,15 @@ function parseFilter(filter) {
                 filter[`user_submissions.created_by`] = filter.completed_by;
 
             }
-            
+
             //If started_by
             else if (key === 'started_by') {
-                
+
                 //Then add a where filter for user_submissions.completed = false
                 //But it exists, so they have started on the challenge
                 filter[`user_submissions.created_by`] = filter.started_by;
                 filter[`user_submissions.completed`] = false;
-                
+
             }
 
             //Delete the invalid filter property
@@ -294,16 +293,26 @@ function parseFilter(filter) {
         }
     });
 
-    //Delete the old property
-    //It will cause an invalid column error
-    //Because the table is not specified
-    //And we are using a joined query below
+    //Apply pagination and sorting parameters
+    // const limit = filter.limit;
+    // const offset = (filter.page - 1) * limit;
+    // const orderBy = filter.order_by;
+    // queryBuilder.orderBy(orderBy, 'desc').orderBy('id', 'asc').limit(limit).offset(offset);
+
+    // delete filter.page;
+    // delete filter.limit;
+    // delete filter.order_by;
+
+    //Utility function to delete old filter properties after they are parsed
+    //The old properties will cause an invalid column error because the table is not specified
+    //We are using a joined query below so table name needs to be included with properties
+    //And some filter parameters are translated from semantic names to actual column names 
     function deleteKey(key) {
         delete filter[key];
     }
 
     //Apply the parsed filter to the query builder
-    queryBuilder.where(filter)
+    queryBuilder.where(filter);
 
     return queryBuilder;
 }

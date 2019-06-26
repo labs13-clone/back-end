@@ -253,7 +253,11 @@ function get(req, res, next) {
 
                 //Default GET /api/challenges to approved challenges
                 if (req.query.approved === undefined) req.query.approved = true;
-
+                //Default to first page and limit by 5 challenges
+                // if (req.query.page === undefined) req.query.page = 1;
+                // if (req.query.limit === undefined) req.query.limit = 5;
+                // //Default to sorting by popularity
+                // if (req.query.order_by === undefined) req.query.order_by = 'popularity';
 
                 next();
             })
@@ -275,7 +279,7 @@ function get(req, res, next) {
                 return new Promise(async (innerResolve, innerReject) => {
 
                     //Check if the property is in the list of valid properties
-                    const validProperties = ['difficulty', 'id', 'category_name', 'title', 'category_id', 'approved', 'created', 'completed', 'started'];
+                    const validProperties = ['difficulty', 'id', 'category_name', 'title', 'category_id', 'approved', 'created', 'completed', 'started']; //'page', 'limit', 'order_by'
                     if (!validProperties.includes(key)) {
                         innerReject({
                             code: 422,
@@ -390,7 +394,7 @@ function get(req, res, next) {
 
                             innerReject({
                                 code: 422,
-                                message: `${key} must be a string`
+                                message: `${key} must be an integer`
                             });
                         } else {
 
@@ -417,7 +421,7 @@ function get(req, res, next) {
                         if (!validate.isBoolean(obj[key])) {
                             innerReject({
                                 code: 422,
-                                message: `${key} must be a string`
+                                message: `${key} must be a boolean`
                             });
                         } else {
 
@@ -529,6 +533,76 @@ function get(req, res, next) {
                             delete req.query.started;
                         }
                     }
+
+                    //Else run page specific checks
+                    // else if (key === 'page') {
+
+                    //     //Make sure it's an integer
+                    //     if (!validate.isInteger(obj[key])) {
+
+                    //         innerReject({
+                    //             code: 422,
+                    //             message: `${key} must be an integer`
+                    //         });
+                    //     } else {
+
+                    //         //Convert to an integer
+                    //         obj[key] = parseInt(obj[key], 10);
+
+                    //         //Set a minimum page number
+                    //         if(obj[key] < 1) obj[key] = 1;
+
+                    //         //Update the request object
+                    //         req.query[key] = obj[key];
+                    //     }
+                    // }
+
+                    // //Else run limit specific checks
+                    // else if (key === 'limit') {
+
+                    //     //Make sure it's an integer
+                    //     if (!validate.isInteger(obj[key])) {
+
+                    //         innerReject({
+                    //             code: 422,
+                    //             message: `${key} must be an integer`
+                    //         });
+                    //     } else {
+
+                    //         //Convert to an integer
+                    //         obj[key] = parseInt(obj[key], 10);
+
+                    //         //Set a minimum and maximum limit
+                    //         if(obj[key] < 1) obj[key] = 1;
+                    //         else if (obj[key] > 25) obj[key] = 25;
+
+                    //         //Update the request object
+                    //         req.query[key] = obj[key];
+                    //     }
+                    // }
+
+                    // //Else run order_by specific checks
+                    // else if (key === 'order_by') {
+
+                    //     const validSortOptions = ['popularity'];
+
+                    //     ///Make sure it's string
+                    //     if (!validate.isString(obj[key])) {
+
+                    //         innerReject({
+                    //             code: 422,
+                    //             message: `${key} must be a string`
+                    //         });
+                    //     }
+                    //     //Else make sure it's a valid sort option
+                    //     else if (!validSortOptions.includes(obj[key])) {
+
+                    //         innerReject({
+                    //             code: 422,
+                    //             message: `${obj[key]} is not a valid sort option (${validSortOptions.toString()})`
+                    //         });
+                    //     }
+                    // }
 
                     //Resolve the inner promise.
                     //No issues found with this property
