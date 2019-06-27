@@ -1,17 +1,18 @@
 const express = require('express');
-const usersDb = require('../apis/db/users');
+const usersDb = require('../../apis/db/users');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
 
-    //Filter out sub_id since it's already available client-side
+    //Filter out sub_id since it is not needed client-side
     const user = req.headers.user;
     delete user.sub_id;
 
     //Return user information
-    //It is already populated from the middleware
+    //It is already populated from the auth middleware
     res.status(200).send(user);
+    
 });
 
 router.get('/all', async (req, res) => {
@@ -25,8 +26,7 @@ router.get('/all', async (req, res) => {
 
     .catch(err => {
         res.status(500).send({message: 'Internal server error'})
-    })
-
+    });
     
 });
 

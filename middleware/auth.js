@@ -111,7 +111,7 @@ module.exports = function (req, res, next) {
                                                     return null;
                                                 })
                                         } else {
-                                            console.log(typeof err.code, err.code)
+                                            console.log('Auth module error', err);
                                         }
 
                                     })
@@ -119,6 +119,7 @@ module.exports = function (req, res, next) {
 
                             //Else user was found, combine user info from db with decodedAccessToken token
                             else {
+
                                 req.headers.user = {
                                     ...user,
                                     role
@@ -132,6 +133,7 @@ module.exports = function (req, res, next) {
                             }
                         })
                         .catch(err => {
+                            console.log('Internal Error auth.js', err);
                             res.status(500).send({
                                 message: 'Internal Server Error'
                             });
