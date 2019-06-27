@@ -120,6 +120,22 @@ exports.seed = function(knex, Promise) {
           challenge_id:21,
           categories_id:7
         },
+        {
+          challenge_id:22,
+          categories_id:6
+        },
+        {
+          challenge_id:22,
+          categories_id:7
+        },
+        {
+          challenge_id:23,
+          categories_id:6
+        },
+        {
+          challenge_id:23,
+          categories_id:7
+        },
       ]);
     });
 };

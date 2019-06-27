@@ -1327,6 +1327,562 @@ false
               difficulty:60,
               approved:1
             },
+            {
+
+              created_by: 1,
+              title: "Twin Primes ",
+                description:`
+A twin prime is a prime number that differs from another prime number by two.
+Write a function called isTwinPrime which takes an integer and returns true if it is a twin prime, or false if it is not.
+
+Input
+\`\`\`
+5 is a prime, and 5 + 2 = 7, which is also a prime, so returns true.
+9 is not a prime, and so does not need checking, so it returns false.
+7 is a prime, but 7 + 2 = 9, which is not a prime. However, 7 - 2 = 5, which is a prime, so it returns true.
+23 is a prime, but 23 + 2 is 25, which is not a prime.  23 - 2 is 21, which isn't a prime either, so 23 is not a twin prime.
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"given_2_it_should_return_false",
+                    argumentsToPass:[2],
+                    expectedResult:false
+                  },
+                  {
+                    descriptor:"given_19_it_should_return_true",
+                    argumentsToPass:[19],
+                    expectedResult:true
+                  },
+                  {
+                    descriptor:"given_5_it_should_return_true",
+                    argumentsToPass:[5],
+                    expectedResult:true
+                  },
+              ]),
+              skeleton_function:
+`function isTwinPrime(n) {
+
+}`,
+              solution:
+`function isTwinPrime(n) {
+  function isPrime(num) {
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+      if (num % i === 0) return false;
+    }
+    return num >= 2;
+  }
+  return (isPrime(n) && (isPrime(n - 2) || isPrime(n + 2)));
+}`,
+              difficulty:60,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Equal Sides",
+                description:`
+Write a function that returns the index of the given array at which the sums of the numbers on either side of it are equal to each other. 
+
+Input
+\`\`\`
+equalSides([1, 2, 3, 4, 3, 2, 1]);
+\`\`\`
+
+Output
+\`\`\`
+should return 3 because the sums of the numbers on either side of arr[3] are both equal to 6. (1+2+3 (4) 3+2+1)
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"should_return_index_of_center_digit",
+                    argumentsToPass:[[2, 1, 5, 9, 8]],
+                    expectedResult:'3'
+                  },
+                  {
+                    descriptor:"should_return_neg1_if_none_found",
+                    argumentsToPass:[[1, 2, 36, 8, 2]],
+                    expectedResult:'-1'
+                  },
+              ]),
+              skeleton_function:
+`function equalSides (arr) {
+
+ }`,
+              solution:
+`function equalSides (arr) {
+  function reduceSide (side) {
+    return side.reduce(function(result, currentNum, index, side){
+      return result + currentNum;
+    }, 0);
+  }
+  for (var i = 1; i < arr.length; i++) {
+    var a = arr.slice(0, i);
+    var b = arr.slice(i+1, arr.length);
+    if (reduceSide(a) === reduceSide(b)) {
+      return i;
+    }
+  }
+  return -1;
+}`,
+              difficulty:60,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Expanded Numbers",
+                description:`
+ Write a function that accepts a number and returns it in a string as it's expanded form.
+Input
+\`\`\`
+562
+\`\`\`
+
+Output
+\`\`\`
+500 + 60 + 2
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"should_not_expand_zeroes",
+                    argumentsToPass:[70802],
+                    expectedResult:'70000 + 800 + 2'
+                  },
+                  {
+                    descriptor:"should_return_expanded_number",
+                    argumentsToPass:[22],
+                    expectedResult:'20 + 2'
+                  },
+              ]),
+              skeleton_function:
+`function expandedNums(num) {
+
+}`,
+              solution:
+`function expandedNums (num) {
+  return num.toString().split('').reduce(function (currentVal, nextVal, index, array) {
+    if (array[index] === '0') {
+      return currentVal + nextVal;
+    }
+  return currentVal + '0'.repeat(array.length - index) + ' + ' + nextVal;
+  });
+}`,
+              difficulty:60,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "prime list",
+                description:`
+Write a function that generates a list of all prime numbers in a specified range (inclusive). 
+
+
+Input
+\`\`\`
+(100, 150)
+\`\`\`
+
+Output
+\`\`\`
+[ 101, 103, 107, 109, 113, 127, 131, 137, 139, 149 ]
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"100_to_150",
+                    argumentsToPass:[100, 150],
+                    expectedResult:[ 101, 103, 107, 109, 113, 127, 131, 137, 139, 149 ]
+                  },
+                  {
+                    descriptor:"10_to_100",
+                    argumentsToPass:[10,100],
+                    expectedResult:[ 11,
+                      13,
+                      17,
+                      19,
+                      23,
+                      29,
+                      31,
+                      37,
+                      41,
+                      43,
+                      47,
+                      53,
+                      59,
+                      61,
+                      67,
+                      71,
+                      73,
+                      79,
+                      83,
+                      89,
+                      97 ]
+                  },
+                  {
+                    descriptor:"1000_to_1050",
+                    argumentsToPass:[1000, 1050],
+                    expectedResult:[ 1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049 ]
+                  },
+              ]),
+              skeleton_function:
+`function primeList(start, end) {
+  
+}`,
+              solution:
+`function primeList(start, end) {
+  const primes = [];
+  const upperLimit = Math.sqrt(end);
+  const output = [];
+
+  for (let i = 0; i <= end; i++) {
+    primes.push(true);
+  }
+
+  for (let i = 2; i <= upperLimit; i++) {
+    if (primes[i]) {
+      for (let j = i * i; j <= end; j += i) {
+        // console.log(i);
+        primes[j] = false;
+      }
+    }
+  }
+
+  for (let i = 2; i <= end; i++) {
+    if (primes[i] && i >= start) output.push(i);
+  }
+
+  return output;
+}`,
+              difficulty:60,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Sum and Product",
+                description:`
+Given a sum and a product,
+find two integers x and y, where x + y === sum, and x * y === product.
+  You will return this in an array.
+
+
+Input
+\`\`\`
+(6, 9)
+\`\`\`
+
+Output
+\`\`\`
+[3, 3]
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"should_return_an_array_of_answers_for_each_of_these_sum_and_multiply",
+                    argumentsToPass:[13, 12],
+                    expectedResult:[1, 12]
+                  },
+                  {
+                    descriptor:"should_return_an_array_of_answers_for_each_of_these_sum_and_multiply",
+                    argumentsToPass:[50, 0],
+                    expectedResult:[0, 50]
+                  },
+                  {
+                    descriptor:"should_return_an_array_of_answers_for_each_of_these_sum_and_multiply",
+                    argumentsToPass:[36, 180],
+                    expectedResult:[6, 30]
+                  },
+                  {
+                    descriptor:"should_return_an_array_of_answers_for_each_of_these_sum_and_multiply",
+                    argumentsToPass:[300, 0],
+                    expectedResult:[0, 300]
+                  },
+                  {
+                    descriptor:"should_return_an_array_of_answers_for_each_of_these_sum_and_multiply",
+                    argumentsToPass:[100, 99],
+                    expectedResult:[1, 99]
+                  },
+              ]),
+              skeleton_function:
+`function sumAndProduct(sum, product) {
+  
+}`,
+              solution:
+`function sumAndProduct(sum, product) {
+  for (let i = 0; i <= sum / 2; i++) {
+    if (i * (sum - i) === product) return [i, (sum - i)];
+  }
+  return null;
+} `,
+              difficulty:60,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Prime Reduction",
+                description:`
+                Given a range of integers from a to b (but not including b),
+                 primeReduction should return how many primes within that range are capable of being reduced to 1.
+                 In mathematical notation: [a, b) indicates that the "b" integer is excluded,
+                  e.g. [2, 8) would be the range 2, 3, 4, 5, 6, 7.
+
+
+Input
+\`\`\`
+ Basic Test cases
+console.log(primeReduction(2,7)); // <--- 0
+console.log(primeReduction(2,8)); // <--- 1, of the prime numbers in the range 2, 3, 4, 5, 6, 7, only 7 reduces to one.
+console.log(primeReduction(1,25)); // <--- 4
+console.log(primeReduction(100, 2000)); // <--- 47
+
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"basic_tests",
+                    argumentsToPass:[2, 7],
+                    expectedResult:'0'
+                  },
+                  {
+                    descriptor:"basic_tests",
+                    argumentsToPass:[2, 8],
+                    expectedResult:'1'
+                  },
+                  {
+                    descriptor:"basic_tests",
+                    argumentsToPass:[1, 25],
+                    expectedResult:'4'
+                  },
+                  {
+                    descriptor:"basic_tests",
+                    argumentsToPass:[100, 2000],
+                    expectedResult:'47'
+                  },
+              ]),
+              skeleton_function:
+`function primeReduction(a, b) {
+
+}`,
+              solution:
+`function primeReduction(a, b) {
+  function isPrime(n) {
+    if (n < 2) return false;
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) return false;
+    }
+    return true;
+  }
+  const arr = [];
+  // Ensure we have no loops!
+  // Return true when we reach 1
+  function reduction(n) {
+    if (arr.includes(n)) {
+      arr.length = 0;
+      return false;
+    }
+    arr.push(n);
+    if (n === 1) {
+    arr.length = 0;
+    return true;
+    }
+    let hold = 0;
+    let num = n;
+    // Separate Digits
+    while (num > 0) {
+      hold += Math.pow(num % 10, 2);
+      num -= num % 10;
+      num /= 10;
+    }
+    return reduction(hold);
+  }
+  let count = 0;
+  for (let i = a; i < b; i++) {
+    if (isPrime(i)) {
+      if (reduction(i)) {
+        count++;
+      }
+    }
+  }
+  return count;
+} `,
+              difficulty:80,
+              approved:1
+            },
+            {
+
+              created_by: 1,
+              title: "Rotate Image",
+                description:`
+Given an image represented by an NxN matrix, where each pixel in the image is an integer from 0 - 9,
+write a method to rotate the image by 90 degrees counterclockwise. Can you do this in place?
+
+
+Input
+\`\`\`
+([ [1, 2],
+  [3, 4]]);
+\`\`\`
+
+Output
+\`\`\`
+[ [2, 4],
+  [1, 3]].
+\`\`\``,
+              tests:JSON.stringify([
+                  {
+                    descriptor:"basic_tests",
+                    argumentsToPass:[[[1, 2], [3, 4]]],
+                    expectedResult:[[2,4],[1,3]]
+                  },
+              ]),
+              skeleton_function:
+`function rotateImage(arr) {
+  
+}`,
+              solution:
+`function rotateImage(arr) {
+  const len = arr.length;
+  for (let i = 0; i < len / 2; i++) {
+    for (let j = i; j < len - i - 1; j++) {
+      let bucket = arr[i][j];
+      arr[i][j] = arr[j][len - i - 1];
+      arr[j][len - i - 1] = arr[len - i - 1][len - j - 1];
+      arr[len - i - 1][len - j - 1] = arr[len - j - 1][i];
+      arr[len - j - 1][i] = bucket;
+    }
+  }
+  return arr;
+}`,
+              difficulty:80,
+              approved:1
+            },
+{
+
+  created_by: 1,
+  title: "Merged Objects",
+    description:`
+Write a function that given an array of objects will return a single 'merged' object,
+where duplicate keys have the last value given.
+
+
+Input
+\`\`\`
+[
+  {1: '1', 2: '2', 3: '3'}
+  {3: '4', 4: '4', 5: '6'}
+  {5: '5', 6: '6', 7: '7'}
+  ];
+\`\`\`
+
+Output
+\`\`\`
+{1: '1', 2: '2': 3: '4', 4: '4', 5: '5', 6: '6', 7: '7'}
+\`\`\``,
+  tests:JSON.stringify([
+      {
+        descriptor:"should_return_an_object",
+        argumentsToPass:[[{'key1': 'val1'},{'key2': 'val2'}]],
+        expectedResult:{'key1': 'val1', 'key2': 'val2'}
+      },
+      {
+        descriptor:"duplicate_keys_last",
+        argumentsToPass:[[{'key1': 'val1'},{'key1': 'val2'}]],
+        expectedResult:{'key1': 'val2'}
+      },
+  ]),
+  skeleton_function:
+`function mergeObjects(arr) {
+
+}`,
+  solution:
+`function mergeObjects(objs) {
+  newObj = objs[0];
+  for (let i = 1; i < objs.length; i++) {
+    for (let key in objs[i]) {
+      if (!newObj[key] || newObj[key] !== objs[i][key]) {
+        newObj[key] = objs[i][key];
+      }
+    }
+  }
+  return newObj;
+}`,
+  difficulty:80,
+  approved:1
+},
+{
+  created_by: 1,
+  title: "Balanced Brackets",
+    description:`
+Write a function balancedBrackets that accepts a string and returns true if the parentheses are balanced and false otherwise.
+
+
+Input Example: 
+\`\`\`
+balancedBrackets('(');  // false
+  balancedBrackets('()'); // true
+  balancedBrackets(')(');  // false
+  balancedBrackets('(())');  // true
+\`\`\``,
+
+  tests:JSON.stringify([
+      {
+      descriptor:"level_1",
+      argumentsToPass:['('],
+      expectedResult:false
+      },
+      {
+      descriptor:"level_1",
+      argumentsToPass:['()'],
+      expectedResult:true
+      },
+      {
+      descriptor:"level_1",
+      argumentsToPass:[')('],
+      expectedResult:false
+      },
+      {
+      descriptor:"level_1",
+      argumentsToPass:['(())'],
+      expectedResult:true
+      },
+      {
+      descriptor:"level_2",
+      argumentsToPass:['[](){}'],
+      expectedResult:true
+      },
+      {
+      descriptor:"level_2",
+      argumentsToPass:['[(]{)}'],
+      expectedResult:false
+      },
+      {
+      descriptor:"level_2",
+      argumentsToPass:['[({})]'],
+      expectedResult:true
+      },
+  ]),
+  skeleton_function:
+`function balancedBrackets(str) {
+  
+}`,
+  solution:
+`function balancedBrackets(str) {
+  let line = str.split('');
+  const stack = [];
+  let ans = true;
+  const open = {'(': ')', '{': '}', '[': ']'};
+  const close = {')': true, '}': true, ']': true};
+  line.forEach((item) => {
+    if (open[item]) {
+      stack.push(item);
+    } else if (close[item]) {
+      if (open[stack.pop()] !== item) ans = false;
+    }
+  });
+  return ans && stack.length === 0;
+}`,
+  difficulty:40,
+  approved:1
+},
         ]);
       });
   };
