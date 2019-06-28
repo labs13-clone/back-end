@@ -127,7 +127,7 @@ exports.up = function (knex, Promise) {
             tbl.boolean('completed')
                 .defaultTo(0);
 
-            tbl.string('solution');
+            tbl.string('solution', 5000);
         })
 };
 
