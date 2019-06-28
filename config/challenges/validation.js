@@ -146,10 +146,10 @@ function post(req, res, next) {
                                             code: 422,
                                             message: `All ${key} must have a argumentsToPass parameter`
                                         });
-                                    } else if (!validate.isString(test.argumentsToPass)) {
+                                    } else if (!validate.isArray(test.argumentsToPass)) {
                                         innerReject({
                                             code: 422,
-                                            message: `The argumentsToPass in ${key} must be a string`
+                                            message: `The argumentsToPass in ${key} must be a array`
                                         });
                                     }
                                     if (test.expectedResult === undefined) {
