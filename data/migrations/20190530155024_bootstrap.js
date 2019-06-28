@@ -64,7 +64,7 @@ exports.up = function (knex, Promise) {
         })
         .createTable('challenges_categories', tbl => {
 
-            tbl.primary(['challenge_id', 'categories_id']);
+            tbl.primary(['challenge_id', 'category_id']);
 
             tbl.integer('challenge_id')
                 .notNullable()
@@ -73,7 +73,7 @@ exports.up = function (knex, Promise) {
                 .onDelete('RESTRICT')
                 .onUpdate('CASCADE');
 
-            tbl.integer('categories_id')
+            tbl.integer('category_id')
                 .notNullable()
                 .references('id')
                 .inTable('categories')

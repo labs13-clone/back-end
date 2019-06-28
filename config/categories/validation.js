@@ -42,7 +42,7 @@ const post = (req, res, next) => {
     //Validates an object
     function validateObject(obj) {
 
-        return new Promise((resolve, reject) => {
+        return new Promise((outerResolve, outerReject) => {
 
             //If one of these properties is left out
             //Then the input is an invalid many to many row
@@ -57,7 +57,7 @@ const post = (req, res, next) => {
                     var missing = 'challenge_id';
                 }
 
-                reject({
+                outerReject({
                     code: 422,
                     message: `The request must contain ${missing}`
                 });
@@ -65,72 +65,151 @@ const post = (req, res, next) => {
             } else {
 
                 //For each property
-                Object.keys(obj).forEach(async key => {
+                const propertyChecks = Object.keys(obj).map(key => {
 
-                    //Check if the property is in the list of valid properties
-                    const validProperties = ['challenge_id', 'category_id'];
-                    if (!validProperties.includes(key)) {
-                        reject({
-                            code: 422,
-                            message: `The request body can not contain ${key}`
-                        });
+                    return new Promise(async (innerResolve, innerReject) => {
 
-                    }
-
-                    //Else run challenge_id specific checks
-                    else if (key === 'challenge_id') {
-
-                        //Make sure it's an integer
-                        if (!validate.isInteger(obj[key])) {
-
-                            reject({
+                        //Check if the property is in the list of valid properties
+                        const validProperties = ['challenge_id', 'category_id'];
+                        if (!validProperties.includes(key)) {
+                            innerReject({
                                 code: 422,
-                                message: `${key} must be an integer`
+                                message: `The request body can not contain ${key}`
                             });
+
                         }
 
-                        //Make sure the category exists
-                        else if (!await validate.existsWhere('challenges', {
-                                id: obj[key]
-                            })) {
+                        //Else run challenge_id specific checks
+                        else if (key === 'challenge_id') {
 
-                            reject({
-                                code: 422,
-                                message: `${obj[key]} is not a valid challenge id`
-                            });
+                            //Make sure it's an integer
+                            if (!validate.isInteger(obj[key])) {
+
+                                innerReject({
+                                    code: 422,
+                                    message: `${key} must be an integer`
+                                });
+                            }
+
+                            //Make sure the category exists
+                            else if (!await validate.existsWhere('challenges', {
+                                    id: obj[key]
+                                })) {
+
+                                innerReject({
+                                    code: 422,
+                                    message: `${obj[key]} is not a valid challenge id`
+                                });
+                            }
+
                         }
 
-                    }
+                        //Else run category_id specific checks
+                        else if (key === 'category_id') {
 
-                    //Else run category_id specific checks
-                    else if (key === 'category_id') {
+                            //Make sure it's an integer
+                            if (!validate.isInteger(obj[key])) {
 
-                        //Make sure it's an integer
-                        if (!validate.isInteger(obj[key])) {
+                                innerReject({
+                                    code: 422,
+                                    message: `${key} must be an integer`
+                                });
+                            }
+                            //Make sure the category exists
+                            else if (!await validate.existsWhere('categories', {
+                                    id: obj[key]
+                                })) {
 
-                            reject({
-                                code: 422,
-                                message: `${key} must be an integer`
-                            });
+                                innerReject({
+                                    code: 422,
+                                    message: `${obj[key]} is not a valid category id`
+                                });
+                            }
                         }
-                        //Make sure the category exists
-                        else if (!await validate.existsWhere('categories', {
-                                id: obj[key]
-                            })) {
 
-                            reject({
-                                code: 422,
-                                message: `${obj[key]} is not a valid category id`
-                            });
-                        }
-                    }
-
+                        //Resolve the inner promise.
+                    //No issues found with this property
+                    innerResolve();
+                    });
                 });
+
+                //Wait for all object property checks to finish
+                //Immediately throw error if innerReject() is thrown
+                Promise.all(propertyChecks)
+                    .then(_ => outerResolve())
+                    .catch(err => outerReject(err));
             }
         });
     }
 }
 
+const get = (req, res, next) => {
+
+    //Validate object
+    validateObject(req.query)
+        .then(_ => next())
+        .catch(err => {
+            res.status(err.code).send({
+                message: err.message
+            });
+        });
+
+    //Validates an object
+    function validateObject(obj) {
+
+        return new Promise((outerResolve, outerReject) => {
+
+            //For each property
+            const propertyChecks = Object.keys(obj).map(key => {
+
+                return new Promise(async (innerResolve, innerReject) => {
+
+                    //Check if the property is in the list of valid properties
+                    const validProperties = ['challenges'];
+                    if (!validProperties.includes(key)) {
+                        innerReject({
+                            code: 422,
+                            message: `The request body can not contain ${key}`
+                        });
+                    }
+
+                    //Else run challenges specific checks
+                    else if (key === 'challenges') {
+
+                        //Make sure it's a boolean
+                        if (!validate.isBoolean(obj[key])) {
+
+                            innerReject({
+                                code: 422,
+                                message: `${key} must be an boolean`
+                            });
+                        }
+
+                        //Convert the query param string to a boolean
+                        //Overwrite the request object value
+                        obj[key] = validate.convertBoolean(obj[key]);
+                        req.query[key] = obj[key];
+                    }
+                    
+                    
+                    //Resolve the inner promise.
+                    //No issues found with this property
+                    innerResolve();
+
+                });
+            });
+
+            //Wait for all object property checks to finish
+            //Immediately throw error if innerReject() is thrown
+            Promise.all(propertyChecks)
+                .then(_ => outerResolve())
+                .catch(err => outerReject(err));
+
+        });
+    }
+}
+
 module.exports = {
+    get,
     post
 }

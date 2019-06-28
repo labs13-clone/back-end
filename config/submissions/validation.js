@@ -703,15 +703,20 @@ const putReset = (req, res, next) => {
 
                 //Force the following fields to exist and be of a certain value
 
-                //Get the current submission and applicable challenge
+                //Get the submission as it exists currently before the update
                 const currentSubmission = await validate.getWhere('user_submissions', {
                     id: req.body.id
                 });
-                const challenge = await validate.getWhere('challenges', {
-                    id: currentSubmission.challenge_id
-                });
 
-                req.body.solution = challenge.skeleton_function;
+                //If it is not completed then reset to the skeleton function
+                //IF it is already completed then keep their solution as-is
+                if (!currentSubmission.completed) {
+                    const applicableChallenge = await validate.getWhere('challenges', {
+                        id: currentSubmission.challenge_id
+                    });
+                    req.body.solution = applicableChallenge.skeleton_function;
+                }
+
                 req.body.attempts = 0;
                 req.body.code_execs = 0;
                 req.body.test_execs = 0;
@@ -720,6 +725,7 @@ const putReset = (req, res, next) => {
                 next();
             })
             .catch(err => {
+                console.log(err)
                 res.status(err.code).send({
                     message: err.message
                 });
@@ -779,19 +785,6 @@ const putReset = (req, res, next) => {
                                     innerReject({
                                         code: 422,
                                         message: `The user does not have a submission for this challenge`
-                                    });
-                                }
-
-                                //Else If the submission is not already completed
-                                else if (!await validate.existsWhere('user_submissions', {
-                                        id: obj[key],
-                                        created_by: req.headers.user.id,
-                                        completed: true
-                                    })) {
-
-                                    innerReject({
-                                        code: 422,
-                                        message: `You have can not reset a challenge you haven't completed`
                                     });
                                 }
                             }

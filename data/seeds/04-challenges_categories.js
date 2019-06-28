@@ -6,207 +6,207 @@ exports.seed = function(knex, Promise) {
       return knex('challenges_categories').insert([
         {
           challenge_id:1,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:2,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:3,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:4,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:5,
-          categories_id:8
+          category_id:8
         },
         {
           challenge_id:5,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:5,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:6,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:7,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:8,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:9,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:10,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:11,
-          categories_id:8
+          category_id:8
         },
         {
           challenge_id:12,
-          categories_id:8
+          category_id:8
         },
         {
           challenge_id:13,
-          categories_id:1
+          category_id:1
         },
         {
           challenge_id:14,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:15,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:15,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:16,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:16,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:17,
-          categories_id:3
+          category_id:3
         },
         {
           challenge_id:17,
-          categories_id:8
+          category_id:8
         },
         {
           challenge_id:18,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:19,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:19,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:20,
-          categories_id:23
+          category_id:23
         },
         {
           challenge_id:20,
-          categories_id:33
+          category_id:33
         },
         {
           challenge_id:21,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:21,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:22,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:22,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:23,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:23,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:24,
-          categories_id:6
+          category_id:6
         }, 
         {
           challenge_id:24,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:25,
-          categories_id:6
+          category_id:6
         }, 
         {
           challenge_id:25,
-          categories_id:8
+          category_id:8
         }, 
         {
           challenge_id:26,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:26,
-          categories_id:6
+          category_id:6
         }, 
         {
           challenge_id:26,
-          categories_id:8
+          category_id:8
         }, 
         {
           challenge_id:27,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:27,
-          categories_id:6
+          category_id:6
         }, 
         {
           challenge_id:28,
-          categories_id:8
+          category_id:8
         }, 
         {
           challenge_id:28,
-          categories_id:7
+          category_id:7
         },
         {
           challenge_id:28,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:28,
-          categories_id:10
+          category_id:10
         },
         {
           challenge_id:29,
-          categories_id:8
+          category_id:8
         }, 
         {
           challenge_id:29,
-          categories_id:6
+          category_id:6
         },
         {
           challenge_id:30,
-          categories_id:10
+          category_id:10
         },
         {
           challenge_id:30,
-          categories_id:38
+          category_id:38
         }, 
         {
           challenge_id:30,
-          categories_id:19
+          category_id:19
         },
       ]);
     });

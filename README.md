@@ -35,6 +35,7 @@
   - Get an array of categories for:
     - Create Challenge Form
     - Search Challenges Category Filter
+      - Use the challenges query param to only get back categories that have been attached to challenges
 - **POST /api/categories/challenges**
   - Attach categories to challenges:
     - Accepts a single category or multiple categories
@@ -105,9 +106,12 @@
 
 ## GET /api/categories
 
-- Get an array of category information 
+- Get an array of category information
 
 ### --- Sent 
+
+#### Query Parameters
+- challenges - BOOLEAN - Optional - Filter for categories that have been attached to challenges. Returns the same whether true or false.
 
 #### Request Body:
 ```
@@ -144,7 +148,7 @@
 [
   {
     challenge_id: INTEGER - Required
-    categories_id: INTEGER - Required
+    category_id: INTEGER - Required
   },
   ...
 ]
@@ -153,7 +157,7 @@
 ```
 {
   challenge_id: INTEGER - Required
-  categories_id: INTEGER - Required
+  category_id: INTEGER - Required
 }
 ```
 ### --- Received 201
@@ -294,6 +298,7 @@
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match supported
+ - title: STRING - Optional - Search by title of challenge - Case insensitive and partial match supported
  - category_id: NUMBER - Optional - ID of category
  - created: Boolean - Optional - Currently only works for true
  - completed: Boolean - Optional - Currently only works for true
@@ -611,7 +616,7 @@
 {
   id: UUID
   challenges_id: UUID - Required - Foreign key in CHALLENGES table
-  categories_id: UUID - Required - Foreign key in CATEGORIES table
+  category_id: UUID - Required - Foreign key in CATEGORIES table
 }
 ```
 
