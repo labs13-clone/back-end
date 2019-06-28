@@ -298,6 +298,7 @@
  - approved: BOOLEAN - Optional - Whether the challenge should be approved or unapproved
  - id: NUMBER - Optional - ID of challenge
  - category_name: STRING - Optional - Search by name of category - Case insensitive and partial match supported
+ - title: STRING - Optional - Search by title of challenge - Case insensitive and partial match supported
  - category_id: NUMBER - Optional - ID of category
  - created: Boolean - Optional - Currently only works for true
  - completed: Boolean - Optional - Currently only works for true
