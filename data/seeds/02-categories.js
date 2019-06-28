@@ -7,7 +7,7 @@ exports.seed = function(knex, Promise) {
       return knex('categories').insert([
         {name: 'Strings'},
         {name: 'Fundamentals'},
-        {name: 'Alogrithms'},
+        {name: 'Algorithms'},
         {name: 'Data Types'},
         {name: 'Logic'},
         {name: 'Numbers'},
