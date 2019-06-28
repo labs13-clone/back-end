@@ -707,11 +707,6 @@ const putReset = (req, res, next) => {
                 const currentSubmission = await validate.getWhere('user_submissions', {
                     id: req.body.id
                 });
-                const challenge = await validate.getWhere('challenges', {
-                    id: currentSubmission.challenge_id
-                });
-
-                req.body.solution = challenge.skeleton_function;
                 req.body.attempts = 0;
                 req.body.code_execs = 0;
                 req.body.test_execs = 0;

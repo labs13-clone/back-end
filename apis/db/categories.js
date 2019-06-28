@@ -55,7 +55,8 @@ function remove(selector = null) {
 //Filterable by sending in an object literal that matches the categories schema
 function getMany(filter = {}) {
     return db('categories')
-        .where(filter);
+        .where(filter)
+        .orderBy('name', 'asc');
 }
 
 //Get a single challenge object
