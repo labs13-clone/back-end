@@ -15,7 +15,6 @@ router.get('/', validate.get, (req, res) => {
             res.status(200).send(response);
         })
         .catch(err => {
-            console.log(err)
             res.status(500).send({
                 message: 'Internal Server Error'
             });
@@ -32,7 +31,6 @@ router.post('/challenges', validate.post, (req, res) => {
             res.status(201).send(dbRes);
         })
         .catch(err => {
-            console.log(err)
             res.status(500).send({
                 message: 'Internal Server Error'
             });
