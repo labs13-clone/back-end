@@ -46,13 +46,13 @@ const post = (req, res, next) => {
 
             //If one of these properties is left out
             //Then the input is an invalid many to many row
-            if (obj.challenge_id === undefined || obj.category_id === undefined) {
+            if (obj.challenge_id === undefined || obj.categories_id === undefined) {
 
                 //Generate semantic error message
-                if (obj.challenge_id === undefined && obj.category_id === undefined) {
-                    var missing = 'challenge_id and category_id';
-                } else if (obj.category_id === undefined) {
-                    var missing = 'category_id';
+                if (obj.challenge_id === undefined && obj.categories_id === undefined) {
+                    var missing = 'challenge_id and categories_id';
+                } else if (obj.categories_id === undefined) {
+                    var missing = 'categories_id';
                 } else {
                     var missing = 'challenge_id';
                 }
@@ -68,7 +68,7 @@ const post = (req, res, next) => {
                 Object.keys(obj).forEach(async key => {
 
                     //Check if the property is in the list of valid properties
-                    const validProperties = ['challenge_id', 'category_id'];
+                    const validProperties = ['challenge_id', 'categories_id'];
                     if (!validProperties.includes(key)) {
                         reject({
                             code: 422,
@@ -102,8 +102,8 @@ const post = (req, res, next) => {
 
                     }
 
-                    //Else run category_id specific checks
-                    else if (key === 'category_id') {
+                    //Else run categories_id specific checks
+                    else if (key === 'categories_id') {
 
                         //Make sure it's an integer
                         if (!validate.isInteger(obj[key])) {

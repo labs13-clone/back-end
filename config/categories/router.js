@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
 
     //Get an array of categories from the database
-    categoriesApi.getMany()
+    categoriesApi.getMany(req.query)
     .then(response => {
 
         //Return an array of category information

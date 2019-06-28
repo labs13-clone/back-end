@@ -54,9 +54,29 @@ function remove(selector = null) {
 //Get multiple categories in the database
 //Filterable by sending in an object literal that matches the categories schema
 function getMany(filter = {}) {
-    return db('categories')
-        .where(filter)
-        .orderBy('name', 'asc');
+
+    const queryBuilder = db('categories')
+
+    //If the query param challenges is passed in
+    //Then only return categories which have been attached to challenges
+    if (filter.challenges !== undefined) {
+
+        delete filter.challenges;
+
+        return db('challenges_categories')
+            .distinct()
+            .pluck('categories_id')
+            .then(ids => {
+
+                //Use the list of IDs 
+                return queryBuilder.whereIn('id', ids).where(filter).orderBy('name', 'asc');
+            });
+        
+    } else {
+        
+        return queryBuilder.where(filter).orderBy('name', 'asc');
+    }
+
 }
 
 //Get a single challenge object
