@@ -35,6 +35,7 @@
   - Get an array of categories for:
     - Create Challenge Form
     - Search Challenges Category Filter
+      - Use the challenges query param to only get back categories that have been attached to challenges
 - **POST /api/categories/challenges**
   - Attach categories to challenges:
     - Accepts a single category or multiple categories
@@ -105,9 +106,12 @@
 
 ## GET /api/categories
 
-- Get an array of category information 
+- Get an array of category information
 
 ### --- Sent 
+
+#### Query Parameters
+- challenges - BOOLEAN - Optional - Filter for categories that have been attached to challenges. Returns the same whether true or false.
 
 #### Request Body:
 ```

@@ -5,18 +5,21 @@ const validate = require('./validation');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', validate.get, (req, res) => {
 
     //Get an array of categories from the database
     categoriesApi.getMany(req.query)
-    .then(response => {
+        .then(response => {
 
-        //Return an array of category information
-        res.status(200).send(response);
-    })
-    .catch(err => {
-        res.status(500).send({message: 'Internal Server Error'});
-    })
+            //Return an array of category information
+            res.status(200).send(response);
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({
+                message: 'Internal Server Error'
+            });
+        })
 });
 
 router.post('/challenges', validate.post, (req, res) => {
@@ -29,6 +32,7 @@ router.post('/challenges', validate.post, (req, res) => {
             res.status(201).send(dbRes);
         })
         .catch(err => {
+            console.log(err)
             res.status(500).send({
                 message: 'Internal Server Error'
             });
