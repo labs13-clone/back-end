@@ -11,8 +11,6 @@ module.exports = {
 //Returns the updated challenge object
 function insert(challenge) {
 
-    challenge.tests = JSON.stringify(challenge.tests);
-
     return db('challenges')
         .insert(challenge)
         .returning('id')
