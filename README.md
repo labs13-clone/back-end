@@ -204,7 +204,7 @@
 {
   title: STRING - Required - **Unique**
   description: STRING - Required
-  tests: JSON - Required
+  tests: JSON - Required, [description:STRING,arguementToPass:ARRAY,expectedResult:NOT UNDEFINED]
   skeleton_function: STRING - Required
   solution: STRING - Required
   difficulty: INTEGER - Required - Inbetween 1 to 100 (inclusive)
