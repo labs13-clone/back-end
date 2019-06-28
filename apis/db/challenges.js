@@ -193,6 +193,7 @@ function parseFilter(filter) {
         .leftJoin('categories', 'challenges_categories.category_id', 'categories.id')
         .leftJoin('user_submissions', 'challenges.id', 'user_submissions.challenge_id')
         .groupBy('challenges.id')
+        .orderBy('popularity', 'desc');
 
     //.where() Filter Builders
     //Possible .where() filters and their applicable tables
