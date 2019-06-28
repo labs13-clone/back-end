@@ -23,7 +23,7 @@ function insert(challengeCategory) {
             )
             .from('challenges')
             .leftJoin('challenges_categories', 'challenges.id', 'challenges_categories.challenge_id')
-            .leftJoin('categories', 'challenges_categories.categories_id', 'categories.id')
+            .leftJoin('categories', 'challenges_categories.category_id', 'categories.id')
             .where({
                 ['challenges.id']: id
             })
@@ -37,7 +37,7 @@ function insert(challengeCategory) {
                         'categories.name'
                     )
                     .from('categories')
-                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.category_id')
                     .where({
                         'challenges_categories.challenge_id': challenge.id
                     });

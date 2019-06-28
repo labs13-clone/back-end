@@ -65,7 +65,7 @@ function getMany(filter = {}) {
 
         return db('challenges_categories')
             .distinct()
-            .pluck('categories_id')
+            .pluck('category_id')
             .then(ids => {
 
                 //Use the list of IDs 

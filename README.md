@@ -144,7 +144,7 @@
 [
   {
     challenge_id: INTEGER - Required
-    categories_id: INTEGER - Required
+    category_id: INTEGER - Required
   },
   ...
 ]
@@ -153,7 +153,7 @@
 ```
 {
   challenge_id: INTEGER - Required
-  categories_id: INTEGER - Required
+  category_id: INTEGER - Required
 }
 ```
 ### --- Received 201
@@ -611,7 +611,7 @@
 {
   id: UUID
   challenges_id: UUID - Required - Foreign key in CHALLENGES table
-  categories_id: UUID - Required - Foreign key in CATEGORIES table
+  category_id: UUID - Required - Foreign key in CATEGORIES table
 }
 ```
 

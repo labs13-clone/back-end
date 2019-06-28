@@ -32,7 +32,7 @@ function insert(challenge) {
                             'categories.name'
                         )
                         .from('categories')
-                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.category_id')
                         .where({
                             'challenges_categories.challenge_id': challenge.id
                         });
@@ -75,7 +75,7 @@ function update(selector = null, payload) {
                             'categories.name'
                         )
                         .from('categories')
-                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                        .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.category_id')
                         .where({
                             'challenges_categories.challenge_id': challenge.id
                         });
@@ -111,7 +111,7 @@ function getMany(filter = {}) {
                         'categories.name'
                     )
                     .from('categories')
-                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.category_id')
                     .where({
                         'challenges_categories.challenge_id': challenge.id
                     });
@@ -155,7 +155,7 @@ function getOne(filter = null) {
                         'categories.name'
                     )
                     .from('categories')
-                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.categories_id')
+                    .leftJoin('challenges_categories', 'categories.id', 'challenges_categories.category_id')
                     .where({
                         'challenges_categories.challenge_id': challenge.id
                     });
@@ -192,7 +192,7 @@ function parseFilter(filter) {
         .count('user_submissions.id as popularity')
         .from('challenges')
         .leftJoin('challenges_categories', 'challenges.id', 'challenges_categories.challenge_id')
-        .leftJoin('categories', 'challenges_categories.categories_id', 'categories.id')
+        .leftJoin('categories', 'challenges_categories.category_id', 'categories.id')
         .leftJoin('user_submissions', 'challenges.id', 'user_submissions.challenge_id')
         .groupBy('challenges.id')
 
