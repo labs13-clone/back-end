@@ -157,11 +157,6 @@ function post(req, res, next) {
                                             code: 422,
                                             message: `All ${key} must have a expectedResult parameter`
                                         });
-                                    } else if (!validate.isString(test.expectedResult)) {
-                                        innerReject({
-                                            code: 422,
-                                            message: `The expectedResult in ${key} must be a string`
-                                        });
                                     }
                                 });
 
