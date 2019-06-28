@@ -76,6 +76,11 @@ function getOne(filter = null) {
                     })
                     .first();
 
+                //Get total users
+                const numUsers= db('users')
+                    .count('id as users')
+                    .first();
+
                 //For each category
                 const categorySpecific = applicableCategories.map(cat => {
 
@@ -105,7 +110,7 @@ function getOne(filter = null) {
 
                     //Get total challenges completed per category for all users
                     //Get total experience earned per category for all users
-                    const allUsers = db('user_submissions')
+                    const allUserSubmissions = db('user_submissions')
                         .sum('challenges.difficulty as all_users_xp_earned')
                         .count('user_submissions.created_by as all_users_challenges_complete')
                         .leftJoin('challenges', 'user_submissions.challenge_id', 'challenges.id')
@@ -117,13 +122,13 @@ function getOne(filter = null) {
                         })
                         .first();
 
-                    return Promise.all([cat, userSpecific, categorySpecific, allUsers]);
+                    return Promise.all([cat, userSpecific, categorySpecific, allUserSubmissions]);
                 });
 
-                return Promise.all([totalXp, categorySpecific])
+                return Promise.all([totalXp, numUsers, categorySpecific])
                     .then(result => {
 
-                        const [totalXp, categorySpecific] = result;
+                        const [totalXp, numUsers, categorySpecific] = result;
 
                         return Promise.all(categorySpecific)
                             .then(category => {
@@ -133,7 +138,7 @@ function getOne(filter = null) {
                                     const [{
                                         id,
                                         name
-                                    }, userSpecific, categorySpecific, allUsers] = cat;
+                                    }, userSpecific, categorySpecific, allUserSubmissions] = cat;
 
                                     return {
                                         id,
@@ -142,8 +147,8 @@ function getOne(filter = null) {
                                         userChallengesCompleted: Number(userSpecific.user_challenges_complete),
                                         totalPossibleXp: Number(categorySpecific.total_possible_xp),
                                         totalPossibleChallenges: Number(categorySpecific.total_possible_challenges),
-                                        totalXpEarned: Number(allUsers.all_users_xp_earned),
-                                        totalChallengesCompleted: Number(allUsers.all_users_challenges_complete)
+                                        totalXpEarned: Number(allUserSubmissions.all_users_xp_earned),
+                                        totalChallengesCompleted: Number(allUserSubmissions.all_users_challenges_complete)
                                     }
                                 });
                             })
@@ -151,6 +156,7 @@ function getOne(filter = null) {
                                 return {
                                     ...user,
                                     xp: Number(totalXp.xp),
+                                    numUsers: Number(numUsers.users),
                                     categories
                                 }
                             });
