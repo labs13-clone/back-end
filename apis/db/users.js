@@ -125,21 +125,35 @@ function getOne(filter = null) {
 
                         const [totalXp, categorySpecific] = result;
 
-                        Promise.all(categorySpecific)
-                        .then(category => {
+                        return Promise.all(categorySpecific)
+                            .then(category => {
 
-                            const categories = category.map(cat => {
-    
-                                const [category, userSpecific, categorySpecific, allUsers] = cat;
-                                console.log(category, userSpecific, categorySpecific, allUsers);
+                                return category.map(cat => {
+
+                                    const [{
+                                        id,
+                                        name
+                                    }, userSpecific, categorySpecific, allUsers] = cat;
+
+                                    return {
+                                        id,
+                                        name,
+                                        userXpEarned: Number(userSpecific.user_xp_earned),
+                                        userChallengesCompleted: Number(userSpecific.user_challenges_complete),
+                                        totalPossibleXp: Number(categorySpecific.total_possible_xp),
+                                        totalPossibleChallenges: Number(categorySpecific.total_possible_challenges),
+                                        totalXpEarned: Number(allUsers.all_users_xp_earned),
+                                        totalChallengesCompleted: Number(allUsers.all_users_challenges_complete)
+                                    }
+                                });
+                            })
+                            .then(categories => {
+                                return {
+                                    ...user,
+                                    xp: Number(totalXp.xp),
+                                    categories
+                                }
                             });
-                        })
-
-
-                        return {
-                            ...user,
-                            xp: Number(totalXp.xp)
-                        }
                     });
 
             } else {

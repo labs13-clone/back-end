@@ -725,6 +725,7 @@ const putReset = (req, res, next) => {
                 next();
             })
             .catch(err => {
+                console.log(err)
                 res.status(err.code).send({
                     message: err.message
                 });
