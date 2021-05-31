@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "db_start_dev": "docker run --rm --name postgres_dev -d -p 6000:5432 postgres",
-    "db_start_test": "docker run --rm --name postgres_test -d -p 7000:5432 postgres",
+    "db_start_dev": "docker run --rm --name postgres_dev -d -p 6000:5432 -e POSTGRES_PASSWORD=password postgres",
+    "db_start_test": "docker run --rm --name postgres_test -d -p 7000:5432 -e POSTGRES_PASSWORD=password postgres",
     "db_reset_dev": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
     "db_reset_test": "npx knex migrate:rollback --env testing && npx knex migrate:latest --env testing && npx knex seed:run --env testing",
     "db_stop_dev": "docker container stop postgres_dev",
